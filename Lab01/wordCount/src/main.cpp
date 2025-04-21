@@ -11,6 +11,7 @@
 
 int main() {
     auto start = std::chrono::high_resolution_clock::now();
+    threadWordCounts.resize(NUM_WORKERS);
     // std::cout << NUM_WORKERS << std::endl;
     std::vector<std::thread> threads;
     for (int i = 0; i < NUM_WORKERS; ++i)
@@ -23,6 +24,13 @@ int main() {
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
+
+    // MERGE threadWordCounts[i]
+    for (const auto& localMap : threadWordCounts) {
+        for (const auto& [word, count] : localMap) {
+            globalWordCount[word] += count;
+        }
+    }
 
     std::cout << "Tiempo de ejecución: " << duration.count() << " s\n";
     std::cout << "Número total de palabras distintas: " << globalWordCount.size() << "\n";
@@ -56,3 +64,9 @@ int main() {
     // DEBUG WORD COUNT
     return 0;
 }
+
+// 20GB
+// CON resultMutex:
+    // 360 seg
+// CON MAP por cada thread:
+    // 286 seg
