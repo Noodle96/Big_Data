@@ -1,0 +1,5521 @@
+{
+  "scene_id": "VIRAT_S_0401",
+  "subclips": [
+    {
+      "clip_id": "VIRAT_S_040104_05_000939_001116",
+      "video_filename": "VIRAT_S_040104_05_000939_001116.mp4",
+      "start_sec": 939,
+      "end_sec": 1116,
+      "textual_tokens": {
+        "person": 34,
+        "object": 10,
+        "car": 13,
+        "unloading": 1,
+        "an": 4,
+        "from": 1,
+        "a": 1,
+        "vehicle": 1,
+        "carrying": 3
+      },
+      "events": [
+        {
+          "event_id": 26,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 797,
+          "end_frame": 942,
+          "start_offset_sec": 31.88,
+          "end_offset_sec": 37.68,
+          "object_ids": []
+        },
+        {
+          "event_id": 28,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1009,
+          "end_frame": 1232,
+          "start_offset_sec": 40.36,
+          "end_offset_sec": 49.28,
+          "object_ids": []
+        },
+        {
+          "event_id": 29,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1406,
+          "end_frame": 2264,
+          "start_offset_sec": 56.24,
+          "end_offset_sec": 90.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 31,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2931,
+          "end_frame": 3229,
+          "start_offset_sec": 117.24,
+          "end_offset_sec": 129.16,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 25.56,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 34.28,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 27.0
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 127.16
+        },
+        {
+          "object_id": 4,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 188.4,
+          "end_offset_sec": 192.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 115.84,
+          "end_offset_sec": 180.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 168.0,
+          "end_offset_sec": 180.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 168.0,
+          "end_offset_sec": 180.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 6.48,
+          "end_offset_sec": 66.8
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 69.4
+        },
+        {
+          "object_id": 11,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 192.0,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 87.96,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 119.0
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 117.12,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 192.0,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 192.0,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 192.0,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 25.44,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 99.96
+        },
+        {
+          "object_id": 25,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 104.76
+        },
+        {
+          "object_id": 26,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 27,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 28,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 29,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 30,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 31,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 32,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 33,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 34,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 90.76,
+          "end_offset_sec": 205.16
+        },
+        {
+          "object_id": 35,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 206.8,
+          "end_offset_sec": 212.12
+        },
+        {
+          "object_id": 36,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 37,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 57.72,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 38,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 39,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 75.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 40,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 74.8,
+          "end_offset_sec": 81.16
+        },
+        {
+          "object_id": 41,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 42,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 43,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 16.8,
+          "end_offset_sec": 24.76
+        },
+        {
+          "object_id": 44,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 116.12,
+          "end_offset_sec": 167.76
+        },
+        {
+          "object_id": 45,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 119.0
+        },
+        {
+          "object_id": 46,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 156.84
+        },
+        {
+          "object_id": 47,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 156.84
+        },
+        {
+          "object_id": 48,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 9.0,
+          "end_offset_sec": 27.4
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_07_001268_001348",
+      "video_filename": "VIRAT_S_040104_07_001268_001348.mp4",
+      "start_sec": 1268,
+      "end_sec": 1348,
+      "textual_tokens": {
+        "car": 10,
+        "person": 21,
+        "object": 6,
+        "unloading": 1,
+        "an": 5,
+        "from": 1,
+        "a": 1,
+        "vehicle": 1,
+        "carrying": 4
+      },
+      "events": [
+        {
+          "event_id": 24,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 429,
+          "end_frame": 543,
+          "start_offset_sec": 17.16,
+          "end_offset_sec": 21.72,
+          "object_ids": []
+        },
+        {
+          "event_id": 27,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 504,
+          "end_frame": 863,
+          "start_offset_sec": 20.16,
+          "end_offset_sec": 34.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 28,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 533,
+          "end_frame": 869,
+          "start_offset_sec": 21.32,
+          "end_offset_sec": 34.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 29,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1152,
+          "end_frame": 1802,
+          "start_offset_sec": 46.08,
+          "end_offset_sec": 72.08,
+          "object_ids": []
+        },
+        {
+          "event_id": 30,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1000,
+          "end_frame": 1994,
+          "start_offset_sec": 40.0,
+          "end_offset_sec": 79.76,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 20.84,
+          "end_offset_sec": 35.56
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 13.0,
+          "end_offset_sec": 35.56
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 11,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 6.0,
+          "end_offset_sec": 32.64
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 26.96,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 15,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.68
+        },
+        {
+          "object_id": 16,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 59.04,
+          "end_offset_sec": 88.68
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 8.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 44.28,
+          "end_offset_sec": 81.68
+        },
+        {
+          "object_id": 26,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 80.96
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_03_000284_000425",
+      "video_filename": "VIRAT_S_040103_03_000284_000425.mp4",
+      "start_sec": 284,
+      "end_sec": 425,
+      "textual_tokens": {
+        "person": 40,
+        "object": 17,
+        "car": 13,
+        "carrying": 6,
+        "an": 10,
+        "getting": 5,
+        "out": 3,
+        "of": 3,
+        "a": 10,
+        "vehicle": 10,
+        "loading": 4,
+        "to": 4,
+        "into": 2,
+        "opening": 1,
+        "trunk": 1
+      },
+      "events": [
+        {
+          "event_id": 26,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2819,
+          "end_frame": 3175,
+          "start_offset_sec": 112.76,
+          "end_offset_sec": 127.0,
+          "object_ids": []
+        },
+        {
+          "event_id": 33,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 1681,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 67.24,
+          "object_ids": []
+        },
+        {
+          "event_id": 34,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 269,
+          "end_frame": 358,
+          "start_offset_sec": 10.76,
+          "end_offset_sec": 14.32,
+          "object_ids": []
+        },
+        {
+          "event_id": 35,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 387,
+          "end_frame": 758,
+          "start_offset_sec": 15.48,
+          "end_offset_sec": 30.32,
+          "object_ids": []
+        },
+        {
+          "event_id": 36,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 208,
+          "end_frame": 1341,
+          "start_offset_sec": 8.32,
+          "end_offset_sec": 53.64,
+          "object_ids": []
+        },
+        {
+          "event_id": 37,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 1677,
+          "end_frame": 2514,
+          "start_offset_sec": 67.08,
+          "end_offset_sec": 100.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 38,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2568,
+          "end_frame": 2637,
+          "start_offset_sec": 102.72,
+          "end_offset_sec": 105.48,
+          "object_ids": []
+        },
+        {
+          "event_id": 39,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2725,
+          "end_frame": 3275,
+          "start_offset_sec": 109.0,
+          "end_offset_sec": 131.0,
+          "object_ids": []
+        },
+        {
+          "event_id": 40,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 2814,
+          "end_frame": 2927,
+          "start_offset_sec": 112.56,
+          "end_offset_sec": 117.08,
+          "object_ids": []
+        },
+        {
+          "event_id": 41,
+          "type_id": 3,
+          "type_label": "Person Opening a Vehicle Trunk",
+          "start_frame": 3037,
+          "end_frame": 3121,
+          "start_offset_sec": 121.48,
+          "end_offset_sec": 124.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 42,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 3159,
+          "end_frame": 3266,
+          "start_offset_sec": 126.36,
+          "end_offset_sec": 130.64,
+          "object_ids": [
+            3
+          ]
+        },
+        {
+          "event_id": 43,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 3272,
+          "end_frame": 3388,
+          "start_offset_sec": 130.88,
+          "end_offset_sec": 135.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 44,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 3323,
+          "end_frame": 3454,
+          "start_offset_sec": 132.92,
+          "end_offset_sec": 138.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 45,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 3378,
+          "end_frame": 3621,
+          "start_offset_sec": 135.12,
+          "end_offset_sec": 144.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 48,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 3605,
+          "end_frame": 3757,
+          "start_offset_sec": 144.2,
+          "end_offset_sec": 150.28,
+          "object_ids": []
+        },
+        {
+          "event_id": 49,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 3640,
+          "end_frame": 4214,
+          "start_offset_sec": 145.6,
+          "end_offset_sec": 168.56,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 114.92,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 103.92,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 4,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 126.28,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 39.2,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 51.6,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 55.4,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 11,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 71.24,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.4,
+          "end_offset_sec": 117.76
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 115.0
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 157.56
+        },
+        {
+          "object_id": 15,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 96.24,
+          "end_offset_sec": 160.44
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 103.48
+        },
+        {
+          "object_id": 17,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 107.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 21,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 22,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 23,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 24,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 26,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 27,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 28,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 29,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 31,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 32,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 33,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 134.0,
+          "end_offset_sec": 140.36
+        },
+        {
+          "object_id": 34,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 131.12,
+          "end_offset_sec": 140.76
+        },
+        {
+          "object_id": 35,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 21.12
+        },
+        {
+          "object_id": 36,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 37,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 5.72,
+          "end_offset_sec": 21.96
+        },
+        {
+          "object_id": 38,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 31.16
+        },
+        {
+          "object_id": 39,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 156.84
+        },
+        {
+          "object_id": 40,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 152.76
+        },
+        {
+          "object_id": 41,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 42,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 139.36,
+          "end_offset_sec": 168.56
+        },
+        {
+          "object_id": 43,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 94.44
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_09_001475_001583",
+      "video_filename": "VIRAT_S_040104_09_001475_001583.mp4",
+      "start_sec": 1475,
+      "end_sec": 1583,
+      "textual_tokens": {
+        "car": 11,
+        "person": 18,
+        "object": 5,
+        "bike": 1,
+        "unloading": 1,
+        "an": 4,
+        "from": 1,
+        "a": 2,
+        "vehicle": 2,
+        "carrying": 2,
+        "loading": 1,
+        "to": 1
+      },
+      "events": [
+        {
+          "event_id": 23,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 631,
+          "end_frame": 734,
+          "start_offset_sec": 25.24,
+          "end_offset_sec": 29.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 25,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 721,
+          "end_frame": 1024,
+          "start_offset_sec": 28.84,
+          "end_offset_sec": 40.96,
+          "object_ids": []
+        },
+        {
+          "event_id": 27,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1517,
+          "end_frame": 1821,
+          "start_offset_sec": 60.68,
+          "end_offset_sec": 72.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 28,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 2631,
+          "end_frame": 2689,
+          "start_offset_sec": 105.24,
+          "end_offset_sec": 107.56,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 2.12,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 68.52
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 57.84,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 50.6,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 6.24,
+          "end_offset_sec": 64.36
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 99.84,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 99.88,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 15,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 16,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 5,
+          "type_label": "bike",
+          "start_offset_sec": 80.4,
+          "end_offset_sec": 90.72
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 92.48,
+          "end_offset_sec": 122.28
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 124.0,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 126.68,
+          "end_offset_sec": 128.16
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 22.08,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 26,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 108.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_04_000854_000934",
+      "video_filename": "VIRAT_S_040104_04_000854_000934.mp4",
+      "start_sec": 854,
+      "end_sec": 934,
+      "textual_tokens": {
+        "car": 9,
+        "person": 17,
+        "object": 5,
+        "carrying": 3,
+        "an": 4,
+        "loading": 1,
+        "to": 1,
+        "a": 2,
+        "vehicle": 2,
+        "closing": 1,
+        "trunk": 1
+      },
+      "events": [
+        {
+          "event_id": 22,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 730,
+          "end_frame": 1211,
+          "start_offset_sec": 29.2,
+          "end_offset_sec": 48.44,
+          "object_ids": []
+        },
+        {
+          "event_id": 29,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 1254,
+          "end_frame": 1344,
+          "start_offset_sec": 50.16,
+          "end_offset_sec": 53.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 30,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 1339,
+          "end_frame": 1397,
+          "start_offset_sec": 53.56,
+          "end_offset_sec": 55.88,
+          "object_ids": []
+        },
+        {
+          "event_id": 31,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 619,
+          "end_frame": 1521,
+          "start_offset_sec": 24.76,
+          "end_offset_sec": 60.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 32,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 600,
+          "end_frame": 921,
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 7.72,
+          "end_offset_sec": 88.16
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 85.64,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 50.52,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 49.64
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.72
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 28.48,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 16,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 28.96,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 71.2
+        },
+        {
+          "object_id": 21,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 61.36,
+          "end_offset_sec": 71.64
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_08_001475_001512",
+      "video_filename": "VIRAT_S_040103_08_001475_001512.mp4",
+      "start_sec": 1475,
+      "end_sec": 1512,
+      "textual_tokens": {
+        "person": 9,
+        "bike": 1,
+        "car": 10,
+        "carrying": 2,
+        "an": 2,
+        "object": 2
+      },
+      "events": [
+        {
+          "event_id": 15,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 236,
+          "end_frame": 854,
+          "start_offset_sec": 9.44,
+          "end_offset_sec": 34.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 16,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 226,
+          "end_frame": 621,
+          "start_offset_sec": 9.04,
+          "end_offset_sec": 24.84,
+          "object_ids": [
+            1
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 7.8,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 20.72,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 3,
+          "type_id": 5,
+          "type_label": "bike",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.12
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.4
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 7.32,
+          "end_offset_sec": 36.8
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_01_000227_000457",
+      "video_filename": "VIRAT_S_040104_01_000227_000457.mp4",
+      "start_sec": 227,
+      "end_sec": 457,
+      "textual_tokens": {
+        "car": 29,
+        "person": 50,
+        "object": 26,
+        "unloading": 3,
+        "an": 11,
+        "from": 3,
+        "a": 4,
+        "vehicle": 4,
+        "carrying": 8,
+        "getting": 1,
+        "into": 1
+      },
+      "events": [
+        {
+          "event_id": 37,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1088,
+          "end_frame": 1266,
+          "start_offset_sec": 43.52,
+          "end_offset_sec": 50.64,
+          "object_ids": []
+        },
+        {
+          "event_id": 38,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1398,
+          "end_frame": 1467,
+          "start_offset_sec": 55.92,
+          "end_offset_sec": 58.68,
+          "object_ids": []
+        },
+        {
+          "event_id": 39,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1376,
+          "end_frame": 1488,
+          "start_offset_sec": 55.04,
+          "end_offset_sec": 59.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 41,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1800,
+          "end_frame": 2093,
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 83.72,
+          "object_ids": []
+        },
+        {
+          "event_id": 44,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 4897,
+          "end_frame": 5235,
+          "start_offset_sec": 195.88,
+          "end_offset_sec": 209.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 46,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 4912,
+          "end_frame": 5164,
+          "start_offset_sec": 196.48,
+          "end_offset_sec": 206.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 52,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 5632,
+          "end_frame": 6023,
+          "start_offset_sec": 225.28,
+          "end_offset_sec": 240.92,
+          "object_ids": []
+        },
+        {
+          "event_id": 55,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2878,
+          "end_frame": 3310,
+          "start_offset_sec": 115.12,
+          "end_offset_sec": 132.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 56,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 3466,
+          "end_frame": 6554,
+          "start_offset_sec": 138.64,
+          "end_offset_sec": 262.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 57,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 4431,
+          "end_frame": 5421,
+          "start_offset_sec": 177.24,
+          "end_offset_sec": 216.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 58,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 4756,
+          "end_frame": 5421,
+          "start_offset_sec": 190.24,
+          "end_offset_sec": 216.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 59,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 5767,
+          "end_frame": 5894,
+          "start_offset_sec": 230.68,
+          "end_offset_sec": 235.76,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 187.6,
+          "end_offset_sec": 188.8
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 156.0,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 77.36
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 83.72
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 6.92,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 30.08,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 40.04,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 16,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 54.4,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 55.24,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 194.6,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 195.24,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 196.16,
+          "end_offset_sec": 204.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 122.4,
+          "end_offset_sec": 159.16
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 123.2,
+          "end_offset_sec": 168.84
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 228.0,
+          "end_offset_sec": 233.08
+        },
+        {
+          "object_id": 26,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 228.0,
+          "end_offset_sec": 240.84
+        },
+        {
+          "object_id": 27,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 216.0,
+          "end_offset_sec": 240.84
+        },
+        {
+          "object_id": 28,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 228.0,
+          "end_offset_sec": 240.84
+        },
+        {
+          "object_id": 29,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 31,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 32,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 9.72,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 33,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 10.72,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 34,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 173.68,
+          "end_offset_sec": 180.84
+        },
+        {
+          "object_id": 35,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 86.0
+        },
+        {
+          "object_id": 36,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 37,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 38,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 39,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 138.04,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 40,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 144.56,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 41,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 156.0,
+          "end_offset_sec": 168.84
+        },
+        {
+          "object_id": 42,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 43,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 44,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 160.8,
+          "end_offset_sec": 168.84
+        },
+        {
+          "object_id": 45,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 193.52,
+          "end_offset_sec": 240.92
+        },
+        {
+          "object_id": 46,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 231.2,
+          "end_offset_sec": 243.28
+        },
+        {
+          "object_id": 47,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 223.44,
+          "end_offset_sec": 252.84
+        },
+        {
+          "object_id": 48,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 240.0,
+          "end_offset_sec": 251.56
+        },
+        {
+          "object_id": 49,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 168.0,
+          "end_offset_sec": 180.84
+        },
+        {
+          "object_id": 50,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 122.36
+        },
+        {
+          "object_id": 51,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.16,
+          "end_offset_sec": 125.96
+        },
+        {
+          "object_id": 52,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 129.6,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 53,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 273.52,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 54,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 274.28,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 55,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 275.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 56,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 264.0,
+          "end_offset_sec": 273.12
+        },
+        {
+          "object_id": 57,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 269.04,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 58,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 59,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 60,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 61,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 189.48,
+          "end_offset_sec": 216.84
+        },
+        {
+          "object_id": 62,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 146.8,
+          "end_offset_sec": 216.84
+        },
+        {
+          "object_id": 63,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 64,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 65,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 66,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 67,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 240.0,
+          "end_offset_sec": 254.36
+        },
+        {
+          "object_id": 68,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 252.0,
+          "end_offset_sec": 264.84
+        },
+        {
+          "object_id": 69,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 114.0,
+          "end_offset_sec": 262.16
+        },
+        {
+          "object_id": 70,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 252.0,
+          "end_offset_sec": 261.72
+        },
+        {
+          "object_id": 71,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 216.0,
+          "end_offset_sec": 228.84
+        },
+        {
+          "object_id": 72,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 101.12,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 73,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 74,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 196.2,
+          "end_offset_sec": 228.84
+        },
+        {
+          "object_id": 75,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.84,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 76,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 77,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 216.0,
+          "end_offset_sec": 228.84
+        },
+        {
+          "object_id": 78,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 275.56
+        },
+        {
+          "object_id": 79,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 173.44,
+          "end_offset_sec": 192.8
+        },
+        {
+          "object_id": 80,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 162.84,
+          "end_offset_sec": 185.84
+        },
+        {
+          "object_id": 81,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 180.0,
+          "end_offset_sec": 192.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_00_000000_000120",
+      "video_filename": "VIRAT_S_040103_00_000000_000120.mp4",
+      "start_sec": 0,
+      "end_sec": 120,
+      "textual_tokens": {
+        "person": 44,
+        "object": 9,
+        "car": 14,
+        "carrying": 3,
+        "an": 5,
+        "closing": 1,
+        "a": 9,
+        "vehicle": 9,
+        "trunk": 2,
+        "getting": 5,
+        "into": 3,
+        "out": 2,
+        "of": 2,
+        "opening": 1,
+        "loading": 1,
+        "to": 1,
+        "unloading": 1,
+        "from": 1
+      },
+      "events": [
+        {
+          "event_id": 11,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 321,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84,
+          "object_ids": [
+            1,
+            2
+          ]
+        },
+        {
+          "event_id": 14,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 2686,
+          "end_frame": 3596,
+          "start_offset_sec": 107.44,
+          "end_offset_sec": 143.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 15,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2853,
+          "end_frame": 2985,
+          "start_offset_sec": 114.12,
+          "end_offset_sec": 119.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 25,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 104,
+          "end_frame": 203,
+          "start_offset_sec": 4.16,
+          "end_offset_sec": 8.12,
+          "object_ids": []
+        },
+        {
+          "event_id": 26,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 238,
+          "end_frame": 508,
+          "start_offset_sec": 9.52,
+          "end_offset_sec": 20.32,
+          "object_ids": []
+        },
+        {
+          "event_id": 27,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 929,
+          "end_frame": 1024,
+          "start_offset_sec": 37.16,
+          "end_offset_sec": 40.96,
+          "object_ids": []
+        },
+        {
+          "event_id": 28,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 2511,
+          "end_frame": 2741,
+          "start_offset_sec": 100.44,
+          "end_offset_sec": 109.64,
+          "object_ids": []
+        },
+        {
+          "event_id": 29,
+          "type_id": 3,
+          "type_label": "Person Opening a Vehicle Trunk",
+          "start_frame": 2489,
+          "end_frame": 2577,
+          "start_offset_sec": 99.56,
+          "end_offset_sec": 103.08,
+          "object_ids": []
+        },
+        {
+          "event_id": 30,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 2582,
+          "end_frame": 2669,
+          "start_offset_sec": 103.28,
+          "end_offset_sec": 106.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 31,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 3108,
+          "end_frame": 3288,
+          "start_offset_sec": 124.32,
+          "end_offset_sec": 131.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 32,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2870,
+          "end_frame": 3056,
+          "start_offset_sec": 114.8,
+          "end_offset_sec": 122.24,
+          "object_ids": []
+        },
+        {
+          "event_id": 33,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 3254,
+          "end_frame": 3593,
+          "start_offset_sec": 130.16,
+          "end_offset_sec": 143.72,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 99.2,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 105.56
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 135.96
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 109.84,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 134.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 71.08,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 15,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 16,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 130.04,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 75.92,
+          "end_offset_sec": 79.08
+        },
+        {
+          "object_id": 18,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 19,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 22,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 23,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 24,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 117.12
+        },
+        {
+          "object_id": 26,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 27,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 117.44
+        },
+        {
+          "object_id": 28,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 7.52,
+          "end_offset_sec": 20.32
+        },
+        {
+          "object_id": 29,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 31,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 32,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 33,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 71.68,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 34,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 40.84,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 35,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 36,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.88,
+          "end_offset_sec": 16.72
+        },
+        {
+          "object_id": 37,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 41.24,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 38,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 44.04,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 39,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 65.76,
+          "end_offset_sec": 101.56
+        },
+        {
+          "object_id": 40,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 41,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 105.16
+        },
+        {
+          "object_id": 42,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 43,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 75.16,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 44,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 143.72
+        },
+        {
+          "object_id": 45,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 1.64
+        },
+        {
+          "object_id": 46,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 47,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 48,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 49,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 36.76
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_01_000132_000195",
+      "video_filename": "VIRAT_S_040103_01_000132_000195.mp4",
+      "start_sec": 132,
+      "end_sec": 195,
+      "textual_tokens": {
+        "person": 14,
+        "car": 11,
+        "object": 6,
+        "bike": 1,
+        "carrying": 2,
+        "an": 3,
+        "getting": 1,
+        "out": 1,
+        "of": 1,
+        "a": 4,
+        "vehicle": 4,
+        "opening": 1,
+        "trunk": 2,
+        "unloading": 1,
+        "from": 1,
+        "closing": 1
+      },
+      "events": [
+        {
+          "event_id": 13,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1097,
+          "end_frame": 1634,
+          "start_offset_sec": 43.88,
+          "end_offset_sec": 65.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 14,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 246,
+          "end_frame": 621,
+          "start_offset_sec": 9.84,
+          "end_offset_sec": 24.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 15,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 390,
+          "end_frame": 509,
+          "start_offset_sec": 15.6,
+          "end_offset_sec": 20.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 16,
+          "type_id": 3,
+          "type_label": "Person Opening a Vehicle Trunk",
+          "start_frame": 630,
+          "end_frame": 713,
+          "start_offset_sec": 25.2,
+          "end_offset_sec": 28.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 17,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 786,
+          "end_frame": 879,
+          "start_offset_sec": 31.44,
+          "end_offset_sec": 35.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 18,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 934,
+          "end_frame": 1003,
+          "start_offset_sec": 37.36,
+          "end_offset_sec": 40.12,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.44,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 75.24
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.84,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 5.64,
+          "end_offset_sec": 67.44
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 19.6,
+          "end_offset_sec": 65.36
+        },
+        {
+          "object_id": 16,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 65.64
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 5,
+          "type_label": "bike",
+          "start_offset_sec": 24.72,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_06_001121_001241",
+      "video_filename": "VIRAT_S_040104_06_001121_001241.mp4",
+      "start_sec": 1121,
+      "end_sec": 1241,
+      "textual_tokens": {
+        "person": 24,
+        "object": 11,
+        "car": 10,
+        "unloading": 1,
+        "an": 5,
+        "from": 1,
+        "a": 1,
+        "vehicle": 1,
+        "carrying": 4
+      },
+      "events": [
+        {
+          "event_id": 53,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1143,
+          "end_frame": 1209,
+          "start_offset_sec": 45.72,
+          "end_offset_sec": 48.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 55,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1259,
+          "end_frame": 1749,
+          "start_offset_sec": 50.36,
+          "end_offset_sec": 69.96,
+          "object_ids": []
+        },
+        {
+          "event_id": 59,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2328,
+          "end_frame": 3052,
+          "start_offset_sec": 93.12,
+          "end_offset_sec": 122.08,
+          "object_ids": []
+        },
+        {
+          "event_id": 60,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1259,
+          "end_frame": 1749,
+          "start_offset_sec": 50.36,
+          "end_offset_sec": 69.96,
+          "object_ids": []
+        },
+        {
+          "event_id": 61,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1259,
+          "end_frame": 1749,
+          "start_offset_sec": 50.36,
+          "end_offset_sec": 69.96,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 91.2,
+          "end_offset_sec": 129.76
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 12,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.8
+        },
+        {
+          "object_id": 13,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 19.0
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 17.12,
+          "end_offset_sec": 69.96
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 26.12,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 108.4,
+          "end_offset_sec": 136.32
+        },
+        {
+          "object_id": 21,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 22,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 23,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 24,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 143.56
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 53.44,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 26,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 6.4,
+          "end_offset_sec": 82.44
+        },
+        {
+          "object_id": 27,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 28,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 29,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 69.88
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 31,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 32,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 61.12,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 33,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 34,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 19.04,
+          "end_offset_sec": 63.32
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_05_000729_000804",
+      "video_filename": "VIRAT_S_040103_05_000729_000804.mp4",
+      "start_sec": 729,
+      "end_sec": 804,
+      "textual_tokens": {
+        "car": 9,
+        "object": 12,
+        "person": 13,
+        "unloading": 4,
+        "an": 6,
+        "from": 4,
+        "a": 4,
+        "vehicle": 4,
+        "carrying": 2
+      },
+      "events": [
+        {
+          "event_id": 15,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1027,
+          "end_frame": 1164,
+          "start_offset_sec": 41.08,
+          "end_offset_sec": 46.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 16,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1235,
+          "end_frame": 1344,
+          "start_offset_sec": 49.4,
+          "end_offset_sec": 53.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 17,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1317,
+          "end_frame": 1442,
+          "start_offset_sec": 52.68,
+          "end_offset_sec": 57.68,
+          "object_ids": []
+        },
+        {
+          "event_id": 19,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1526,
+          "end_frame": 1999,
+          "start_offset_sec": 61.04,
+          "end_offset_sec": 79.96,
+          "object_ids": []
+        },
+        {
+          "event_id": 20,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 846,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 33.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 21,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1027,
+          "end_frame": 1164,
+          "start_offset_sec": 41.08,
+          "end_offset_sec": 46.56,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 49.36,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 4,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 52.48,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 33.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 7.52,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 85.6,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 83.28,
+          "end_offset_sec": 89.6
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 30.12,
+          "end_offset_sec": 79.96
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 32.88,
+          "end_offset_sec": 79.56
+        },
+        {
+          "object_id": 19,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 81.96
+        },
+        {
+          "object_id": 20,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 81.16
+        },
+        {
+          "object_id": 21,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_02_000459_000721",
+      "video_filename": "VIRAT_S_040104_02_000459_000721.mp4",
+      "start_sec": 459,
+      "end_sec": 721,
+      "textual_tokens": {
+        "car": 17,
+        "person": 45,
+        "object": 20,
+        "gesturing": 1,
+        "carrying": 8,
+        "an": 12,
+        "unloading": 4,
+        "from": 4,
+        "a": 7,
+        "vehicle": 7,
+        "getting": 3,
+        "out": 3,
+        "of": 3
+      },
+      "events": [
+        {
+          "event_id": 33,
+          "type_id": 7,
+          "type_label": "Person gesturing",
+          "start_frame": 458,
+          "end_frame": 684,
+          "start_offset_sec": 18.32,
+          "end_offset_sec": 27.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 38,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1907,
+          "end_frame": 3269,
+          "start_offset_sec": 76.28,
+          "end_offset_sec": 130.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 40,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 2355,
+          "end_frame": 2437,
+          "start_offset_sec": 94.2,
+          "end_offset_sec": 97.48,
+          "object_ids": []
+        },
+        {
+          "event_id": 41,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 2423,
+          "end_frame": 2665,
+          "start_offset_sec": 96.92,
+          "end_offset_sec": 106.6,
+          "object_ids": []
+        },
+        {
+          "event_id": 43,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2730,
+          "end_frame": 3179,
+          "start_offset_sec": 109.2,
+          "end_offset_sec": 127.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 44,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2802,
+          "end_frame": 3269,
+          "start_offset_sec": 112.08,
+          "end_offset_sec": 130.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 47,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 6025,
+          "end_frame": 6158,
+          "start_offset_sec": 241.0,
+          "end_offset_sec": 246.32,
+          "object_ids": []
+        },
+        {
+          "event_id": 56,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 885,
+          "end_frame": 1086,
+          "start_offset_sec": 35.4,
+          "end_offset_sec": 43.44,
+          "object_ids": [
+            1
+          ]
+        },
+        {
+          "event_id": 58,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 1019,
+          "end_frame": 1156,
+          "start_offset_sec": 40.76,
+          "end_offset_sec": 46.24,
+          "object_ids": [
+            1
+          ]
+        },
+        {
+          "event_id": 59,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1151,
+          "end_frame": 1209,
+          "start_offset_sec": 46.04,
+          "end_offset_sec": 48.36,
+          "object_ids": [
+            1
+          ]
+        },
+        {
+          "event_id": 60,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1203,
+          "end_frame": 3321,
+          "start_offset_sec": 48.12,
+          "end_offset_sec": 132.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 61,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1211,
+          "end_frame": 1269,
+          "start_offset_sec": 48.44,
+          "end_offset_sec": 50.76,
+          "object_ids": [
+            1
+          ]
+        },
+        {
+          "event_id": 62,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 2020,
+          "end_frame": 2129,
+          "start_offset_sec": 80.8,
+          "end_offset_sec": 85.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 63,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1658,
+          "end_frame": 2145,
+          "start_offset_sec": 66.32,
+          "end_offset_sec": 85.8,
+          "object_ids": []
+        },
+        {
+          "event_id": 64,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2339,
+          "end_frame": 2489,
+          "start_offset_sec": 93.56,
+          "end_offset_sec": 99.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 65,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2639,
+          "end_frame": 4504,
+          "start_offset_sec": 105.56,
+          "end_offset_sec": 180.16,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 17.2,
+          "end_offset_sec": 211.96
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 192.0,
+          "end_offset_sec": 216.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 216.2,
+          "end_offset_sec": 305.96
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 144.76
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 140.56,
+          "end_offset_sec": 154.36
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 132.72
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 144.84
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 132.48,
+          "end_offset_sec": 135.88
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 44.76,
+          "end_offset_sec": 48.8
+        },
+        {
+          "object_id": 11,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 239.04,
+          "end_offset_sec": 288.84
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 252.0,
+          "end_offset_sec": 288.84
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 56.56,
+          "end_offset_sec": 168.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 82.16,
+          "end_offset_sec": 127.16
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 313.24,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 94.8,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 96.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 240.2,
+          "end_offset_sec": 252.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 75.64,
+          "end_offset_sec": 130.76
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 241.84,
+          "end_offset_sec": 252.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 144.0,
+          "end_offset_sec": 173.96
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 62.92,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 25,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 26,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 27,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 13.52,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 28,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 240.0,
+          "end_offset_sec": 240.84
+        },
+        {
+          "object_id": 29,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 191.72
+        },
+        {
+          "object_id": 31,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 192.84
+        },
+        {
+          "object_id": 32,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 218.08,
+          "end_offset_sec": 219.92
+        },
+        {
+          "object_id": 33,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 128.36
+        },
+        {
+          "object_id": 34,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 85.2,
+          "end_offset_sec": 132.76
+        },
+        {
+          "object_id": 35,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 36,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 266.8,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 37,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 268.76,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 38,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 312.8,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 39,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 168.0,
+          "end_offset_sec": 195.2
+        },
+        {
+          "object_id": 40,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 41,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 42,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 43,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 52.92
+        },
+        {
+          "object_id": 44,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 45,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 46,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 313.64
+        },
+        {
+          "object_id": 47,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 3.24
+        },
+        {
+          "object_id": 48,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 49,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 52.2
+        },
+        {
+          "object_id": 50,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 51,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 52,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 53,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 50.08,
+          "end_offset_sec": 60.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_08_001353_001470",
+      "video_filename": "VIRAT_S_040104_08_001353_001470.mp4",
+      "start_sec": 1353,
+      "end_sec": 1470,
+      "textual_tokens": {
+        "car": 10,
+        "person": 33,
+        "bike": 1,
+        "unloading": 1,
+        "an": 4,
+        "object": 4,
+        "from": 1,
+        "a": 1,
+        "vehicle": 1,
+        "carrying": 3
+      },
+      "events": [
+        {
+          "event_id": 14,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 532,
+          "end_frame": 683,
+          "start_offset_sec": 21.28,
+          "end_offset_sec": 27.32,
+          "object_ids": [
+            1
+          ]
+        },
+        {
+          "event_id": 17,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 704,
+          "end_frame": 921,
+          "start_offset_sec": 28.16,
+          "end_offset_sec": 36.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 18,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1221,
+          "end_frame": 1521,
+          "start_offset_sec": 48.84,
+          "end_offset_sec": 60.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 19,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 3353,
+          "end_frame": 3504,
+          "start_offset_sec": 134.12,
+          "end_offset_sec": 140.16,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 7.04,
+          "end_offset_sec": 50.24
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 135.84,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 133.84,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 132.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 94.0
+        },
+        {
+          "object_id": 11,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 106.44,
+          "end_offset_sec": 113.96
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 96.84
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 90.36
+        },
+        {
+          "object_id": 14,
+          "type_id": 5,
+          "type_label": "bike",
+          "start_offset_sec": 76.2,
+          "end_offset_sec": 90.76
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 96.36
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 85.16
+        },
+        {
+          "object_id": 17,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 18,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 19,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.0,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 114.52,
+          "end_offset_sec": 120.84
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.0,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 96.16,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 26,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 120.0,
+          "end_offset_sec": 132.84
+        },
+        {
+          "object_id": 27,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 105.72,
+          "end_offset_sec": 108.84
+        },
+        {
+          "object_id": 28,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 76.48,
+          "end_offset_sec": 131.88
+        },
+        {
+          "object_id": 29,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 140.16
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 25.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 31,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 32.64
+        },
+        {
+          "object_id": 32,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 32.6
+        },
+        {
+          "object_id": 33,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.8
+        },
+        {
+          "object_id": 34,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.32,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 35,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 19.2,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 36,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 37,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 17.2,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 38,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 17.2,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 39,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 49.44
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_07_001011_001093",
+      "video_filename": "VIRAT_S_040103_07_001011_001093.mp4",
+      "start_sec": 1011,
+      "end_sec": 1093,
+      "textual_tokens": {
+        "car": 12,
+        "person": 16,
+        "carrying": 3,
+        "an": 3,
+        "object": 3
+      },
+      "events": [
+        {
+          "event_id": 9,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 970,
+          "end_frame": 1403,
+          "start_offset_sec": 38.8,
+          "end_offset_sec": 56.12,
+          "object_ids": []
+        },
+        {
+          "event_id": 10,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 940,
+          "end_frame": 1385,
+          "start_offset_sec": 37.6,
+          "end_offset_sec": 55.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 11,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1569,
+          "end_frame": 2255,
+          "start_offset_sec": 62.76,
+          "end_offset_sec": 90.2,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 90.36
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 56.12
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 56.72
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 49.24,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 14,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 15,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 98.16
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 6.4,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 25.6,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 12.0,
+          "end_offset_sec": 25.96
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 5.64,
+          "end_offset_sec": 12.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040104_00_000120_000224",
+      "video_filename": "VIRAT_S_040104_00_000120_000224.mp4",
+      "start_sec": 120,
+      "end_sec": 224,
+      "textual_tokens": {
+        "car": 10,
+        "object": 9,
+        "person": 20,
+        "carrying": 2,
+        "an": 2
+      },
+      "events": [
+        {
+          "event_id": 18,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 348,
+          "end_frame": 944,
+          "start_offset_sec": 13.92,
+          "end_offset_sec": 37.76,
+          "object_ids": []
+        },
+        {
+          "event_id": 27,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 621,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 8,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 12.48,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 33.96
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 8.72,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 114.96
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.4
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 15,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 16,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 17,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 9.24,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 21,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 22,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 80.36
+        },
+        {
+          "object_id": 24,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 81.44
+        },
+        {
+          "object_id": 25,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 70.64
+        },
+        {
+          "object_id": 26,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 11.32,
+          "end_offset_sec": 69.24
+        },
+        {
+          "object_id": 27,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.36,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 28,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 29,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 54.76
+        },
+        {
+          "object_id": 30,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 31,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 49.96
+        },
+        {
+          "object_id": 32,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 52.0,
+          "end_offset_sec": 60.8
+        },
+        {
+          "object_id": 33,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.84
+        },
+        {
+          "object_id": 34,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 12.52,
+          "end_offset_sec": 24.84
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_040103_02_000199_000279",
+      "video_filename": "VIRAT_S_040103_02_000199_000279.mp4",
+      "start_sec": 199,
+      "end_sec": 279,
+      "textual_tokens": {
+        "person": 18,
+        "car": 13,
+        "object": 5,
+        "carrying": 3,
+        "an": 4,
+        "loading": 1,
+        "to": 1,
+        "a": 4,
+        "vehicle": 4,
+        "closing": 1,
+        "trunk": 1,
+        "getting": 2,
+        "into": 2
+      },
+      "events": [
+        {
+          "event_id": 8,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 210,
+          "end_frame": 1064,
+          "start_offset_sec": 8.4,
+          "end_offset_sec": 42.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 9,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 321,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 10,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 474,
+          "end_frame": 1868,
+          "start_offset_sec": 18.96,
+          "end_offset_sec": 74.72,
+          "object_ids": []
+        },
+        {
+          "event_id": 11,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 1071,
+          "end_frame": 1136,
+          "start_offset_sec": 42.84,
+          "end_offset_sec": 45.44,
+          "object_ids": []
+        },
+        {
+          "event_id": 12,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 1103,
+          "end_frame": 1165,
+          "start_offset_sec": 44.12,
+          "end_offset_sec": 46.6,
+          "object_ids": []
+        },
+        {
+          "event_id": 13,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1235,
+          "end_frame": 1347,
+          "start_offset_sec": 49.4,
+          "end_offset_sec": 53.88,
+          "object_ids": []
+        },
+        {
+          "event_id": 14,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1762,
+          "end_frame": 1923,
+          "start_offset_sec": 70.48,
+          "end_offset_sec": 76.92,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 60.84
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 36.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 19.12
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 51.64,
+          "end_offset_sec": 60.0
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 12.84
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 10,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 6.0,
+          "end_offset_sec": 52.36
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 24.92,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 12,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 15,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 36.0,
+          "end_offset_sec": 48.84
+        },
+        {
+          "object_id": 16,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 17,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 18,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 19,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 60.0,
+          "end_offset_sec": 95.76
+        },
+        {
+          "object_id": 21,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 49.2,
+          "end_offset_sec": 87.04
+        },
+        {
+          "object_id": 22,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 72.0,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 23,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 14.6,
+          "end_offset_sec": 84.84
+        },
+        {
+          "object_id": 24,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 48.0,
+          "end_offset_sec": 75.04
+        }
+      ]
+    }
+  ]
+}

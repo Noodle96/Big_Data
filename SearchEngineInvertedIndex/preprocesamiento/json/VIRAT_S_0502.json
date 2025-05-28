@@ -1,0 +1,2099 @@
+{
+  "scene_id": "VIRAT_S_0502",
+  "subclips": [
+    {
+      "clip_id": "VIRAT_S_050201_11_002090_002220",
+      "video_filename": "VIRAT_S_050201_11_002090_002220.mp4",
+      "start_sec": 2090,
+      "end_sec": 2220,
+      "textual_tokens": {
+        "car": 4,
+        "person": 8,
+        "getting": 4,
+        "out": 3,
+        "of": 3,
+        "a": 4,
+        "vehicle": 4,
+        "into": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 599,
+          "end_frame": 804,
+          "start_offset_sec": 23.96,
+          "end_offset_sec": 32.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 1,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 735,
+          "end_frame": 935,
+          "start_offset_sec": 29.4,
+          "end_offset_sec": 37.4,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 2,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2546,
+          "end_frame": 2804,
+          "start_offset_sec": 101.84,
+          "end_offset_sec": 112.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 3,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 2762,
+          "end_frame": 2958,
+          "start_offset_sec": 110.48,
+          "end_offset_sec": 118.32,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 58.72
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 155.76
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 26.6,
+          "end_offset_sec": 44.8
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 34.2,
+          "end_offset_sec": 43.88
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 93.56,
+          "end_offset_sec": 155.76
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 90.84,
+          "end_offset_sec": 108.08
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 101.88,
+          "end_offset_sec": 144.6
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 118.2,
+          "end_offset_sec": 121.08
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050201_01_000147_000321",
+      "video_filename": "VIRAT_S_050201_01_000147_000321.mp4",
+      "start_sec": 147,
+      "end_sec": 321,
+      "textual_tokens": {
+        "person": 2,
+        "car": 1,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 3354,
+          "end_frame": 3561,
+          "start_offset_sec": 134.16,
+          "end_offset_sec": 142.44,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 46.56,
+          "end_offset_sec": 140.84
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 196.76
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050203_00_000023_000097",
+      "video_filename": "VIRAT_S_050203_00_000023_000097.mp4",
+      "start_sec": 23,
+      "end_sec": 97,
+      "textual_tokens": {
+        "object": 4,
+        "person": 9,
+        "car": 3,
+        "opening": 1,
+        "a": 3,
+        "vehicle": 3,
+        "trunk": 2,
+        "closing": 1,
+        "getting": 1,
+        "into": 1,
+        "carrying": 3,
+        "an": 3
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 3,
+          "type_label": "Person Opening a Vehicle Trunk",
+          "start_frame": 744,
+          "end_frame": 814,
+          "start_offset_sec": 29.76,
+          "end_offset_sec": 32.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 1,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 834,
+          "end_frame": 892,
+          "start_offset_sec": 33.36,
+          "end_offset_sec": 35.68,
+          "object_ids": []
+        },
+        {
+          "event_id": 2,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 995,
+          "end_frame": 1259,
+          "start_offset_sec": 39.8,
+          "end_offset_sec": 50.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 4,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 1060,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 42.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 5,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 1115,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 44.6,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 6,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1464,
+          "end_frame": 1695,
+          "start_offset_sec": 58.56,
+          "end_offset_sec": 67.8,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 50.6
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 50.2
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 80.84
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 42.4
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 58.56,
+          "end_offset_sec": 68.16
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 78.28,
+          "end_offset_sec": 88.48
+        },
+        {
+          "object_id": 7,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 84.96,
+          "end_offset_sec": 88.48
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050203_01_000147_000223",
+      "video_filename": "VIRAT_S_050203_01_000147_000223.mp4",
+      "start_sec": 147,
+      "end_sec": 223,
+      "textual_tokens": {
+        "car": 1,
+        "person": 9,
+        "getting": 2,
+        "out": 2,
+        "of": 2,
+        "a": 2,
+        "vehicle": 2,
+        "carrying": 3,
+        "an": 3,
+        "object": 3
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 656,
+          "end_frame": 745,
+          "start_offset_sec": 26.24,
+          "end_offset_sec": 29.8,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 1,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 1067,
+          "end_frame": 1125,
+          "start_offset_sec": 42.68,
+          "end_offset_sec": 45.0,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 2,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 858,
+          "end_frame": 1229,
+          "start_offset_sec": 34.32,
+          "end_offset_sec": 49.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 3,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1142,
+          "end_frame": 1292,
+          "start_offset_sec": 45.68,
+          "end_offset_sec": 51.68,
+          "object_ids": []
+        },
+        {
+          "event_id": 4,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2227,
+          "end_frame": 2268,
+          "start_offset_sec": 89.08,
+          "end_offset_sec": 90.72,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 90.72
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 26.24,
+          "end_offset_sec": 49.28
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 42.68,
+          "end_offset_sec": 51.8
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 88.96,
+          "end_offset_sec": 90.72
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 89.08,
+          "end_offset_sec": 90.72
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050201_08_001567_001647",
+      "video_filename": "VIRAT_S_050201_08_001567_001647.mp4",
+      "start_sec": 1567,
+      "end_sec": 1647,
+      "textual_tokens": {
+        "car": 1,
+        "person": 2,
+        "object": 1,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 657,
+          "end_frame": 1488,
+          "start_offset_sec": 26.28,
+          "end_offset_sec": 59.52,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 62.92
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 23.8,
+          "end_offset_sec": 51.2
+        },
+        {
+          "object_id": 3,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 23.92,
+          "end_offset_sec": 52.32
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050201_00_000012_000116",
+      "video_filename": "VIRAT_S_050201_00_000012_000116.mp4",
+      "start_sec": 12,
+      "end_sec": 116,
+      "textual_tokens": {
+        "person": 13,
+        "car": 4,
+        "getting": 2,
+        "into": 1,
+        "a": 3,
+        "vehicle": 2,
+        "out": 1,
+        "of": 1,
+        "carrying": 5,
+        "an": 5,
+        "object": 5,
+        "exiting": 1,
+        "facility": 1
+      },
+      "events": [
+        {
+          "event_id": 1,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 836,
+          "end_frame": 1207,
+          "start_offset_sec": 33.44,
+          "end_offset_sec": 48.28,
+          "object_ids": []
+        },
+        {
+          "event_id": 2,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 1532,
+          "end_frame": 1777,
+          "start_offset_sec": 61.28,
+          "end_offset_sec": 71.08,
+          "object_ids": []
+        },
+        {
+          "event_id": 3,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 330,
+          "end_frame": 885,
+          "start_offset_sec": 13.2,
+          "end_offset_sec": 35.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 4,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1395,
+          "end_frame": 2471,
+          "start_offset_sec": 55.8,
+          "end_offset_sec": 98.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 5,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 1608,
+          "end_frame": 1829,
+          "start_offset_sec": 64.32,
+          "end_offset_sec": 73.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 6,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2023,
+          "end_frame": 2526,
+          "start_offset_sec": 80.92,
+          "end_offset_sec": 101.04,
+          "object_ids": []
+        },
+        {
+          "event_id": 7,
+          "type_id": 12,
+          "type_label": "Person exiting a facility",
+          "start_frame": 2042,
+          "end_frame": 2143,
+          "start_offset_sec": 81.68,
+          "end_offset_sec": 85.72,
+          "object_ids": [
+            1
+          ]
+        },
+        {
+          "event_id": 8,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 2121,
+          "end_frame": 2830,
+          "start_offset_sec": 84.84,
+          "end_offset_sec": 113.2,
+          "object_ids": [
+            1
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 84.64,
+          "end_offset_sec": 117.96
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 83.6,
+          "end_offset_sec": 94.76
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.64
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.64
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 13.2,
+          "end_offset_sec": 42.8
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 46.8,
+          "end_offset_sec": 124.64
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 55.6,
+          "end_offset_sec": 103.96
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 64.0,
+          "end_offset_sec": 73.56
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 69.88,
+          "end_offset_sec": 101.4
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_03_000608_000684",
+      "video_filename": "VIRAT_S_050202_03_000608_000684.mp4",
+      "start_sec": 608,
+      "end_sec": 684,
+      "textual_tokens": {
+        "person": 2,
+        "car": 1,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1125,
+          "end_frame": 1218,
+          "start_offset_sec": 45.0,
+          "end_offset_sec": 48.72,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 18.8,
+          "end_offset_sec": 48.72
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 81.8
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_06_001048_001115",
+      "video_filename": "VIRAT_S_050202_06_001048_001115.mp4",
+      "start_sec": 1048,
+      "end_sec": 1115,
+      "textual_tokens": {
+        "person": 2,
+        "car": 1,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 749,
+          "end_frame": 1069,
+          "start_offset_sec": 29.96,
+          "end_offset_sec": 42.76,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 9.92,
+          "end_offset_sec": 42.76
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 76.76
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050203_07_001288_001531",
+      "video_filename": "VIRAT_S_050203_07_001288_001531.mp4",
+      "start_sec": 1288,
+      "end_sec": 1531,
+      "textual_tokens": {
+        "person": 16,
+        "unknown": 2,
+        "car": 6,
+        "getting": 3,
+        "into": 3,
+        "a": 8,
+        "vehicle": 8,
+        "opening": 1,
+        "trunk": 2,
+        "unloading": 2,
+        "an": 3,
+        "object": 3,
+        "from": 2,
+        "loading": 1,
+        "to": 1,
+        "closing": 1
+      },
+      "events": [
+        {
+          "event_id": 4,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1761,
+          "end_frame": 2061,
+          "start_offset_sec": 70.44,
+          "end_offset_sec": 82.44,
+          "object_ids": []
+        },
+        {
+          "event_id": 5,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 4191,
+          "end_frame": 4339,
+          "start_offset_sec": 167.64,
+          "end_offset_sec": 173.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 6,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 3681,
+          "end_frame": 3913,
+          "start_offset_sec": 147.24,
+          "end_offset_sec": 156.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 7,
+          "type_id": 3,
+          "type_label": "Person Opening a Vehicle Trunk",
+          "start_frame": 664,
+          "end_frame": 784,
+          "start_offset_sec": 26.56,
+          "end_offset_sec": 31.36,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 8,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 3337,
+          "end_frame": 3487,
+          "start_offset_sec": 133.48,
+          "end_offset_sec": 139.48,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 9,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 3522,
+          "end_frame": 3672,
+          "start_offset_sec": 140.88,
+          "end_offset_sec": 146.88,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 10,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 3943,
+          "end_frame": 4157,
+          "start_offset_sec": 157.72,
+          "end_offset_sec": 166.28,
+          "object_ids": []
+        },
+        {
+          "event_id": 11,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 4016,
+          "end_frame": 4128,
+          "start_offset_sec": 160.64,
+          "end_offset_sec": 165.12,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 16.44,
+          "end_offset_sec": 253.48
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 31.92,
+          "end_offset_sec": 86.24
+        },
+        {
+          "object_id": 3,
+          "type_id": 3299,
+          "type_label": "unknown",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 131.8
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 112.6,
+          "end_offset_sec": 165.24
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 270.12
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 126.28,
+          "end_offset_sec": 156.52
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 108.52,
+          "end_offset_sec": 173.56
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 187.6,
+          "end_offset_sec": 205.48
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 211.8
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 112.64,
+          "end_offset_sec": 291.24
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 187.92,
+          "end_offset_sec": 246.68
+        },
+        {
+          "object_id": 13,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 188.24,
+          "end_offset_sec": 245.4
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 210.4,
+          "end_offset_sec": 262.8
+        },
+        {
+          "object_id": 15,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 280.12,
+          "end_offset_sec": 291.24
+        },
+        {
+          "object_id": 16,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 291.24
+        },
+        {
+          "object_id": 17,
+          "type_id": 0,
+          "type_label": "unknown",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 291.24
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_00_000000_000105",
+      "video_filename": "VIRAT_S_050202_00_000000_000105.mp4",
+      "start_sec": 0,
+      "end_sec": 105,
+      "textual_tokens": {
+        "car": 1,
+        "person": 3,
+        "object": 2,
+        "unloading": 1,
+        "an": 1,
+        "from": 1,
+        "a": 2,
+        "vehicle": 2,
+        "getting": 1,
+        "out": 1,
+        "of": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 1850,
+          "end_frame": 1908,
+          "start_offset_sec": 74.0,
+          "end_offset_sec": 76.32,
+          "object_ids": [
+            2,
+            3
+          ]
+        },
+        {
+          "event_id": 1,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 995,
+          "end_frame": 1138,
+          "start_offset_sec": 39.8,
+          "end_offset_sec": 45.52,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 125.88
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 41.96,
+          "end_offset_sec": 111.64
+        },
+        {
+          "object_id": 3,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 74.88,
+          "end_offset_sec": 100.52
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_01_000150_000280",
+      "video_filename": "VIRAT_S_050202_01_000150_000280.mp4",
+      "start_sec": 150,
+      "end_sec": 280,
+      "textual_tokens": {
+        "person": 4,
+        "car": 2,
+        "getting": 2,
+        "out": 1,
+        "of": 1,
+        "a": 2,
+        "vehicle": 2,
+        "into": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 637,
+          "end_frame": 1176,
+          "start_offset_sec": 25.48,
+          "end_offset_sec": 47.04,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 1,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2544,
+          "end_frame": 2929,
+          "start_offset_sec": 101.76,
+          "end_offset_sec": 117.16,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 42.52,
+          "end_offset_sec": 103.16
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 78.84,
+          "end_offset_sec": 114.04
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 155.68
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 155.68
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_02_000447_000577",
+      "video_filename": "VIRAT_S_050202_02_000447_000577.mp4",
+      "start_sec": 447,
+      "end_sec": 577,
+      "textual_tokens": {
+        "person": 14,
+        "car": 5,
+        "loading": 2,
+        "an": 2,
+        "object": 2,
+        "to": 2,
+        "a": 7,
+        "vehicle": 7,
+        "getting": 5,
+        "into": 4,
+        "out": 1,
+        "of": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 1555,
+          "end_frame": 1613,
+          "start_offset_sec": 62.2,
+          "end_offset_sec": 64.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 1,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1681,
+          "end_frame": 2065,
+          "start_offset_sec": 67.24,
+          "end_offset_sec": 82.6,
+          "object_ids": []
+        },
+        {
+          "event_id": 2,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1712,
+          "end_frame": 1821,
+          "start_offset_sec": 68.48,
+          "end_offset_sec": 72.84,
+          "object_ids": []
+        },
+        {
+          "event_id": 3,
+          "type_id": 1,
+          "type_label": "Person loading an Object to a Vehicle",
+          "start_frame": 1897,
+          "end_frame": 2017,
+          "start_offset_sec": 75.88,
+          "end_offset_sec": 80.68,
+          "object_ids": []
+        },
+        {
+          "event_id": 4,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2050,
+          "end_frame": 2134,
+          "start_offset_sec": 82.0,
+          "end_offset_sec": 85.36,
+          "object_ids": []
+        },
+        {
+          "event_id": 5,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2500,
+          "end_frame": 2643,
+          "start_offset_sec": 100.0,
+          "end_offset_sec": 105.72,
+          "object_ids": []
+        },
+        {
+          "event_id": 6,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 2842,
+          "end_frame": 2900,
+          "start_offset_sec": 113.68,
+          "end_offset_sec": 116.0,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 51.96
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 72.84
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 120.76
+        },
+        {
+          "object_id": 4,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 124.64
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 44.44,
+          "end_offset_sec": 85.36
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 54.2,
+          "end_offset_sec": 82.6
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 56.36,
+          "end_offset_sec": 71.84
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 146.44
+        },
+        {
+          "object_id": 9,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 95.72,
+          "end_offset_sec": 105.72
+        },
+        {
+          "object_id": 10,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 137.64
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 90.4,
+          "end_offset_sec": 155.56
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 114.28,
+          "end_offset_sec": 132.68
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_10_002159_002233",
+      "video_filename": "VIRAT_S_050202_10_002159_002233.mp4",
+      "start_sec": 2159,
+      "end_sec": 2233,
+      "textual_tokens": {
+        "car": 2,
+        "person": 6,
+        "object": 4,
+        "getting": 2,
+        "into": 2,
+        "a": 2,
+        "vehicle": 2,
+        "carrying": 2,
+        "an": 2
+      },
+      "events": [
+        {
+          "event_id": 1,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 714,
+          "end_frame": 950,
+          "start_offset_sec": 28.56,
+          "end_offset_sec": 38.0,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 3,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 1015,
+          "end_frame": 1287,
+          "start_offset_sec": 40.6,
+          "end_offset_sec": 51.48,
+          "object_ids": []
+        },
+        {
+          "event_id": 4,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 585,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 23.4,
+          "object_ids": []
+        },
+        {
+          "event_id": 5,
+          "type_id": 9,
+          "type_label": "Person carrying an object",
+          "start_frame": 0,
+          "end_frame": 1167,
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 46.68,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 70.6
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 78.96
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 37.2
+        },
+        {
+          "object_id": 4,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 30.52
+        },
+        {
+          "object_id": 5,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 47.84
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 50.56
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050203_08_001686_001885",
+      "video_filename": "VIRAT_S_050203_08_001686_001885.mp4",
+      "start_sec": 1686,
+      "end_sec": 1885,
+      "textual_tokens": {
+        "person": 9,
+        "car": 3,
+        "getting": 4,
+        "out": 3,
+        "of": 3,
+        "a": 5,
+        "vehicle": 5,
+        "into": 1,
+        "unloading": 1,
+        "an": 1,
+        "object": 1,
+        "from": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 528,
+          "end_frame": 659,
+          "start_offset_sec": 21.12,
+          "end_offset_sec": 26.36,
+          "object_ids": [
+            1,
+            2
+          ]
+        },
+        {
+          "event_id": 1,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 3043,
+          "end_frame": 3311,
+          "start_offset_sec": 121.72,
+          "end_offset_sec": 132.44,
+          "object_ids": []
+        },
+        {
+          "event_id": 2,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 4839,
+          "end_frame": 5061,
+          "start_offset_sec": 193.56,
+          "end_offset_sec": 202.44,
+          "object_ids": []
+        },
+        {
+          "event_id": 3,
+          "type_id": 2,
+          "type_label": "Person Unloading an Object from a Vehicle",
+          "start_frame": 3564,
+          "end_frame": 3664,
+          "start_offset_sec": 142.56,
+          "end_offset_sec": 146.56,
+          "object_ids": []
+        },
+        {
+          "event_id": 4,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 3635,
+          "end_frame": 3734,
+          "start_offset_sec": 145.4,
+          "end_offset_sec": 149.36,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.16,
+          "end_offset_sec": 38.64
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 238.48
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 124.28,
+          "end_offset_sec": 212.68
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 89.64,
+          "end_offset_sec": 238.48
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 184.24,
+          "end_offset_sec": 194.64
+        },
+        {
+          "object_id": 5,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 238.48
+        },
+        {
+          "object_id": 6,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 147.8,
+          "end_offset_sec": 158.16
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_07_001126_001301",
+      "video_filename": "VIRAT_S_050202_07_001126_001301.mp4",
+      "start_sec": 1126,
+      "end_sec": 1301,
+      "textual_tokens": {
+        "car": 3,
+        "person": 8,
+        "getting": 2,
+        "out": 1,
+        "of": 1,
+        "a": 4,
+        "vehicle": 4,
+        "opening": 1,
+        "trunk": 2,
+        "closing": 1,
+        "into": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 589,
+          "end_frame": 799,
+          "start_offset_sec": 23.56,
+          "end_offset_sec": 31.96,
+          "object_ids": [
+            2
+          ]
+        },
+        {
+          "event_id": 1,
+          "type_id": 3,
+          "type_label": "Person Opening a Vehicle Trunk",
+          "start_frame": 3738,
+          "end_frame": 3798,
+          "start_offset_sec": 149.52,
+          "end_offset_sec": 151.92,
+          "object_ids": []
+        },
+        {
+          "event_id": 2,
+          "type_id": 4,
+          "type_label": "Person Closing a Vehicle Trunk",
+          "start_frame": 3946,
+          "end_frame": 4004,
+          "start_offset_sec": 157.84,
+          "end_offset_sec": 160.16,
+          "object_ids": []
+        },
+        {
+          "event_id": 3,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 4076,
+          "end_frame": 4351,
+          "start_offset_sec": 163.04,
+          "end_offset_sec": 174.04,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 209.44
+        },
+        {
+          "object_id": 4,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 29.04,
+          "end_offset_sec": 55.48
+        },
+        {
+          "object_id": 5,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 52.76,
+          "end_offset_sec": 83.56
+        },
+        {
+          "object_id": 6,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 209.44
+        },
+        {
+          "object_id": 7,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 112.8,
+          "end_offset_sec": 127.6
+        },
+        {
+          "object_id": 8,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 147.0,
+          "end_offset_sec": 167.96
+        },
+        {
+          "object_id": 9,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 209.44
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050201_04_000669_000728",
+      "video_filename": "VIRAT_S_050201_04_000669_000728.mp4",
+      "start_sec": 669,
+      "end_sec": 728,
+      "textual_tokens": {
+        "car": 1,
+        "person": 2,
+        "getting": 1,
+        "out": 1,
+        "of": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 643,
+          "end_frame": 777,
+          "start_offset_sec": 25.72,
+          "end_offset_sec": 31.08,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 1.96,
+          "end_offset_sec": 70.68
+        },
+        {
+          "object_id": 2,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 27.48,
+          "end_offset_sec": 44.92
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_04_000690_000750",
+      "video_filename": "VIRAT_S_050202_04_000690_000750.mp4",
+      "start_sec": 690,
+      "end_sec": 750,
+      "textual_tokens": {
+        "person": 2,
+        "car": 2,
+        "unknown": 1,
+        "getting": 1,
+        "out": 1,
+        "of": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 684,
+          "end_frame": 746,
+          "start_offset_sec": 27.36,
+          "end_offset_sec": 29.84,
+          "object_ids": [
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 27.36,
+          "end_offset_sec": 54.44
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 13.28
+        },
+        {
+          "object_id": 3,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 5.32,
+          "end_offset_sec": 71.6
+        },
+        {
+          "object_id": 6,
+          "type_id": 0,
+          "type_label": "unknown",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 11.68
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050203_09_001960_002083",
+      "video_filename": "VIRAT_S_050203_09_001960_002083.mp4",
+      "start_sec": 1960,
+      "end_sec": 2083,
+      "textual_tokens": {
+        "unknown": 2,
+        "car": 4,
+        "person": 11,
+        "getting": 4,
+        "out": 3,
+        "of": 3,
+        "a": 4,
+        "vehicle": 4,
+        "into": 1
+      },
+      "events": [
+        {
+          "event_id": 5,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 951,
+          "end_frame": 1113,
+          "start_offset_sec": 38.04,
+          "end_offset_sec": 44.52,
+          "object_ids": []
+        },
+        {
+          "event_id": 6,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 948,
+          "end_frame": 1141,
+          "start_offset_sec": 37.92,
+          "end_offset_sec": 45.64,
+          "object_ids": []
+        },
+        {
+          "event_id": 7,
+          "type_id": 6,
+          "type_label": "Person getting out of a Vehicle",
+          "start_frame": 899,
+          "end_frame": 1130,
+          "start_offset_sec": 35.96,
+          "end_offset_sec": 45.2,
+          "object_ids": []
+        },
+        {
+          "event_id": 8,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 2589,
+          "end_frame": 2697,
+          "start_offset_sec": 103.56,
+          "end_offset_sec": 107.88,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 5,
+          "type_id": 0,
+          "type_label": "unknown",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 147.04
+        },
+        {
+          "object_id": 8,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 147.04
+        },
+        {
+          "object_id": 10,
+          "type_id": 631,
+          "type_label": "unknown",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 24.96
+        },
+        {
+          "object_id": 11,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 9.28,
+          "end_offset_sec": 33.36
+        },
+        {
+          "object_id": 12,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 21.32,
+          "end_offset_sec": 35.12
+        },
+        {
+          "object_id": 13,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 27.76,
+          "end_offset_sec": 147.04
+        },
+        {
+          "object_id": 14,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 41.24,
+          "end_offset_sec": 69.6
+        },
+        {
+          "object_id": 16,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 42.0,
+          "end_offset_sec": 70.72
+        },
+        {
+          "object_id": 17,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 40.48,
+          "end_offset_sec": 71.0
+        },
+        {
+          "object_id": 18,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 47.4,
+          "end_offset_sec": 87.04
+        },
+        {
+          "object_id": 19,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 77.52,
+          "end_offset_sec": 90.56
+        },
+        {
+          "object_id": 20,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 77.28,
+          "end_offset_sec": 107.88
+        },
+        {
+          "object_id": 21,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 147.04
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050201_07_001348_001458",
+      "video_filename": "VIRAT_S_050201_07_001348_001458.mp4",
+      "start_sec": 1348,
+      "end_sec": 1458,
+      "textual_tokens": {
+        "car": 1,
+        "person": 2,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 255,
+          "end_frame": 406,
+          "start_offset_sec": 10.2,
+          "end_offset_sec": 16.24,
+          "object_ids": [
+            1,
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 3.4,
+          "end_offset_sec": 46.28
+        },
+        {
+          "object_id": 1,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 8.88,
+          "end_offset_sec": 10.88
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050201_10_001992_002056",
+      "video_filename": "VIRAT_S_050201_10_001992_002056.mp4",
+      "start_sec": 1992,
+      "end_sec": 2056,
+      "textual_tokens": {
+        "car": 1,
+        "person": 2,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 735,
+          "end_frame": 919,
+          "start_offset_sec": 29.4,
+          "end_offset_sec": 36.76,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 23.24,
+          "end_offset_sec": 54.08
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.84,
+          "end_offset_sec": 33.64
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_09_001642_001712",
+      "video_filename": "VIRAT_S_050202_09_001642_001712.mp4",
+      "start_sec": 1642,
+      "end_sec": 1712,
+      "textual_tokens": {
+        "person": 2,
+        "car": 1,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 697,
+          "end_frame": 1187,
+          "start_offset_sec": 27.88,
+          "end_offset_sec": 47.48,
+          "object_ids": [
+            1,
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 24.52,
+          "end_offset_sec": 33.28
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 72.48
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050202_08_001410_001494",
+      "video_filename": "VIRAT_S_050202_08_001410_001494.mp4",
+      "start_sec": 1410,
+      "end_sec": 1494,
+      "textual_tokens": {
+        "person": 2,
+        "car": 1,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 0,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 760,
+          "end_frame": 889,
+          "start_offset_sec": 30.4,
+          "end_offset_sec": 35.56,
+          "object_ids": [
+            1,
+            2
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 0,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 28.44,
+          "end_offset_sec": 33.2
+        },
+        {
+          "object_id": 1,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 19.04,
+          "end_offset_sec": 53.64
+        }
+      ]
+    },
+    {
+      "clip_id": "VIRAT_S_050200_00_000106_000380",
+      "video_filename": "VIRAT_S_050200_00_000106_000380.mp4",
+      "start_sec": 106,
+      "end_sec": 380,
+      "textual_tokens": {
+        "object": 1,
+        "car": 1,
+        "person": 2,
+        "getting": 1,
+        "into": 1,
+        "a": 1,
+        "vehicle": 1
+      },
+      "events": [
+        {
+          "event_id": 1,
+          "type_id": 5,
+          "type_label": "Person getting into a Vehicle",
+          "start_frame": 5730,
+          "end_frame": 5788,
+          "start_offset_sec": 229.2,
+          "end_offset_sec": 231.52,
+          "object_ids": []
+        }
+      ],
+      "objects": [
+        {
+          "object_id": 1,
+          "type_id": 4,
+          "type_label": "object",
+          "start_offset_sec": 203.52,
+          "end_offset_sec": 228.76
+        },
+        {
+          "object_id": 2,
+          "type_id": 2,
+          "type_label": "car",
+          "start_offset_sec": 0.0,
+          "end_offset_sec": 293.36
+        },
+        {
+          "object_id": 3,
+          "type_id": 1,
+          "type_label": "person",
+          "start_offset_sec": 208.24,
+          "end_offset_sec": 229.72
+        }
+      ]
+    }
+  ]
+}
