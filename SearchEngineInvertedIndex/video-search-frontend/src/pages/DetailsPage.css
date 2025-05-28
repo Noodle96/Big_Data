@@ -1,0 +1,58 @@
+.detail-container {
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .detail-box {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .main-button {
+    padding: 0.5rem 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .query-info {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+  
+  .metric {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .label {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .video-section {
+    margin-top: 1rem;
+  }
+  
+  .json-box {
+    background-color: #f8f8f8;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    max-height: 400px;
+  }
