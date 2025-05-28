@@ -41,10 +41,10 @@ void worker(int id_thread) {
         std::string word;
         std::unordered_set<std::string> uniqueWords;  // Para evitar duplicados por la misma palabra
         while (iss >> word) {
-            // if(uniqueWords.insert(word).second){
-            //     localIndex[word].insert(task.filename);
-            // }
-            localIndex[word].insert(task.filename);
+            if(uniqueWords.insert(word).second){
+                localIndex[word].insert(task.filename);
+            }
+            // localIndex[word].insert(task.filename);
         }
         // std::unordered_map<std::string, int> localCount;
         // std::istringstream iss(task.text);
