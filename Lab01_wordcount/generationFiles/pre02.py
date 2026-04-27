@@ -10,7 +10,9 @@
 import os
 import time
 # Ruta al archivo base
-input_file = '../../txt/words_lowercase_test_borrar.txt'
+# input_file = '../../txt/words_lowercase_test_borrar.txt'
+input_file = "../../txt/words_lowercase.txt"
+
 
 # Leemos el contenido base una sola vez
 with open(input_file, 'r', encoding='utf-8') as f:
@@ -24,10 +26,10 @@ os.makedirs(output_dir, exist_ok=True)  # Crear si no existe
 # # Tamaños de destino en GB y sus repeticiones aproximadas
 targets = {
     # '100MB.txt': 22, # 0.5 segundos
-    '500MB_test.txt': 111, 
+    #'500MB_test.txt': 111, 
     # '1GB.txt': 221, # 13 segundos
     # '2GB.txt': 443, #12 segundos
-    # '4GB.txt': 884, #57 segundos
+     '4GB.txt': 884, #57 segundos
     # '8GB.txt': 1768, # 157 segundos
     # '16GB.txt': 3536,  # 312 segundos
     # '20GB.txt': 4424    #  237 segundos
@@ -47,4 +49,3 @@ for filename, repetitions in targets.items():
     size_mb = os.path.getsize(output_path) / (1024 * 1024)
     # print(f'{filename} generado en {output_path} (~{size_mb:.2f} MB)')
     print(f'✅ {filename} generado en {output_path} (~{size_mb:.2f} MB) en {elapsed:.2f} segundos\n')
-

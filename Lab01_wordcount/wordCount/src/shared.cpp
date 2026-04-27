@@ -18,7 +18,9 @@ std::vector<std::condition_variable> queueConds(NUM_WORKERS);
 std::atomic<bool> finishedReading(false);
 std::unordered_map<std::string, int> globalWordCount;
 std::mutex resultMutex;
-std::string PATH = "in/20GB.txt";
+// std::string PATH = "in/20GB.txt";
+std::string PATH = "in/wikipedia.txt";
+//std::string PATH = "in/words.txt";
 const size_t BLOCK_SIZE = 8e6; // 8 MB
 std::vector<std::unordered_map<std::string, int>> threadWordCounts;
 

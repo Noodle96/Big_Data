@@ -1,5 +1,8 @@
 # WordCount Multihilo en C++
 
+![architecture Preview](./assets/architecture.png)
+
+
 Este proyecto implementa un sistema eficiente de conteo de palabras usando múltiples hilos en C++. Procesa archivos de gran tamaño (por ejemplo, 20GB) y distribuye bloques de texto a **una cola individual por hilo** para evitar la contención de recursos y mejorar el rendimiento, además tratamos las palabras cortadas.
 
 ## Caracteristicas
