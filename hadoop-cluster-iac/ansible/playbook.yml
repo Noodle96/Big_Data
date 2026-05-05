@@ -1,0 +1,248 @@
+---
+# Playbook principal para preparar los nodos del cluster Hadoop.
+# Este bloque se ejecuta sobre TODOS los nodos definidos en inventory.ini:
+# master + workers.
+- name: Configure base dependencies and Hadoop installation
+  hosts: all
+  become: true
+
+  vars:
+    # Versión de Hadoop que instalaremos en todos los nodos.
+    hadoop_version: "3.3.6"
+
+    # Nombre del archivo comprimido que se descargará desde Apache.
+    hadoop_archive: "hadoop-{{ hadoop_version }}.tar.gz"
+
+    # URL oficial de descarga de Hadoop.
+    hadoop_download_url: "https://downloads.apache.org/hadoop/common/hadoop-{{ hadoop_version }}/{{ hadoop_archive }}"
+
+    # Carpeta donde quedará instalado Hadoop.
+    hadoop_home: "/home/ubuntu/hadoop-{{ hadoop_version }}"
+
+    master_hostname: "hadoop-master"
+
+  tasks:
+    # Actualiza el índice local de paquetes de Ubuntu.
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    # Instala Java y herramientas necesarias para descargar/descomprimir Hadoop.
+    - name: Install required packages
+      apt:
+        name:
+          - openjdk-11-jdk
+          - wget
+          - tar
+          - openssh-client
+          - openssh-server
+        state: present
+
+    # Asegura que el servicio SSH esté activo en cada nodo.
+    - name: Ensure SSH service is running
+      service:
+        name: ssh
+        state: started
+        enabled: yes
+
+    # Descarga Hadoop solo si no existe ya el archivo comprimido.
+    - name: Download Hadoop archive
+      get_url:
+        url: "{{ hadoop_download_url }}"
+        dest: "/home/ubuntu/{{ hadoop_archive }}"
+        mode: "0644"
+        owner: ubuntu
+        group: ubuntu
+
+    # Descomprime Hadoop en /home/ubuntu.
+    # creates evita repetir la extracción si la carpeta ya existe.
+    - name: Extract Hadoop archive
+      unarchive:
+        src: "/home/ubuntu/{{ hadoop_archive }}"
+        dest: "/home/ubuntu/"
+        remote_src: yes
+        owner: ubuntu
+        group: ubuntu
+        creates: "{{ hadoop_home }}"
+
+    # Agrega variables de entorno al .bashrc del usuario ubuntu.
+    # Esto permite usar comandos como hadoop, hdfs y yarn en sesiones interactivas.
+    - name: Configure Hadoop environment variables in .bashrc
+      blockinfile:
+        path: "/home/ubuntu/.bashrc"
+        marker: "# {mark} ANSIBLE HADOOP ENV"
+        block: |
+          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+          export HADOOP_HOME={{ hadoop_home }}
+          export PATH=$PATH:$HADOOP_HOME/bin
+          export PATH=$PATH:$HADOOP_HOME/sbin
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    # Configura JAVA_HOME dentro de hadoop-env.sh.
+    # Esto es CRÍTICO porque start-dfs.sh/start-yarn.sh no siempre leen .bashrc.
+    - name: Configure JAVA_HOME in hadoop-env.sh
+      lineinfile:
+        path: "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
+        regexp: "^export JAVA_HOME="
+        line: "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+        insertafter: "^# export JAVA_HOME="
+        state: present
+
+
+
+    - name: Configure /etc/hosts for all nodes
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          {{ hostvars['hadoop-master']['ansible_private_ip'] }} hadoop-master
+          {{ hostvars['hadoop-worker-1']['ansible_host'] }} hadoop-worker-1
+          {{ hostvars['hadoop-worker-2']['ansible_host'] }} hadoop-worker-2
+          {{ hostvars['hadoop-worker-3']['ansible_host'] }} hadoop-worker-3
+
+    - name: Create HDFS directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+      loop:
+        - /home/ubuntu/hadoopdata/hdfs/namenode
+        - /home/ubuntu/hadoopdata/hdfs/datanode
+
+
+    - name: Configure core-site.xml
+      template:
+        src: core-site.xml.j2
+        dest: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+
+    - name: Configure hdfs-site.xml
+      template:
+        src: hdfs-site.xml.j2
+        dest: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Configure mapred-site.xml
+      template:
+        src: mapred-site.xml.j2
+        dest: "{{ hadoop_home }}/etc/hadoop/mapred-site.xml"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Configure yarn-site.xml
+      template:
+        src: yarn-site.xml.j2
+        dest: "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Configure workers file
+      copy:
+        dest: "{{ hadoop_home }}/etc/hadoop/workers"
+        content: |
+          hadoop-worker-1
+          hadoop-worker-2
+          hadoop-worker-3
+      when: inventory_hostname == "hadoop-master"
+
+    # Crea la carpeta .ssh del usuario ubuntu en el master.
+    - name: Ensure .ssh directory exists on master
+      file:
+        path: /home/ubuntu/.ssh
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0700"
+      when: inventory_hostname == "hadoop-master"
+
+    # Genera la clave SSH interna del master como usuario ubuntu, no como root.
+    - name: Generate SSH key on master as ubuntu
+      become: false
+      command: ssh-keygen -t rsa -N "" -f /home/ubuntu/.ssh/id_rsa
+      args:
+        creates: /home/ubuntu/.ssh/id_rsa
+      when: inventory_hostname == "hadoop-master"
+
+    # Asegura que la clave privada pueda ser leída solo por ubuntu.
+    - name: Fix private SSH key permissions on master
+      file:
+        path: /home/ubuntu/.ssh/id_rsa
+        owner: ubuntu
+        group: ubuntu
+        mode: "0600"
+      when: inventory_hostname == "hadoop-master"
+
+    # Asegura permisos correctos para la clave pública.
+    - name: Fix public SSH key permissions on master
+      file:
+        path: /home/ubuntu/.ssh/id_rsa.pub
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+      when: inventory_hostname == "hadoop-master"
+
+    # Lee la clave pública generada en el master.
+    - name: Read public key from master
+      slurp:
+        src: /home/ubuntu/.ssh/id_rsa.pub
+      register: pubkey
+      when: inventory_hostname == "hadoop-master"
+
+    # Agrega la clave pública del master en authorized_keys de todos los nodos.
+    # Incluye también al master, porque start-dfs.sh puede hacer SSH al propio master.
+    - name: Set master public key as authorized key on all nodes
+      authorized_key:
+        user: ubuntu
+        key: "{{ hostvars['hadoop-master']['pubkey']['content'] | b64decode }}"
+
+    
+
+        # Crea un archivo marcador en el nodo master para identificarlo fácilmente.
+    - name: Create marker file on master
+      file:
+        path: /home/ubuntu/master
+        state: touch
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+      when: inventory_hostname == "hadoop-master"
+
+    # Crea un archivo marcador en worker-1.
+    - name: Create marker file on worker 1
+      file:
+        path: /home/ubuntu/worker_1
+        state: touch
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+      when: inventory_hostname == "hadoop-worker-1"
+
+    # Crea un archivo marcador en worker-2.
+    - name: Create marker file on worker 2
+      file:
+        path: /home/ubuntu/worker_2
+        state: touch
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+      when: inventory_hostname == "hadoop-worker-2"
+
+    # Crea un archivo marcador en worker-3.
+    - name: Create marker file on worker 3
+      file:
+        path: /home/ubuntu/worker_3
+        state: touch
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+      when: inventory_hostname == "hadoop-worker-3"
