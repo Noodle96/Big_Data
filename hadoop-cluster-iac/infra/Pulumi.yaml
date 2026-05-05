@@ -1,0 +1,11 @@
+name: hadoop-cluster
+description: configuracion de hadoop en aws
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
