@@ -1,0 +1,101 @@
+codigo_mesa,local,distrito,provincia,departamento,electores_habiles
+100001,Local_100001,Cusco,Cusco,Cusco,253
+100002,Local_100002,San Sebastian,Cusco,Cusco,281
+100003,Local_100003,Los Olivos,Lima,Lima,344
+100004,Local_100004,Lima,Lima,Lima,325
+100005,Local_100005,Arequipa,Arequipa,Arequipa,253
+100006,Local_100006,Los Olivos,Lima,Lima,279
+100007,Local_100007,Cusco,Cusco,Cusco,321
+100008,Local_100008,San Isidro,Lima,Lima,278
+100009,Local_100009,Yanahuara,Arequipa,Arequipa,250
+100010,Local_100010,San Isidro,Lima,Lima,293
+100011,Local_100011,Cayma,Arequipa,Arequipa,277
+100012,Local_100012,Arequipa,Arequipa,Arequipa,261
+100013,Local_100013,Arequipa,Arequipa,Arequipa,295
+100014,Local_100014,Yanahuara,Arequipa,Arequipa,255
+100015,Local_100015,Santiago,Cusco,Cusco,318
+100016,Local_100016,San Isidro,Lima,Lima,260
+100017,Local_100017,San Sebastian,Cusco,Cusco,330
+100018,Local_100018,San Sebastian,Cusco,Cusco,323
+100019,Local_100019,Lima,Lima,Lima,255
+100020,Local_100020,Wanchaq,Cusco,Cusco,348
+100021,Local_100021,Arequipa,Arequipa,Arequipa,279
+100022,Local_100022,San Isidro,Lima,Lima,285
+100023,Local_100023,Yanahuara,Arequipa,Arequipa,270
+100024,Local_100024,Yanahuara,Arequipa,Arequipa,276
+100025,Local_100025,San Sebastian,Cusco,Cusco,339
+100026,Local_100026,Cusco,Cusco,Cusco,327
+100027,Local_100027,Wanchaq,Cusco,Cusco,318
+100028,Local_100028,Wanchaq,Cusco,Cusco,270
+100029,Local_100029,Cerro Colorado,Arequipa,Arequipa,284
+100030,Local_100030,Wanchaq,Cusco,Cusco,337
+100031,Local_100031,Arequipa,Arequipa,Arequipa,279
+100032,Local_100032,Miraflores,Lima,Lima,301
+100033,Local_100033,Arequipa,Arequipa,Arequipa,277
+100034,Local_100034,San Sebastian,Cusco,Cusco,277
+100035,Local_100035,Santiago,Cusco,Cusco,300
+100036,Local_100036,Santiago,Cusco,Cusco,268
+100037,Local_100037,Cayma,Arequipa,Arequipa,281
+100038,Local_100038,San Sebastian,Cusco,Cusco,345
+100039,Local_100039,Santiago,Cusco,Cusco,324
+100040,Local_100040,Yanahuara,Arequipa,Arequipa,278
+100041,Local_100041,San Isidro,Lima,Lima,261
+100042,Local_100042,Lima,Lima,Lima,269
+100043,Local_100043,Wanchaq,Cusco,Cusco,337
+100044,Local_100044,Arequipa,Arequipa,Arequipa,299
+100045,Local_100045,Cerro Colorado,Arequipa,Arequipa,317
+100046,Local_100046,Arequipa,Arequipa,Arequipa,337
+100047,Local_100047,Cusco,Cusco,Cusco,337
+100048,Local_100048,San Sebastian,Cusco,Cusco,348
+100049,Local_100049,San Sebastian,Cusco,Cusco,264
+100050,Local_100050,Cerro Colorado,Arequipa,Arequipa,270
+100051,Local_100051,Arequipa,Arequipa,Arequipa,342
+100052,Local_100052,San Sebastian,Cusco,Cusco,314
+100053,Local_100053,Lima,Lima,Lima,330
+100054,Local_100054,Cayma,Arequipa,Arequipa,269
+100055,Local_100055,Cayma,Arequipa,Arequipa,319
+100056,Local_100056,Cusco,Cusco,Cusco,326
+100057,Local_100057,Cerro Colorado,Arequipa,Arequipa,252
+100058,Local_100058,Miraflores,Lima,Lima,289
+100059,Local_100059,Lima,Lima,Lima,280
+100060,Local_100060,Cusco,Cusco,Cusco,260
+100061,Local_100061,Santiago,Cusco,Cusco,258
+100062,Local_100062,Wanchaq,Cusco,Cusco,266
+100063,Local_100063,Santiago,Cusco,Cusco,320
+100064,Local_100064,Miraflores,Lima,Lima,317
+100065,Local_100065,Santiago,Cusco,Cusco,277
+100066,Local_100066,Wanchaq,Cusco,Cusco,341
+100067,Local_100067,Cerro Colorado,Arequipa,Arequipa,335
+100068,Local_100068,San Sebastian,Cusco,Cusco,306
+100069,Local_100069,Santiago,Cusco,Cusco,265
+100070,Local_100070,Los Olivos,Lima,Lima,258
+100071,Local_100071,Arequipa,Arequipa,Arequipa,325
+100072,Local_100072,Wanchaq,Cusco,Cusco,325
+100073,Local_100073,Lima,Lima,Lima,259
+100074,Local_100074,Cusco,Cusco,Cusco,279
+100075,Local_100075,Lima,Lima,Lima,292
+100076,Local_100076,Los Olivos,Lima,Lima,285
+100077,Local_100077,Santiago,Cusco,Cusco,277
+100078,Local_100078,Wanchaq,Cusco,Cusco,342
+100079,Local_100079,Santiago,Cusco,Cusco,281
+100080,Local_100080,Cerro Colorado,Arequipa,Arequipa,274
+100081,Local_100081,Lima,Lima,Lima,334
+100082,Local_100082,Yanahuara,Arequipa,Arequipa,304
+100083,Local_100083,Cerro Colorado,Arequipa,Arequipa,343
+100084,Local_100084,Lima,Lima,Lima,257
+100085,Local_100085,Yanahuara,Arequipa,Arequipa,263
+100086,Local_100086,Los Olivos,Lima,Lima,274
+100087,Local_100087,Santiago,Cusco,Cusco,267
+100088,Local_100088,Cayma,Arequipa,Arequipa,285
+100089,Local_100089,Cayma,Arequipa,Arequipa,259
+100090,Local_100090,Arequipa,Arequipa,Arequipa,256
+100091,Local_100091,Cusco,Cusco,Cusco,261
+100092,Local_100092,Los Olivos,Lima,Lima,302
+100093,Local_100093,Cerro Colorado,Arequipa,Arequipa,277
+100094,Local_100094,Arequipa,Arequipa,Arequipa,271
+100095,Local_100095,Arequipa,Arequipa,Arequipa,299
+100096,Local_100096,Cerro Colorado,Arequipa,Arequipa,286
+100097,Local_100097,Cerro Colorado,Arequipa,Arequipa,269
+100098,Local_100098,Miraflores,Lima,Lima,277
+100099,Local_100099,Lima,Lima,Lima,345
+100100,Local_100100,Arequipa,Arequipa,Arequipa,256
