@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard Electoral ONPE - Hadoop</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Dashboard Electoral ONPE 2026</h1>
+        <p>Resultados procesados con Hadoop MapReduce sobre AWS</p>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" data-section="resumen">Resumen nacional</button>
+        <button class="nav-btn" data-section="votos">Votos por organización</button>
+        <button class="nav-btn" data-section="ganador">Ganador por región</button>
+        <button class="nav-btn" data-section="nulos">Nulos y blancos</button>
+        <button class="nav-btn" data-section="participacion">Participación</button>
+        <button class="nav-btn" data-section="provincia">Provincia</button>
+    </nav>
+
+    <main>
+        <section id="resumen" class="screen active-screen">
+            <h2>1. Resumen nacional</h2>
+
+            <div id="summary-cards" class="cards"></div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Top organizaciones políticas</h3>
+                    <div>
+                        <button id="prev-btn">←</button>
+                        <button id="next-btn">→</button>
+                    </div>
+                </div>
+                <svg id="top-votes-chart"></svg>
+            </div>
+        </section>
+
+        <section id="votos" class="screen">
+            <h2>2. Votos por organización política</h2>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Ranking nacional de organizaciones políticas</h3>
+                    <div>
+                        <button id="votes-prev-btn">←</button>
+                        <span id="votes-page-label"></span>
+                        <button id="votes-next-btn">→</button>
+                    </div>
+                </div>
+
+                <svg id="votes-ranking-chart"></svg>
+            </div>
+        </section>
+
+        <section id="ganador" class="screen">
+            <h2>3. Ganador por región</h2>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Organización política ganadora por región</h3>
+                    <div>
+                        <button id="winner-prev-btn">←</button>
+                        <span id="winner-page-label"></span>
+                        <button id="winner-next-btn">→</button>
+                    </div>
+                </div>
+
+                <svg id="winner-region-chart"></svg>
+            </div>
+        </section>
+
+        <section id="nulos" class="screen">
+            <h2>4. Votos nulos y blancos por región</h2>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Comparación regional de votos nulos y blancos</h3>
+                </div>
+
+                <svg id="nulos-blancos-chart"></svg>
+            </div>
+        </section>
+
+        <section id="participacion" class="screen">
+            <h2>5. Participación por región</h2>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Participación estimada regional</h3>
+                </div>
+
+                <svg id="participacion-region-chart"></svg>
+            </div>
+        </section>
+
+        <section id="provincia" class="screen">
+            <h2>6. Votos por provincia</h2>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Distribución provincial por organización política</h3>
+
+                    <select id="region-select"></select>
+                </div>
+
+                <svg id="votos-provincia-chart"></svg>
+            </div>
+        </section>
+    </main>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="main.js"></script>
+</body>
+</html>
+
+<!-- python3 -m http.server 8000 -->

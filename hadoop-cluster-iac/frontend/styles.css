@@ -1,0 +1,174 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 24px 40px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p {
+    margin: 8px 0 0;
+    color: #d1d5db;
+}
+
+nav {
+    display: flex;
+    gap: 8px;
+    padding: 14px 40px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #e5e7eb;
+    font-weight: 600;
+}
+
+.nav-btn.active {
+    background: #2563eb;
+    color: white;
+}
+
+main {
+    padding: 28px 40px;
+}
+
+.screen {
+    display: none;
+}
+
+.active-screen {
+    display: block;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.card p {
+    margin: 10px 0 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-header button {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#top-votes-chart {
+    width: 100%;
+    height: 420px;
+}
+
+.tooltip {
+    position: absolute;
+    display: none;
+    background: #111827;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    pointer-events: none;
+    max-width: 280px;
+}
+
+#votes-ranking-chart {
+    width: 100%;
+    height: 460px;
+}
+
+#votes-page-label {
+    margin: 0 10px;
+    font-weight: bold;
+    color: #374151;
+}
+
+#winner-region-chart {
+    width: 100%;
+    height: 620px;
+}
+
+#nulos-blancos-chart {
+    width: 100%;
+    height: 620px;
+}
+
+.bar-nulos {
+    fill: #ef4444;
+}
+
+.bar-blancos {
+    fill: #f59e0b;
+}
+
+#participacion-region-chart {
+    width: 100%;
+    height: 620px;
+}
+.bar-participacion {
+    fill: #10b981;
+}
+
+#votos-provincia-chart {
+    width: 100%;
+    height: 640px;
+}
+
+#region-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-weight: bold;
+}
+.bar-provincia {
+    fill: #8b5cf6;
+}
