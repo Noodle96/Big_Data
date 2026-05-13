@@ -12,6 +12,10 @@ public class VotosCandidatoMapper extends Mapper<LongWritable, Text, Text, IntWr
     private final Text candidato = new Text();
     private final IntWritable votos = new IntWritable();
 
+    // map(0, "codigo_mesa,candidato,votos", context)
+    // map(29, "100001,Candidato_A,120", context)
+    // map(52, "100001,Candidato_B,95", context)
+
     @Override
     protected void map(
             LongWritable key,
