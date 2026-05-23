@@ -1,0 +1,19 @@
+# Python virtual env
+venv/
+__pycache__/
+
+# Pulumi state
+.pulumi/
+
+# Python cache
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# Build java
+target/
+
+# Logs
+*.log
