@@ -1,0 +1,3 @@
+com/bigdata/invertedindex/InvertedIndexDriver.class
+com/bigdata/invertedindex/InvertedIndexMapper.class
+com/bigdata/invertedindex/InvertedIndexReducer.class

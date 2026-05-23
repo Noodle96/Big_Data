@@ -1,0 +1,3 @@
+/home/russell/ssd/code/Big_Data/inverted-index-emr/jobs/inverted-index/src/main/java/com/bigdata/invertedindex/InvertedIndexReducer.java
+/home/russell/ssd/code/Big_Data/inverted-index-emr/jobs/inverted-index/src/main/java/com/bigdata/invertedindex/InvertedIndexDriver.java
+/home/russell/ssd/code/Big_Data/inverted-index-emr/jobs/inverted-index/src/main/java/com/bigdata/invertedindex/InvertedIndexMapper.java
