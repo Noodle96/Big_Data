@@ -1,0 +1,17 @@
+aws	s3://inverted-index-emr-81429/input/doc1.txt:0+54, s3://inverted-index-emr-81429/input/doc2.txt:0+60, s3://inverted-index-emr-81429/input/doc3.txt:0+73
+buscar	s3://inverted-index-emr-81429/input/doc3.txt:0+73
+con	s3://inverted-index-emr-81429/input/doc3.txt:0+73
+construye	s3://inverted-index-emr-81429/input/doc2.txt:0+60
+datos	s3://inverted-index-emr-81429/input/doc1.txt:0+54, s3://inverted-index-emr-81429/input/doc3.txt:0+73
+ejecuta	s3://inverted-index-emr-81429/input/doc2.txt:0+60
+emr	s3://inverted-index-emr-81429/input/doc1.txt:0+54, s3://inverted-index-emr-81429/input/doc2.txt:0+60
+grandes	s3://inverted-index-emr-81429/input/doc1.txt:0+54
+hadoop	s3://inverted-index-emr-81429/input/doc1.txt:0+54, s3://inverted-index-emr-81429/input/doc2.txt:0+60, s3://inverted-index-emr-81429/input/doc3.txt:0+73
+indice	s3://inverted-index-emr-81429/input/doc2.txt:0+60, s3://inverted-index-emr-81429/input/doc3.txt:0+73
+invertido	s3://inverted-index-emr-81429/input/doc2.txt:0+60, s3://inverted-index-emr-81429/input/doc3.txt:0+73
+mapreduce	s3://inverted-index-emr-81429/input/doc1.txt:0+54, s3://inverted-index-emr-81429/input/doc2.txt:0+60
+palabras	s3://inverted-index-emr-81429/input/doc3.txt:0+73
+permite	s3://inverted-index-emr-81429/input/doc3.txt:0+73
+procesa	s3://inverted-index-emr-81429/input/doc1.txt:0+54
+trabajan	s3://inverted-index-emr-81429/input/doc3.txt:0+73
+y	s3://inverted-index-emr-81429/input/doc3.txt:0+73
