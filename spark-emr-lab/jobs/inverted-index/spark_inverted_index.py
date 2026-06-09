@@ -1,41 +1,50 @@
 import re
-from operator import add
 from typing import Iterable, Tuple
 
-from pyspark import RDD, SparkConf, SparkContext
+from pyspark import RDD
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import input_file_name, regexp_extract, col
 
 
 INPUT_PATH: str = "hdfs:///datasets/wikipedia/raw"
 OUTPUT_PATH: str = "hdfs:///outputs/spark/inverted-index"
 
 
-def normalize_line(line: str) -> str:
+def normalize_text(text: str) -> str:
     """
     Entrada:
-        "Hadoop, Spark! HIVE"
+        "Anarchism, Spark! Hadoop."
 
     Salida:
-        "hadoop  spark  hive"
+        "anarchism  spark  hadoop "
     """
-    return re.sub(r"[^a-z0-9 ]", " ", line.lower())
+    return re.sub(r"[^a-z0-9 ]", " ", text.lower())
 
 
-def get_document_name(file_path: str) -> str:
+def row_to_document_line(row: object) -> Tuple[str, str]:
     """
     Entrada:
-        "hdfs://.../wiki_part_0001.txt"
+        Row(
+            document_name="wiki_part_0001.txt",
+            value="Anarchism is a political philosophy..."
+        )
 
     Salida:
-        "wiki_part_0001.txt"
+        (
+            "wiki_part_0001.txt",
+            "Anarchism is a political philosophy..."
+        )
     """
-    return file_path.split("/")[-1]
+    return row["document_name"], row["value"]
 
 
-def line_to_word_document_pairs(record: Tuple[str, str]) -> list[Tuple[str, str]]:
+def line_to_word_document_pairs(
+    record: Tuple[str, str]
+) -> list[Tuple[str, str]]:
     """
     Entrada:
         (
-            "hdfs://.../wiki_part_0001.txt",
+            "wiki_part_0001.txt",
             "Hadoop Spark Hadoop"
         )
 
@@ -45,16 +54,34 @@ def line_to_word_document_pairs(record: Tuple[str, str]) -> list[Tuple[str, str]
             ("spark", "wiki_part_0001.txt"),
             ("hadoop", "wiki_part_0001.txt")
         ]
+
+    Nota:
+        Si la línea está vacía, devuelve [].
     """
-    file_path, line = record
-    document_name: str = get_document_name(file_path)
-    clean_line: str = normalize_line(line)
+    document_name, line = record
+
+    if line is None or line.strip() == "":
+        return []
+
+    clean_text: str = normalize_text(line)
 
     return [
         (word, document_name)
-        for word in clean_line.split()
-        if word
+        for word in clean_text.split()
+        if word != ""
     ]
+
+
+def document_to_set(pair: Tuple[str, str]) -> Tuple[str, set[str]]:
+    """
+    Entrada:
+        ("hadoop", "wiki_part_0001.txt")
+
+    Salida:
+        ("hadoop", {"wiki_part_0001.txt"})
+    """
+    word, document_name = pair
+    return word, {document_name}
 
 
 def merge_document_sets(left: set[str], right: set[str]) -> set[str]:
@@ -74,7 +101,7 @@ def format_result(record: Tuple[str, set[str]]) -> str:
         ("hadoop", {"wiki_part_0001.txt", "wiki_part_0003.txt"})
 
     Salida:
-        "hadoop\twiki_part_0001.txt, wiki_part_0003.txt"
+        "hadoop    wiki_part_0001.txt, wiki_part_0003.txt"
     """
     word, documents = record
     sorted_documents: list[str] = sorted(documents)
@@ -83,49 +110,97 @@ def format_result(record: Tuple[str, set[str]]) -> str:
 
 
 def main() -> None:
-    conf: SparkConf = (
-        SparkConf()
-        .setAppName("Spark Inverted Index RDD")
+    spark: SparkSession = (
+        SparkSession.builder
+        .appName("Spark Inverted Index RDD")
+        .getOrCreate()
     )
 
-    sc: SparkContext = SparkContext(conf=conf)
+    # Lee los archivos línea por línea.
+    # No carga archivos completos en memoria.
+    #
+    # Entrada HDFS:
+    #   /datasets/wikipedia/raw/wiki_part_0001.txt
+    #   /datasets/wikipedia/raw/wiki_part_0002.txt
+    #
+    # Salida DataFrame:
+    #   value = línea de texto
+    #   file_path = ruta completa del archivo
+    #   document_name = nombre del archivo
+    lines_df: DataFrame = (
+        spark.read.text(INPUT_PATH)
+        .withColumn("file_path", input_file_name())
+        .withColumn(
+            "document_name",
+            regexp_extract(col("file_path"), r"([^/]+)$", 1)
+        )
+    )
 
-    # wholeTextFiles:
-    # Lee cada archivo como:
-    # ("ruta_del_archivo", "contenido_completo")
-    files: RDD[Tuple[str, str]] = sc.wholeTextFiles(INPUT_PATH)
+    # Convertimos DataFrame a RDD para trabajar con map y flatMap.
+    #
+    # Entrada:
+    #   Row(document_name="wiki_part_0001.txt", value="Hadoop Spark")
+    #
+    # Salida:
+    #   ("wiki_part_0001.txt", "Hadoop Spark")
+    document_lines: RDD[Tuple[str, str]] = lines_df.rdd.map(
+        lambda row: row_to_document_line(row)
+    )
 
     # flatMap:
-    # (archivo, texto) -> múltiples pares:
-    # ("hadoop", "wiki_part_0001.txt")
-    word_document_pairs: RDD[Tuple[str, str]] = files.flatMap(
+    # Cada línea genera muchos pares (palabra, documento).
+    #
+    # Entrada:
+    #   ("wiki_part_0001.txt", "Hadoop Spark Hadoop")
+    #
+    # Salida:
+    #   ("hadoop", "wiki_part_0001.txt")
+    #   ("spark", "wiki_part_0001.txt")
+    #   ("hadoop", "wiki_part_0001.txt")
+    word_document_pairs: RDD[Tuple[str, str]] = document_lines.flatMap(
         lambda record: line_to_word_document_pairs(record)
     )
 
     # map:
-    # ("hadoop", "wiki_part_0001.txt")
-    # -> ("hadoop", {"wiki_part_0001.txt"})
+    # Convertimos cada documento a set para luego unir documentos únicos.
+    #
+    # Entrada:
+    #   ("hadoop", "wiki_part_0001.txt")
+    #
+    # Salida:
+    #   ("hadoop", {"wiki_part_0001.txt"})
     word_document_sets: RDD[Tuple[str, set[str]]] = word_document_pairs.map(
-        lambda pair: (pair[0], {pair[1]})
+        lambda pair: document_to_set(pair)
     )
 
     # reduceByKey:
-    # ("hadoop", [{"doc1"}, {"doc2"}])
-    # -> ("hadoop", {"doc1", "doc2"})
+    # Une todos los documentos donde aparece cada palabra.
+    #
+    # Entrada:
+    #   ("hadoop", {"wiki_part_0001.txt"})
+    #   ("hadoop", {"wiki_part_0002.txt"})
+    #
+    # Salida:
+    #   ("hadoop", {"wiki_part_0001.txt", "wiki_part_0002.txt"})
     inverted_index: RDD[Tuple[str, set[str]]] = word_document_sets.reduceByKey(
         lambda left, right: merge_document_sets(left, right)
     )
 
     # map:
-    # ("hadoop", {"doc1", "doc2"})
-    # -> "hadoop\tdoc1, doc2"
+    # Convertimos el resultado a texto final.
+    #
+    # Entrada:
+    #   ("hadoop", {"wiki_part_0001.txt", "wiki_part_0002.txt"})
+    #
+    # Salida:
+    #   "hadoop    wiki_part_0001.txt, wiki_part_0002.txt"
     formatted_result: RDD[str] = inverted_index.map(
         lambda record: format_result(record)
     )
 
     formatted_result.saveAsTextFile(OUTPUT_PATH)
 
-    sc.stop()
+    spark.stop()
 
 
 if __name__ == "__main__":
