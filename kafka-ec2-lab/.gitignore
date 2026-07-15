@@ -1,0 +1,17 @@
+cat > .gitignore <<'EOF'
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Pulumi
+.pulumi/
+
+# AWS private keys
+keys/*.pem
+*.pem
+
+# Environment variables
+.env
+EOF
