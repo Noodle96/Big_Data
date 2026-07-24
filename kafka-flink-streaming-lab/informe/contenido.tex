@@ -32,6 +32,11 @@ cd infrastructure
 pulumi up
 		\end{sourcecode}
 
+		La Figura \ref{img:pulumi-up} muestra la salida real de este comando, confirmando la creación de los 15 recursos declarados en el código (VPC, subred, Security Group, sus reglas, y las 4 instancias EC2).
+
+		\setindexcaption{Resultado de \texttt{pulumi up}: los 15 recursos de la infraestructura creados.}
+		\insertimage[\label{img:pulumi-up}]{kafka/infraestruture.png}{width=13cm}{Salida de \texttt{pulumi up}: VPC, subred, Security Group, sus reglas, y las 4 instancias EC2 (3 brokers + cliente) creadas correctamente.}
+
 	\subsection{Configuración de cada broker (modo KRaft)}
 
 		Para que un broker quede correctamente configurado dentro del clúster, el \textit{user data} realiza, en orden, los siguientes pasos:
@@ -62,7 +67,7 @@ sudo chown -R kafka:kafka /opt/kafka /var/lib/kafka
 
 			\item \textbf{Generación de \texttt{server.properties}} en modo KRaft combinado (\texttt{broker,controller}), con el \texttt{node.id} propio del broker (1, 2 o 3) y la lista completa de votantes del quorum (\texttt{controller.quorum.voters}), idéntica en los tres nodos.
 
-			\begin{sourcecode}[\label{codigo-server-properties}]{text}{server.properties generado para kafka-broker-1 (node.id=1).}
+			\begin{sourcecode}[\label{codigo-server-properties}]{plaintext}{server.properties generado para kafka-broker-1 (node.id=1).}
 process.roles=broker,controller
 node.id=1
 controller.quorum.voters=1@10.20.1.11:9093,2@10.20.1.12:9093,3@10.20.1.13:9093
@@ -98,26 +103,57 @@ sudo systemctl start kafka
 
 	\subsection{Verificación: broker activo}
 
-		Una vez completado el arranque, se verificó en cada broker que el servicio quedara activo de forma estable (no reiniciando en bucle).
+		Una vez completado el arranque, se verificó en los \textbf{tres} brokers que el servicio quedara activo de forma estable (no reiniciando en bucle) y se revisó el registro de arranque de Kafka. Para eso, primero hay que conectarse por SSH a cada broker usando su IP pública (la entrega \texttt{pulumi up} como \texttt{sshBroker1}, \texttt{sshBroker2}, \texttt{sshBroker3} en sus outputs; cambia si se vuelve a desplegar):
 
-		\begin{sourcecode}[\label{codigo-check-status}]{bash}{Verificación del servicio en kafka-broker-1.}
-sudo systemctl status kafka
+		\begin{sourcecode}[\label{codigo-ssh-broker1}]{bash}{Conexión SSH a kafka-broker-1 (desde infrastructure/).}
+ssh -i ../keys/kafka-lab-key.pem ubuntu@54.147.218.194
 		\end{sourcecode}
 
-		\setindexcaption{Servicio de Kafka activo en kafka-broker-1.}
-		\insertimage[\label{img:broker1-status}]{kafka/broker1-systemctl-status.png}{width=13cm}{Estado del servicio systemd de Kafka en kafka-broker-1: activo desde hace más de un minuto, sin reinicios.}
+		Ya dentro del broker, se corren los mismos dos comandos:
 
-		El mismo procedimiento se repitió, con idéntico resultado, en \texttt{kafka-broker-2} y \texttt{kafka-broker-3}.
+		\begin{sourcecode}[\label{codigo-check-status}]{bash}{Verificación del servicio (mismo comando en los 3 brokers).}
+sudo systemctl status kafka
+sudo journalctl -u kafka -n 30 --no-pager
+		\end{sourcecode}
+
+		La Figura \ref{img:broker1-status} confirma que \texttt{kafka-broker-1} quedó activo de forma estable, y la Figura \ref{img:broker1-journal} muestra su registro de arranque, sin excepciones.
+
+		\setindexcaption{Servicio de Kafka activo en kafka-broker-1.}
+		\insertimage[\label{img:broker1-status}]{kafka/broker1-systemctl-status.png}{width=13cm}{kafka-broker-1: activo de forma estable, sin reinicios.}
+
+		\setindexcaption{Registro de arranque de Kafka en kafka-broker-1.}
+		\insertimage[\label{img:broker1-journal}]{kafka/broker1-journalctl.png}{width=13cm}{kafka-broker-1: arranque limpio, sin excepciones.}
+
+		Se repitió la misma verificación, conectándose por SSH a cada uno, en \texttt{kafka-broker-2} (Figuras \ref{img:broker2-status} y \ref{img:broker2-journal}) y en \texttt{kafka-broker-3} (Figuras \ref{img:broker3-status} y \ref{img:broker3-journal}), con idéntico resultado:
+
+		\begin{sourcecode}[\label{codigo-ssh-broker23}]{bash}{Conexión SSH a kafka-broker-2 y kafka-broker-3.}
+ssh -i ../keys/kafka-lab-key.pem ubuntu@52.90.232.221   # kafka-broker-2
+ssh -i ../keys/kafka-lab-key.pem ubuntu@52.55.101.14    # kafka-broker-3
+		\end{sourcecode}
+
+		\setindexcaption{Servicio de Kafka activo en kafka-broker-2.}
+		\insertimage[\label{img:broker2-status}]{kafka/broker2-systemctl-status.png}{width=13cm}{kafka-broker-2: activo de forma estable, sin reinicios.}
+
+		\setindexcaption{Registro de arranque de Kafka en kafka-broker-2.}
+		\insertimage[\label{img:broker2-journal}]{kafka/broker2-journalctl.png}{width=13cm}{kafka-broker-2: arranque limpio, sin excepciones.}
+
+		\setindexcaption{Servicio de Kafka activo en kafka-broker-3.}
+		\insertimage[\label{img:broker3-status}]{kafka/broker3-systemctl-status.png}{width=13cm}{kafka-broker-3: activo de forma estable, sin reinicios.}
+
+		\setindexcaption{Registro de arranque de Kafka en kafka-broker-3.}
+		\insertimage[\label{img:broker3-journal}]{kafka/broker3-journalctl.png}{width=13cm}{kafka-broker-3: arranque limpio, sin excepciones.}
 
 	\subsection{Incidente durante el despliegue: KAFKA-18281}
 
 		En el primer intento de despliegue, el formateo del storage (paso 5 de la sección anterior) falló con la siguiente excepción:
 
-		\begin{sourcecode}[\label{codigo-bug-error}]{text}{Error obtenido en el primer intento de formateo.}
+		\begin{sourcecode}[\label{codigo-bug-error}]{plaintext}{Error obtenido en el primer intento de formateo.}
 Exception in thread "main" java.lang.IllegalArgumentException: requirement failed:
 advertised.listeners cannot use the nonroutable meta-address 0.0.0.0.
 Use a routable IP address.
 		\end{sourcecode}
+
+		La Figura \ref{img:bug-properties} muestra el \texttt{server.properties} generado en ese primer intento, donde se aprecia el origen del problema.
 
 		\setindexcaption{server.properties del primer intento, con los listeners atados a 0.0.0.0.}
 		\insertimage[\label{img:bug-properties}]{kafka/broker1-server-properties-bug.png}{width=13cm}{Configuración inicial: tanto \texttt{listeners} como el listener CONTROLLER quedaban atados a la dirección no enrutable 0.0.0.0.}
@@ -126,7 +162,7 @@ Use a routable IP address.
 
 	\subsection{Verificación del quorum KRaft}
 
-		La activación del servicio en cada broker por separado no garantiza, por sí sola, que los tres nodos hayan formado un mismo quorum. Para confirmarlo se consultó el estado del quorum desde uno de los brokers:
+		La activación del servicio en cada broker por separado no garantiza, por sí sola, que los tres nodos hayan formado un mismo quorum. Para confirmarlo se consultó el estado del quorum desde uno de los brokers (basta con estar conectado por SSH a cualquiera de los tres, como en el Código \ref{codigo-ssh-broker1}):
 
 		\begin{sourcecode}[\label{codigo-quorum-status}]{bash}{Consulta del estado del quorum KRaft.}
 kafka-metadata-quorum.sh \
@@ -137,7 +173,7 @@ kafka-metadata-quorum.sh \
 		\setindexcaption{Estado del quorum KRaft del clúster de 3 brokers.}
 		\insertimage[\label{img:quorum-status}]{kafka/quorum-status.png}{width=13cm}{Salida de \texttt{kafka-metadata-quorum.sh describe --status}: los tres node.id aparecen como votantes activos del quorum.}
 
-		La salida obtenida confirma que el clúster quedó correctamente configurado:
+		La salida obtenida en la Figura \ref{img:quorum-status} confirma que el clúster quedó correctamente configurado:
 
 		\begin{itemize}
 			\item \texttt{ClusterId} coincide exactamente con el \texttt{CLUSTER\_ID} fijado en el código de infraestructura (\texttt{X2k7a\_8UT5i145WnsLy8qQ}), es decir, los tres brokers efectivamente pertenecen al mismo clúster.
