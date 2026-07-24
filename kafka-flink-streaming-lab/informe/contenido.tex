@@ -236,3 +236,84 @@ python3 create_topics.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.2
 
 		\setindexcaption{Distribución de réplicas y liderazgo por partición del topic ecommerce-events.}
 		\insertimage[\label{img:broker-partition-leader}]{kafka/broker-partition-leader.png}{width=14cm}{Cada broker guarda una réplica de las 3 particiones (factor de replicación 3), pero el liderazgo (en ámbar) queda repartido: Broker 1 lidera la Partición 2, Broker 2 lidera la Partición 0 y Broker 3 lidera la Partición 1.}
+
+	\subsection{Productor de eventos (Producer)}
+
+		El productor (\texttt{producer.py}) genera continuamente eventos de e-commerce (\texttt{VIEW\_PRODUCT}, \texttt{SEARCH}, \texttt{ADD\_CART}, \texttt{PURCHASE}) y los envía al topic \texttt{ecommerce-events}, usando el \texttt{user} de cada evento como \textit{key} del mensaje (así todos los eventos de un mismo usuario caen siempre en la misma partición). Primero se copia al cliente:
+
+		\begin{sourcecode}[\label{codigo-scp-producer}]{bash}{Copia del productor al cliente.}
+scp -i keys/kafka-lab-key.pem producer/producer.py ubuntu@54.175.182.84:~/
+		\end{sourcecode}
+
+		Y se ejecuta indicando cuántos eventos mandar:
+
+		\begin{sourcecode}[\label{codigo-run-producer}]{bash}{Ejecución del productor.}
+python3 producer.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 --count 20
+		\end{sourcecode}
+
+		\setindexcaption{Ejecución del productor: 20 eventos enviados.}
+		\insertimage[\label{img:producer-run}]{kafka/producer-run.png}{width=13cm}{Cada línea impresa confirma el envío de un evento, junto con la partición y el offset que le asignó el broker líder correspondiente.}
+
+		La Figura \ref{img:producer-run} demuestra el concepto \textbf{Producer}: por cada evento se ve la confirmación real que devuelve el broker (no una suposición del cliente), con su \texttt{topic}, \texttt{partition} y \texttt{offset} — el mismo offset que, más adelante, el consumidor reporta haber leído.
+
+	\subsection{Consumidor individual (Consumer)}
+
+		El consumidor (\texttt{consumer.py}) se suscribe al topic dentro de un \textit{consumer group} y va imprimiendo cada mensaje recibido. Se copia igual que el productor:
+
+		\begin{sourcecode}[\label{codigo-scp-consumer}]{bash}{Copia del consumidor al cliente.}
+scp -i keys/kafka-lab-key.pem consumer/consumer.py ubuntu@54.175.182.84:~/
+		\end{sourcecode}
+
+		\begin{sourcecode}[\label{codigo-run-consumer}]{bash}{Ejecución de un consumidor individual.}
+python3 consumer.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 --group-id demo-group --from-beginning
+		\end{sourcecode}
+
+		\setindexcaption{Consumidor individual leyendo los eventos del topic.}
+		\insertimage[\label{img:consumer-single}]{kafka/consumer-single-run.png}{width=13cm}{Al ser el único miembro del grupo demo-group, este consumidor recibe las 3 particiones completas.}
+
+		La Figura \ref{img:consumer-single} demuestra el concepto \textbf{Consumer}. Al ser el único miembro de \texttt{demo-group}, Kafka le asigna las 3 particiones completas; esto cambia en cuanto aparece un segundo consumidor en el mismo grupo, como se ve en la siguiente sección.
+
+	\subsection{Offset y Consumer Group}
+
+		Un detalle importante detectado durante las pruebas: al volver a correr un consumidor con el mismo \texttt{--group-id} (\texttt{demo-group}), este no vuelve a mostrar los eventos ya leídos, incluso usando \texttt{--from-beginning}. Esto no es un error, sino el comportamiento correcto del \textbf{Offset}: Kafka guarda, por cada combinación (grupo, topic, partición), hasta qué offset ya consumió ese grupo, y al reconectarse retoma desde ahí; la opción \texttt{--from-beginning} solo aplica cuando el grupo nunca consumió nada antes.
+
+		Para demostrar \textbf{Consumer Group} se levantaron dos consumidores (\texttt{C1} y \texttt{C2}) con el mismo \texttt{--group-id}, en dos sesiones SSH independientes:
+
+		\begin{sourcecode}[\label{codigo-c1-c2}]{bash}{Dos consumidores del mismo grupo, en paralelo.}
+# Terminal C1
+python3 consumer.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 \
+    --group-id demo-group --consumer-name C1 --from-beginning
+
+# Terminal C2 (se abre después, ya con C1 corriendo)
+python3 consumer.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 \
+    --group-id demo-group --consumer-name C2 --from-beginning
+		\end{sourcecode}
+
+		\setindexcaption{Rebalanceo en C1 al unirse un segundo consumidor al grupo.}
+		\insertimage[\label{img:group-c1}]{kafka/consumer-group-c1.png}{width=13cm}{C1 arranca solo con las 3 particiones asignadas; al unirse C2, se le revocan y queda solo con la partición 2.}
+
+		\setindexcaption{Asignación de particiones en C2.}
+		\insertimage[\label{img:group-c2}]{kafka/consumer-group-c2.png}{width=13cm}{C2 recibe las particiones 0 y 1 al unirse al grupo.}
+
+		Las Figuras \ref{img:group-c1} y \ref{img:group-c2} muestran el mensaje \texttt{REBALANCEO} que imprime cada consumidor apenas Kafka le confirma su nueva asignación: C1 pasa de tener las 3 particiones a quedarse solo con la partición 2, y C2 recibe las particiones 0 y 1 — entre ambos cubren el topic completo sin superposición.
+
+		Con los dos consumidores ya escuchando, se generó tráfico nuevo para ver cómo se reparte en vivo:
+
+		\begin{sourcecode}[\label{codigo-producer-group-demo}]{bash}{Nuevos eventos mientras C1 y C2 están escuchando.}
+python3 producer.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 --count 20
+		\end{sourcecode}
+
+		\setindexcaption{Productor generando tráfico para la demo de consumer group.}
+		\insertimage[\label{img:group-producer}]{kafka/consumer-group-producer.png}{width=13cm}{Los mismos 20 eventos de siempre, ahora consumidos en vivo por C1 y C2 según la partición que le tocó a cada uno.}
+
+		Finalmente, con \texttt{C1} y \texttt{C2} todavía conectados, se consultó el estado del grupo:
+
+		\begin{sourcecode}[\label{codigo-group-describe}]{bash}{Estado del consumer group con 2 miembros activos.}
+kafka-consumer-groups.sh --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 \
+    --describe --group demo-group
+		\end{sourcecode}
+
+		\setindexcaption{Estado de demo-group: particiones 0 y 1, ambas a cargo de C2.}
+		\insertimage[\label{img:group-describe}]{kafka/consumer-group-describe.png}{width=13cm}{Particiones 0 y 1 del grupo demo-group, ambas atendidas por el mismo CONSUMER-ID (el proceso C2).}
+
+		La Figura \ref{img:group-describe} demuestra el concepto \textbf{Offset}: \texttt{CURRENT-OFFSET} es hasta dónde leyó el grupo en esa partición, \texttt{LOG-END-OFFSET} es el último offset disponible en el log, y \texttt{LAG} (la diferencia entre ambos) en 0 confirma que el consumidor está completamente al día, sin mensajes pendientes por leer. Esta captura en particular solo alcanza a mostrar las particiones 0 y 1 —las dos que tiene asignadas C2, con el mismo \texttt{CONSUMER-ID} en ambas filas—; la partición 2 (a cargo de C1) no aparece en esta tabla, pero su consumo en vivo ya quedó documentado en la Figura \ref{img:group-c1}. Que un mismo grupo tenga particiones siendo leídas simultáneamente por dos procesos distintos (C1 en la partición 2, C2 en las particiones 0 y 1) es, en sí mismo, la evidencia de \textbf{Consumer Group}: Kafka reparte el trabajo de un mismo grupo entre varios consumidores en paralelo.
