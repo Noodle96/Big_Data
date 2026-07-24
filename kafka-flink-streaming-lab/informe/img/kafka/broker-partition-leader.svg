@@ -1,0 +1,72 @@
+<svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Distribución de réplicas y liderazgo por partición en el topic ecommerce-events</title>
+<desc>Tres brokers de Kafka, cada uno con una réplica de las 3 particiones del topic ecommerce-events. El líder de cada partición está resaltado en color ámbar; los followers en gris.</desc>
+<rect x="0" y="0" width="900" height="560" fill="#ffffff"/>
+
+<text x="450" y="34" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#1a1a1a">Topic ecommerce-events: réplicas y liderazgo por partición</text>
+<text x="450" y="56" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#666666">3 particiones x factor de replicación 3 -&gt; cada broker guarda una copia de todas</text>
+
+<!-- Broker 1 -->
+<g>
+<rect x="40" y="90" width="250" height="360" rx="14" fill="#f7f7f8" stroke="#333333" stroke-width="2"/>
+<text x="165" y="122" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1a1a1a">Broker 1</text>
+<text x="165" y="142" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#666666">kafka-broker-1 (node.id=1)</text>
+
+<rect x="60" y="160" width="210" height="80" rx="10" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="165" y="188" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Partición 0</text>
+<text x="165" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5f6368">Follower</text>
+
+<rect x="60" y="250" width="210" height="80" rx="10" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="165" y="278" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Partición 1</text>
+<text x="165" y="300" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5f6368">Follower</text>
+
+<rect x="60" y="340" width="210" height="90" rx="10" fill="#fdf0da" stroke="#c9820a" stroke-width="2.5"/>
+<text x="165" y="370" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Partición 2</text>
+<text x="165" y="393" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#a35a00">LÍDER</text>
+</g>
+
+<!-- Broker 2 -->
+<g>
+<rect x="325" y="90" width="250" height="360" rx="14" fill="#f7f7f8" stroke="#333333" stroke-width="2"/>
+<text x="450" y="122" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1a1a1a">Broker 2</text>
+<text x="450" y="142" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#666666">kafka-broker-2 (node.id=2)</text>
+
+<rect x="345" y="160" width="210" height="90" rx="10" fill="#fdf0da" stroke="#c9820a" stroke-width="2.5"/>
+<text x="450" y="190" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Partición 0</text>
+<text x="450" y="213" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#a35a00">LÍDER</text>
+
+<rect x="345" y="260" width="210" height="80" rx="10" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="450" y="288" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Partición 1</text>
+<text x="450" y="310" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5f6368">Follower</text>
+
+<rect x="345" y="350" width="210" height="80" rx="10" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="450" y="378" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Partición 2</text>
+<text x="450" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5f6368">Follower</text>
+</g>
+
+<!-- Broker 3 -->
+<g>
+<rect x="610" y="90" width="250" height="360" rx="14" fill="#f7f7f8" stroke="#333333" stroke-width="2"/>
+<text x="735" y="122" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1a1a1a">Broker 3</text>
+<text x="735" y="142" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#666666">kafka-broker-3 (node.id=3)</text>
+
+<rect x="630" y="160" width="210" height="80" rx="10" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="735" y="188" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Partición 0</text>
+<text x="735" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5f6368">Follower</text>
+
+<rect x="630" y="250" width="210" height="90" rx="10" fill="#fdf0da" stroke="#c9820a" stroke-width="2.5"/>
+<text x="735" y="280" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Partición 1</text>
+<text x="735" y="303" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#a35a00">LÍDER</text>
+
+<rect x="630" y="350" width="210" height="80" rx="10" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="735" y="378" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Partición 2</text>
+<text x="735" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5f6368">Follower</text>
+</g>
+
+<!-- Leyenda -->
+<rect x="230" y="480" width="26" height="20" rx="5" fill="#fdf0da" stroke="#c9820a" stroke-width="2"/>
+<text x="264" y="495" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1a1a1a">Líder (atiende lecturas/escrituras de esa partición)</text>
+
+<rect x="230" y="510" width="26" height="20" rx="5" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5"/>
+<text x="264" y="525" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1a1a1a">Follower (réplica sincronizada, dentro del ISR)</text>
+</svg>
