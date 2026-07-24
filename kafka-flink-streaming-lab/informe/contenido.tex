@@ -317,3 +317,93 @@ kafka-consumer-groups.sh --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.2
 		\insertimage[\label{img:group-describe}]{kafka/consumer-group-describe.png}{width=13cm}{Particiones 0 y 1 del grupo demo-group, ambas atendidas por el mismo CONSUMER-ID (el proceso C2).}
 
 		La Figura \ref{img:group-describe} demuestra el concepto \textbf{Offset}: \texttt{CURRENT-OFFSET} es hasta dónde leyó el grupo en esa partición, \texttt{LOG-END-OFFSET} es el último offset disponible en el log, y \texttt{LAG} (la diferencia entre ambos) en 0 confirma que el consumidor está completamente al día, sin mensajes pendientes por leer. Esta captura en particular solo alcanza a mostrar las particiones 0 y 1 —las dos que tiene asignadas C2, con el mismo \texttt{CONSUMER-ID} en ambas filas—; la partición 2 (a cargo de C1) no aparece en esta tabla, pero su consumo en vivo ya quedó documentado en la Figura \ref{img:group-c1}. Que un mismo grupo tenga particiones siendo leídas simultáneamente por dos procesos distintos (C1 en la partición 2, C2 en las particiones 0 y 1) es, en sí mismo, la evidencia de \textbf{Consumer Group}: Kafka reparte el trabajo de un mismo grupo entre varios consumidores en paralelo.
+
+
+% ------------------------------------------------------------------------------
+\section{Laboratorio 07: Apache Flink}
+% ------------------------------------------------------------------------------
+
+	Con el clúster de Kafka funcionando y el topic \texttt{ecommerce-events} recibiendo tráfico, esta sección implementa el Laboratorio 07: un proyecto Maven en Java que consume esos mismos eventos con Flink y aplica las 5 actividades pedidas por la guía (2.1 a 2.5).
+
+	\subsection{Modo de ejecución: sin clúster de Flink separado}
+
+		A diferencia del laboratorio de Kafka, aquí no se desplegó un clúster de Flink en AWS. La guía del docente pide "crear un nuevo proyecto Maven" —Maven es la herramienta de build del ecosistema Java/JVM— sin mencionar en ningún punto desplegar varias instancias de Flink, a diferencia de la guía de Kafka que sí pedía explícitamente "usando instancias de EC2 en AWS instale Kafka".
+
+		Flink soporta un modo de ejecución \textbf{local/embebido}: cuando el programa no se conecta a un clúster remoto, arranca automáticamente un \textit{MiniCluster} (JobManager y TaskManagers) como hilos dentro del mismo proceso Java. El código del pipeline (\texttt{DataStream}, \texttt{keyBy}, \texttt{window}, \texttt{filter}, etc.) es idéntico al que se usaría contra un clúster real; solo cambia dónde se ejecutan los hilos. Por eso el \texttt{pom.xml} empaqueta todas las dependencias de Flink en un único \textit{fat jar} (con \texttt{maven-shade-plugin}) en vez de marcarlas como \texttt{provided}: no hay un clúster que las provea en tiempo de ejecución.
+
+	\subsection{Estructura del proyecto}
+
+		\begin{sourcecode}[\label{codigo-flink-estructura}]{plaintext}{Estructura del proyecto Maven.}
+flink-job/
+├── pom.xml
+└── src/main/java/pe/edu/unsa/bigdata/lab07/
+    ├── EcommerceEvent.java              (POJO del evento + campos derivados)
+    ├── JsonToEventMapper.java           (2.1: parsea JSON -> POJO)
+    ├── EnrichWithDateFieldsMapper.java  (2.3: agrega hora/dia/mes/finDeSemana)
+    └── EcommerceEventJob.java           (job principal: encadena 2.1 a 2.5)
+		\end{sourcecode}
+
+		El proyecto usa Flink 2.2.1 (la última versión estable) junto con \texttt{flink-connector-kafka} 5.0.0-2.2.
+
+	\subsection{Flujo del pipeline}
+
+		El job no es una cadena puramente lineal: el parseo y el enriquecimiento son secuenciales (uno depende del resultado del otro), pero a partir de ahí el stream se bifurca en 3 ramas independientes que procesan en paralelo, como se ve en la Figura \ref{img:flink-flow}.
+
+		\setindexcaption{Flujo del job de Flink, de Kafka a las 5 salidas.}
+		\insertimage[\label{img:flink-flow}]{flink/flink-flow-diagram.png}{width=14cm}{Kafka $\rightarrow$ parseo (2.1) $\rightarrow$ enriquecimiento (2.3) es secuencial; de ahí se bifurca en 3 ramas independientes: filtrado (2.2), conteo por tipo (2.4) y agrupamiento por producto (2.5).}
+
+		Cada evento de Kafka se parsea a un objeto \texttt{EcommerceEvent} (2.1) y recién con ese objeto ya parseado se le pueden calcular los campos derivados a partir del \texttt{timestamp} (2.3) —no se puede calcular la hora de un evento que todavía es solo texto sin parsear—. De ahí en adelante, el mismo stream enriquecido alimenta tres consumidores independientes en simultáneo: uno filtra (2.2), otro cuenta por tipo de evento en ventanas de 30 segundos (2.4), y otro agrupa por producto en ventanas de 30 segundos (2.5); ninguno de los tres depende de los otros dos.
+
+		Las salidas de conteo y agrupamiento (2.4 y 2.5) no aparecen evento por evento como las demás: al ser agregaciones (\texttt{sum} sobre un \texttt{keyBy}), Flink necesita acumular los eventos dentro de una ventana de tiempo antes de que el resultado tenga sentido. Se usó una ventana \textit{tumbling} (fija, sin solapamiento) de 30 segundos: los resultados se imprimen en bloque cada vez que una ventana se cierra.
+
+	\subsection{Compilación y ejecución}
+
+		El proyecto se compila con Maven (Java 11, mínimo soportado por Flink 2.x) y se ejecuta en \texttt{kafka-client}, que ya tiene acceso de red a los brokers:
+
+		\begin{sourcecode}[\label{codigo-flink-build}]{bash}{Compilación del proyecto (en la máquina local).}
+cd flink-job
+mvn clean package
+		\end{sourcecode}
+
+		\begin{sourcecode}[\label{codigo-flink-deploy}]{bash}{Copia del jar y ejecución en kafka-client.}
+scp -i keys/kafka-lab-key.pem flink-job/target/flink-lab07-ecommerce.jar ubuntu@54.175.182.84:~/
+ssh -i keys/kafka-lab-key.pem ubuntu@54.175.182.84
+java -jar flink-lab07-ecommerce.jar --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092
+		\end{sourcecode}
+
+		El job se deja corriendo (queda esperando eventos nuevos, ya que el consumer de Flink se configuró con offset \texttt{latest}), y en otra sesión SSH al mismo cliente se genera tráfico:
+
+		\begin{sourcecode}[\label{codigo-flink-producer}]{bash}{Generación de eventos para el job de Flink.}
+python3 producer.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 --count 30
+		\end{sourcecode}
+
+		\setindexcaption{Productor generando eventos para el job de Flink.}
+		\insertimage[\label{img:flink-producer}]{flink/producer-run.png}{width=13cm}{Eventos enviados al topic ecommerce-events, consumidos en vivo por el job de Flink.}
+
+	\subsection{2.1 y 2.3: recepción y transformación}
+
+		\setindexcaption{Eventos recibidos y transformados por Flink.}
+		\insertimage[\label{img:flink-2123}]{flink/flink-2.1-2.3.png}{width=13cm}{Cada evento parseado (RECIBIDO) aparece seguido de su versión enriquecida con hora, día, mes y fin de semana (TRANSFORMADO).}
+
+		La Figura \ref{img:flink-2123} muestra, para un mismo evento, la línea \texttt{[2.1 RECIBIDO]} (justo después de parsear el JSON) seguida de \texttt{[2.3 TRANSFORMADO]} (con los 4 campos derivados ya calculados) — evidencia de que ambas actividades ocurren en cadena sobre cada evento.
+
+	\subsection{2.2: filtrado de eventos de compra}
+
+		\setindexcaption{Eventos filtrados: solo PURCHASE y ADD\_CART.}
+		\insertimage[\label{img:flink-22}]{flink/flink-2.2-filtrado.png}{width=13cm}{Solo los eventos de tipo PURCHASE o ADD\_CART pasan el filtro; el resto (VIEW\_PRODUCT, SEARCH) se descarta en esta rama.}
+
+		La Figura \ref{img:flink-22} confirma que la rama de filtrado descarta correctamente los eventos que no son de compra.
+
+	\subsection{2.4: conteo de eventos por tipo}
+
+		\setindexcaption{Conteo de eventos por tipo, ventana de 30 segundos.}
+		\insertimage[\label{img:flink-24}]{flink/flink-2.4-conteo.png}{width=13cm}{Total de SEARCH, ADD\_CART, PURCHASE y VIEW\_PRODUCT acumulados durante una ventana de 30 segundos.}
+
+		La Figura \ref{img:flink-24} muestra las 4 estadísticas generales que pide la guía (número de búsquedas, compras, productos vistos y agregados al carrito), recalculadas cada 30 segundos.
+
+	\subsection{2.5: agrupamiento por producto}
+
+		\setindexcaption{Actividad por producto, ventana de 30 segundos.}
+		\insertimage[\label{img:flink-25}]{flink/flink-2.5-producto.png}{width=13cm}{Cantidad de interacciones (vistas, búsquedas, compras y carritos combinados) por producto, dentro de la misma ventana de 30 segundos.}
+
+		La Figura \ref{img:flink-25} identifica los productos con mayor actividad dentro de la ventana, tal como pide el punto 2.5 de la guía.
