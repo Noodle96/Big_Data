@@ -353,7 +353,7 @@ process.roles=broker,controller
 node.id=__NODE_ID__
 controller.quorum.voters=__CONTROLLER_QUORUM_VOTERS__
 
-listeners=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+listeners=PLAINTEXT://__PRIVATE_IP__:9092,CONTROLLER://__PRIVATE_IP__:9093
 advertised.listeners=PLAINTEXT://__PRIVATE_IP__:9092
 controller.listener.names=CONTROLLER
 inter.broker.listener.name=PLAINTEXT
