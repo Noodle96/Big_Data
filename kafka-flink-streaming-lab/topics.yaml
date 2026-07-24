@@ -1,0 +1,21 @@
+# Definición declarativa de topics de Kafka para el laboratorio.
+#
+# Esto reemplaza la creación de topics "a mano" por consola: el nombre,
+# número de particiones y factor de replicación quedan versionados aquí,
+# y el script scripts/kafka/create_topics.sh los lee para crearlos.
+#
+# Documentar aquí es lo que evita el problema de la vez pasada (no saber
+# qué se configuró).
+
+topics:
+  - name: ecommerce-events
+    partitions: 3
+    replication_factor: 3
+    description: >
+      Topic principal del laboratorio. Recibe todos los eventos generados
+      por producer/producer.py (VIEW_PRODUCT, SEARCH, ADD_CART, PURCHASE, etc.)
+      con el esquema:
+      {user, event, product, category, city, price, timestamp}.
+    config:
+      retention.ms: 3600000        # 1 hora, suficiente para el laboratorio
+      cleanup.policy: delete
