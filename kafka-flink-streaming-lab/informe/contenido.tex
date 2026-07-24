@@ -1,0 +1,150 @@
+% Documento:    Contenido del informe - Laboratorio Kafka (rehecho) + Laboratorio 07 Flink
+% Integrante:   Jorge Tito Ccahuaya
+% Curso:        Big Data (1705157)
+%
+% Este documento está pensado para funcionar también como guía reproducible:
+% cada evidencia (captura) va precedida del comando exacto y copiable que la
+% generó.
+
+% ------------------------------------------------------------------------------
+\section{Introducción}
+% ------------------------------------------------------------------------------
+
+	Este informe documenta dos laboratorios del curso Big Data desarrollados sobre una misma infraestructura distribuida en AWS: la reconstrucción completa, desde cero, del laboratorio de Apache Kafka (clúster de 3 brokers sobre instancias EC2, demostrando productor, consumidor, tópicos, particiones, offsets y grupos de consumidores), y el nuevo Laboratorio 07 de Apache Flink, que consume los eventos generados por Kafka para aplicar filtrado, transformación, conteo y agrupamiento en tiempo real.
+
+	A diferencia de un informe puramente descriptivo, este documento se escribió para que también sirva de guía: cada paso relevante muestra primero el comando exactamente como se ejecutó, y luego la evidencia (captura de pantalla o salida de consola) de su resultado, de modo que el procedimiento completo pueda reproducirse sin ambigüedad.
+
+
+% ------------------------------------------------------------------------------
+\section{Infraestructura del clúster Kafka}
+% ------------------------------------------------------------------------------
+
+	\subsection{Arquitectura desplegada}
+
+		La infraestructura se aprovisiona con Pulumi (Python) sobre AWS e-2. Se creó una VPC dedicada (\texttt{10.20.0.0/16}) con una subred pública (\texttt{10.20.1.0/24}), donde conviven cuatro instancias EC2 Ubuntu 24.04 (\texttt{t3.small}): tres brokers de Kafka (\texttt{kafka-broker-1/2/3}) y un cliente (\texttt{kafka-client}) desde donde se ejecutan el productor y el consumidor. Todas comparten un mismo Security Group que permite tráfico interno total entre ellas y acceso SSH desde Internet. Cada instancia tiene una IP privada fija asignada de antemano (brokers en \texttt{10.20.1.11-13}, cliente en \texttt{10.20.1.20}), lo que permite generar de forma determinística la configuración de cada nodo antes incluso de crear las instancias.
+
+	\subsection{Aprovisionamiento automático (\textit{user data})}
+
+		Cada instancia EC2 recibe, en el momento de su creación, un script (\textit{user data}) que AWS ejecuta automáticamente mediante \texttt{cloud-init} apenas la máquina arranca por primera vez. Este mecanismo es el que garantiza la reproducibilidad del laboratorio: ningún broker se configuró manualmente por SSH; toda la instalación y configuración de Kafka ocurre de forma automática al momento del despliegue.
+
+		\begin{sourcecode}[\label{codigo-pulumi-up}]{bash}{Despliegue de toda la infraestructura con Pulumi.}
+cd infrastructure
+pulumi up
+		\end{sourcecode}
+
+	\subsection{Configuración de cada broker (modo KRaft)}
+
+		Para que un broker quede correctamente configurado dentro del clúster, el \textit{user data} realiza, en orden, los siguientes pasos:
+
+		\begin{enumerate}
+			\item \textbf{Instalación de Java}, dependencia de la JVM sobre la que corre Kafka.
+
+			\begin{sourcecode}[\label{codigo-install-java}]{bash}{Instalación de Java 17.}
+sudo apt-get update -y
+sudo apt-get install -y openjdk-17-jdk-headless
+			\end{sourcecode}
+
+			\item \textbf{Descarga e instalación del binario de Kafka} (misma versión, 3.9.0, en los tres brokers).
+
+			\begin{sourcecode}[\label{codigo-install-kafka}]{bash}{Descarga e instalación de Kafka.}
+curl -fsSL https://archive.apache.org/dist/kafka/3.9.0/kafka_2.13-3.9.0.tgz -o kafka.tgz
+tar -xzf kafka.tgz
+ln -sfn /opt/kafka/kafka_2.13-3.9.0 /opt/kafka/current
+			\end{sourcecode}
+
+			\item \textbf{Usuario de sistema dedicado} y directorio de datos, para no correr Kafka como \texttt{root}.
+
+			\begin{sourcecode}[\label{codigo-kafka-user}]{bash}{Usuario de sistema y directorio de datos.}
+sudo useradd --system --home-dir /opt/kafka --shell /usr/sbin/nologin kafka
+sudo mkdir -p /var/lib/kafka/data
+sudo chown -R kafka:kafka /opt/kafka /var/lib/kafka
+			\end{sourcecode}
+
+			\item \textbf{Generación de \texttt{server.properties}} en modo KRaft combinado (\texttt{broker,controller}), con el \texttt{node.id} propio del broker (1, 2 o 3) y la lista completa de votantes del quorum (\texttt{controller.quorum.voters}), idéntica en los tres nodos.
+
+			\begin{sourcecode}[\label{codigo-server-properties}]{text}{server.properties generado para kafka-broker-1 (node.id=1).}
+process.roles=broker,controller
+node.id=1
+controller.quorum.voters=1@10.20.1.11:9093,2@10.20.1.12:9093,3@10.20.1.13:9093
+
+listeners=PLAINTEXT://10.20.1.11:9092,CONTROLLER://10.20.1.11:9093
+advertised.listeners=PLAINTEXT://10.20.1.11:9092
+controller.listener.names=CONTROLLER
+inter.broker.listener.name=PLAINTEXT
+listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+
+log.dirs=/var/lib/kafka/data
+num.partitions=3
+default.replication.factor=3
+			\end{sourcecode}
+
+			\item \textbf{Formateo del almacenamiento} con \texttt{kafka-storage.sh}, usando el mismo \texttt{CLUSTER\_ID} en los tres brokers (si el ID no coincide, los nodos no pertenecen al mismo clúster).
+
+			\begin{sourcecode}[\label{codigo-storage-format}]{bash}{Formateo del storage KRaft.}
+sudo -u kafka /opt/kafka/current/bin/kafka-storage.sh format \
+    -t X2k7a_8UT5i145WnsLy8qQ \
+    -c /opt/kafka/current/config/kraft-server.properties \
+    --ignore-formatted
+			\end{sourcecode}
+
+			\item \textbf{Registro como servicio \texttt{systemd}}, para que el proceso quede corriendo de forma persistente y se reinicie solo ante una falla.
+
+			\begin{sourcecode}[\label{codigo-systemd}]{bash}{Habilitar y arrancar el servicio de Kafka.}
+sudo systemctl daemon-reload
+sudo systemctl enable kafka
+sudo systemctl start kafka
+			\end{sourcecode}
+		\end{enumerate}
+
+	\subsection{Verificación: broker activo}
+
+		Una vez completado el arranque, se verificó en cada broker que el servicio quedara activo de forma estable (no reiniciando en bucle).
+
+		\begin{sourcecode}[\label{codigo-check-status}]{bash}{Verificación del servicio en kafka-broker-1.}
+sudo systemctl status kafka
+		\end{sourcecode}
+
+		\setindexcaption{Servicio de Kafka activo en kafka-broker-1.}
+		\insertimage[\label{img:broker1-status}]{kafka/broker1-systemctl-status.png}{width=13cm}{Estado del servicio systemd de Kafka en kafka-broker-1: activo desde hace más de un minuto, sin reinicios.}
+
+		El mismo procedimiento se repitió, con idéntico resultado, en \texttt{kafka-broker-2} y \texttt{kafka-broker-3}.
+
+	\subsection{Incidente durante el despliegue: KAFKA-18281}
+
+		En el primer intento de despliegue, el formateo del storage (paso 5 de la sección anterior) falló con la siguiente excepción:
+
+		\begin{sourcecode}[\label{codigo-bug-error}]{text}{Error obtenido en el primer intento de formateo.}
+Exception in thread "main" java.lang.IllegalArgumentException: requirement failed:
+advertised.listeners cannot use the nonroutable meta-address 0.0.0.0.
+Use a routable IP address.
+		\end{sourcecode}
+
+		\setindexcaption{server.properties del primer intento, con los listeners atados a 0.0.0.0.}
+		\insertimage[\label{img:bug-properties}]{kafka/broker1-server-properties-bug.png}{width=13cm}{Configuración inicial: tanto \texttt{listeners} como el listener CONTROLLER quedaban atados a la dirección no enrutable 0.0.0.0.}
+
+		La causa es un defecto conocido de Kafka 3.9.0, reportado como \textbf{KAFKA-18281}: Kafka valida incorrectamente el listener \texttt{CONTROLLER} exigiéndole una dirección enrutable, aun cuando dicho listener nunca se declaró en \texttt{advertised.listeners} (que es lo correcto). La corrección aplicada, sin depender de un parche de versión, fue atar tanto \texttt{listeners} como \texttt{advertised.listeners} a la IP privada específica de cada broker en vez de \texttt{0.0.0.0}. Como el script de aprovisionamiento se ejecuta con \texttt{set -e}, el fallo interrumpía el script antes de llegar a crear el servicio \texttt{systemd}; por eso, además de corregir la configuración, se destruyó y recreó toda la infraestructura (\texttt{pulumi destroy} seguido de \texttt{pulumi up}) para comprobar que el nuevo código funciona de punta a punta sin intervención manual.
+
+	\subsection{Verificación del quorum KRaft}
+
+		La activación del servicio en cada broker por separado no garantiza, por sí sola, que los tres nodos hayan formado un mismo quorum. Para confirmarlo se consultó el estado del quorum desde uno de los brokers:
+
+		\begin{sourcecode}[\label{codigo-quorum-status}]{bash}{Consulta del estado del quorum KRaft.}
+kafka-metadata-quorum.sh \
+    --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092 \
+    describe --status
+		\end{sourcecode}
+
+		\setindexcaption{Estado del quorum KRaft del clúster de 3 brokers.}
+		\insertimage[\label{img:quorum-status}]{kafka/quorum-status.png}{width=13cm}{Salida de \texttt{kafka-metadata-quorum.sh describe --status}: los tres node.id aparecen como votantes activos del quorum.}
+
+		La salida obtenida confirma que el clúster quedó correctamente configurado:
+
+		\begin{itemize}
+			\item \texttt{ClusterId} coincide exactamente con el \texttt{CLUSTER\_ID} fijado en el código de infraestructura (\texttt{X2k7a\_8UT5i145WnsLy8qQ}), es decir, los tres brokers efectivamente pertenecen al mismo clúster.
+			\item \texttt{LeaderId: 3} indica que, de los tres controladores, \texttt{kafka-broker-3} ganó la elección y actúa como líder del quorum.
+			\item \texttt{LeaderEpoch: 6} es el número de época de la elección actual; un valor mayor a 0 confirma que ya se completó al menos una elección de líder.
+			\item \texttt{CurrentVoters} lista los tres \texttt{node.id} (1, 2 y 3) junto a su endpoint \texttt{CONTROLLER}, confirmando que los tres brokers participan activamente del quorum (ninguno quedó aislado).
+			\item \texttt{CurrentObservers} vacío es esperado en este laboratorio: no hay controladores adicionales en modo solo observador.
+		\end{itemize}
+
+		Con este resultado se da por completada y verificada la configuración del clúster distribuido de Kafka.
