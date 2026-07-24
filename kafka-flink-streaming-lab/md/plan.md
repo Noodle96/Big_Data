@@ -97,3 +97,13 @@ kafka-flink-streaming-lab/
 - **Fase 1 (deploy) cerrada.** Sigue Fase 2: crear el topic (`topics.yaml` + `scripts/kafka/create_topics.py`) y luego producer/consumer.
 
 Nota: las IPs públicas cambian si se destruye/recrea el stack (`pulumi destroy` + `pulumi up`); las privadas son fijas mientras no se cambie el código.
+
+## Cómo pausar y retomar el laboratorio
+
+Kafka corre como servicio `systemd` en los 3 brokers, independiente de la sesión SSH — cerrar la terminal no lo detiene. Para retomar en cualquier momento, sin volver a correr `pulumi up` ni `pulumi destroy`:
+
+```
+ssh -i keys/kafka-lab-key.pem ubuntu@<ip-publica-actual>
+```
+
+**Ojo con la retención:** el topic `ecommerce-events` tiene `retention.ms=3600000` (1 hora). Si la pausa dura más de eso, los eventos producidos antes de pausar ya no van a estar — hay que volver a correr `producer.py` al retomar antes de pasar al consumer.
