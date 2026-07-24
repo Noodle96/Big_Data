@@ -1,1 +1,62 @@
+# ============================================================
+# Secretos - NUNCA subir esto
+# ============================================================
 *.pem
+keys/
+
+# ============================================================
+# Java / Maven (flink-job/)
+# target/ es todo lo generado por "mvn package": .class, el
+# .jar final (pesa decenas de MB, no tiene sentido versionarlo,
+# se regenera con "mvn clean package"), reportes, etc.
+# ============================================================
+target/
+*.class
+dependency-reduced-pom.xml
+
+# ============================================================
+# Python (producer/, consumer/, scripts/, infrastructure/)
+# ============================================================
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# ============================================================
+# Pulumi
+# Pulumi.yaml y Pulumi.<stack>.yaml SÍ se suben (son
+# configuración, no secretos: lo sensible va encriptado con la
+# passphrase). Solo se ignora el entorno virtual.
+# ============================================================
+infrastructure/venv/
+
+# ============================================================
+# LaTeX (informe/)
+# Todo lo que compila main.tex genera esto; se regenera solo.
+# Si en algún momento quieres subir el PDF final para que se
+# vea directo en GitHub, agrégalo a mano con
+# "git add -f informe/build/main.pdf" (la regla de abajo no
+# se lo va a permitir por defecto).
+# ============================================================
+informe/build/
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.lol
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+
+# ============================================================
+# Sistema operativo / editor
+# ============================================================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
