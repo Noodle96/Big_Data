@@ -84,13 +84,16 @@ kafka-flink-streaming-lab/
 
 ## Registro de ejecución (se va actualizando)
 
-- **Infraestructura desplegada** con `pulumi up` (stack `academy`, región `us-east-1`), 15 recursos creados.
-  - VPC `vpc-0ac7a74587bd395fe`, subnet `subnet-0f7d37a4f1af56e30`, SG `sg-0f0a0b786b3352275`.
-  - broker-1: privada `10.20.1.11` / pública `50.16.10.123`
-  - broker-2: privada `10.20.1.12` / pública `54.89.42.95`
-  - broker-3: privada `10.20.1.13` / pública `54.90.152.95`
-  - client: privada `10.20.1.20` / pública `100.54.236.99`
+- **Intento 1** (código con `listeners=0.0.0.0`): falló. `kafka-storage.sh format` tiraba `advertised.listeners cannot use the nonroutable meta-address 0.0.0.0` — bug conocido de Kafka 3.9.0, [KAFKA-18281](https://issues.apache.org/jira/browse/KAFKA-18281) (valida mal el listener CONTROLLER en 0.0.0.0 aunque no esté en advertised.listeners). El script de `user_data` usa `set -e`, así que abortaba antes de crear el `systemd` unit.
+- **Fix aplicado:** `listeners` ahora bindea `PLAINTEXT` y `CONTROLLER` a la IP privada de cada broker en vez de `0.0.0.0` (evita el bug sin depender de parches de Kafka). Se quitó un intento fallido de usar `--override` (no existe esa flag en `kafka-storage.sh` 3.9.0).
+- **Intento 2 (`pulumi destroy` + `pulumi up`, con el fix ya en el código):** 15 recursos recreados.
+  - VPC `vpc-080b0a98f9e50781a`, subnet `subnet-028740dace59254c2`, SG `sg-0e0134a6642eb2cfd`.
+  - broker-1: privada `10.20.1.11` / pública `54.147.218.194`
+  - broker-2: privada `10.20.1.12` / pública `52.90.232.221`
+  - broker-3: privada `10.20.1.13` / pública `52.55.101.14`
+  - client: privada `10.20.1.20` / pública `54.90.122.174`
   - `controller.quorum.voters`: `1@10.20.1.11:9093,2@10.20.1.12:9093,3@10.20.1.13:9093`
-- **Pendiente:** verificar `systemctl status kafka` en los 3 brokers y capturar evidencia en `informe/img/kafka/` (`brokerN-systemctl-status.png`, `brokerN-journalctl.png`).
+- **Verificado:** `systemctl status kafka` → `active (running)` estable en los 3 brokers (1-5 min de uptime al momento de la captura, sin loop de reinicio). Evidencia guardada en `informe/img/kafka/`: `broker1-server-properties-bug.png` (diagnóstico del bug, intento 1), `infraestruture.png` (output de `pulumi up`, intento 1), `broker{1,2,3}-systemctl-status.png` y `broker{1,2,3}-journalctl.png` (intento 2, ya con el fix).
+- **Fase 1 (deploy) cerrada.** Sigue Fase 2: crear el topic (`topics.yaml` + `scripts/kafka/create_topics.py`) y luego producer/consumer.
 
 Nota: las IPs públicas cambian si se destruye/recrea el stack (`pulumi destroy` + `pulumi up`); las privadas son fijas mientras no se cambie el código.
