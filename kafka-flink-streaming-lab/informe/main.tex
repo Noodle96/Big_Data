@@ -1,0 +1,79 @@
+% Template:     Informe LaTeX
+% Documento:    Archivo principal
+% Versión:      8.4.8 (12/07/2026)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R.
+%        pablo@ppizarror.com
+%
+% Manual template: [https://template-latex.github.io/informe]
+% Licencia MIT:    [https://opensource.org/licenses/MIT]
+
+% CREACIÓN DEL DOCUMENTO
+\documentclass[
+	spanish, % Idioma: spanish, english, etc.
+	letterpaper, oneside
+]{article}
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\documenttitle {Laboratorio 07: FLINK}
+\def\documentsubtitle {}
+\def\documentsubject {Apache Flink}
+
+\def\documentauthor {Jorge Tito Ccahuaya}
+\def\coursename {Big Data}
+\def\coursecode {1705157}
+
+\def\universityname {Universidad Nacional de San Agustin de Arequipa}
+\def\universityfaculty {Facultad de Ingeniería de Producción y servicios}
+\def\universitydepartment {Escuela Profesional de Ciencias de la Computación}
+\def\universitydepartmentimage {departamentos/unsa}
+\def\universitydepartmentimagecfg {height=1.57cm}
+\def\universitylocation {Arequipa - Perú}
+
+% INTEGRANTES, PROFESORES Y FECHAS
+\def\authortable {
+	\begin{tabular}{ll}
+		Integrante:
+		& \begin{tabular}[t]{l}
+			Jorge Alfredo Tito Ccahuaya
+		\end{tabular} \\
+		Profesor:
+		& \begin{tabular}[t]{l}
+			Alvaro Henry Mamani Aliaga
+		\end{tabular} \\
+		& \\
+		\multicolumn{2}{l}{Fecha de entrega: \today} \\
+		\multicolumn{2}{l}{\universitylocation}
+	\end{tabular}
+}
+
+% IMPORTACIÓN DEL TEMPLATE
+\input{template}
+
+% INICIO DE PÁGINAS
+\begin{document}
+
+% PORTADA
+\templatePortrait
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\templatePagecfg
+
+% RESUMEN O ABSTRACT
+\begin{abstractd}
+	\lipsum[1] % Párrafo ejemplo, se puede borrar
+\end{abstractd}
+
+% TABLA DE CONTENIDOS - ÍNDICE
+\templateIndex
+
+% CONFIGURACIONES FINALES
+\templateFinalcfg
+
+% ======================= INICIO DEL DOCUMENTO =======================
+
+\input{example} % Ejemplo, se puede borrar
+
+% FIN DEL DOCUMENTO
+\end{document}
