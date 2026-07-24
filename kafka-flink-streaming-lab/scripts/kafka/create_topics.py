@@ -26,7 +26,9 @@ except ImportError:
     sys.exit(1)
 
 KAFKA_TOPICS_BIN = "kafka-topics.sh"
-TOPICS_FILE = Path(__file__).resolve().parents[2] / "topics.yaml"
+# Se asume que topics.yaml vive junto a este script (así se copian juntos
+# por scp a la máquina cliente, que no tiene el resto del repositorio).
+TOPICS_FILE = Path(__file__).resolve().parent / "topics.yaml"
 
 
 def load_topics(path: Path) -> list[dict]:
