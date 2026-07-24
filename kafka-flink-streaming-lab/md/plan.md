@@ -36,11 +36,12 @@ kafka-flink-streaming-lab/
 ├── flink-job/                # Proyecto Maven para el Laboratorio 07
 ├── scripts/                  # Utilidades CLI (crear topics, describir, monitorear grupos)
 ├── docs/
-│   ├── images/                # Diagramas generados (arquitectura, flujo)
-│   └── evidence/               # Capturas/logs por concepto, para alimentar el informe
+│   └── images/                # Diagramas generados (arquitectura, flujo) — no evidencia
 ├── md/                        # Notas y planes (este archivo)
 └── README.md
 ```
+
+**Nota sobre evidencia (capturas):** el template LaTeX carga imágenes desde `informe/img/` (`\defaultimagefolder {img/}`). Para que `\insertimage{...}` nunca falle por ruta incorrecta, **toda** captura/evidencia que vaya a citarse en el informe se guarda directamente en `informe/img/kafka/` (ya creada), no en `docs/evidence/`. `docs/images/` queda solo para diagramas genéricos fuera del informe (ej. README).
 
 ## Plan paso a paso
 
@@ -66,7 +67,7 @@ kafka-flink-streaming-lab/
 10. Levantar 2 instancias de `consumer.py` con el mismo `--group-id` → evidencia de **Consumer Group** (rebalanceo de particiones).
 
 ### Fase 3 — Informe (sección Kafka)
-11. Con la evidencia guardada en `docs/evidence/`, escribir la sección Kafka en `informe/contenido.tex`. Diagramas genéricos (arquitectura) los genera Claude; capturas específicas (consola AWS, terminal) las inserta Russell manualmente.
+11. Con la evidencia guardada en `informe/img/kafka/`, escribir la sección Kafka en `informe/contenido.tex`. Diagramas genéricos (arquitectura) los genera Claude; capturas específicas (consola AWS, terminal) las inserta Russell manualmente en esa misma carpeta.
 
 ### Fase 4 — Flink
 12. Implementar el proyecto Maven en `flink-job/` cubriendo 2.1 a 2.5 de la guía.
@@ -79,4 +80,17 @@ kafka-flink-streaming-lab/
 
 - Kafka 3.9.0 (Scala 2.13), Java 17.
 - Topic principal: `ecommerce-events`, 3 particiones, factor de replicación 3.
-- `CLUSTER_ID` fijo, generado una vez y hardcodeado en el código de infraestructura.
+- `CLUSTER_ID` fijo, generado una vez y hardcodeado en el código de infraestructura: `X2k7a_8UT5i145WnsLy8qQ`.
+
+## Registro de ejecución (se va actualizando)
+
+- **Infraestructura desplegada** con `pulumi up` (stack `academy`, región `us-east-1`), 15 recursos creados.
+  - VPC `vpc-0ac7a74587bd395fe`, subnet `subnet-0f7d37a4f1af56e30`, SG `sg-0f0a0b786b3352275`.
+  - broker-1: privada `10.20.1.11` / pública `50.16.10.123`
+  - broker-2: privada `10.20.1.12` / pública `54.89.42.95`
+  - broker-3: privada `10.20.1.13` / pública `54.90.152.95`
+  - client: privada `10.20.1.20` / pública `100.54.236.99`
+  - `controller.quorum.voters`: `1@10.20.1.11:9093,2@10.20.1.12:9093,3@10.20.1.13:9093`
+- **Pendiente:** verificar `systemctl status kafka` en los 3 brokers y capturar evidencia en `informe/img/kafka/` (`brokerN-systemctl-status.png`, `brokerN-journalctl.png`).
+
+Nota: las IPs públicas cambian si se destruye/recrea el stack (`pulumi destroy` + `pulumi up`); las privadas son fijas mientras no se cambie el código.
