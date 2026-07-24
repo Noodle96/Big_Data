@@ -14,6 +14,8 @@
 
 	A diferencia de un informe puramente descriptivo, este documento se escribió para que también sirva de guía: cada paso relevante muestra primero el comando exactamente como se ejecutó, y luego la evidencia (captura de pantalla o salida de consola) de su resultado, de modo que el procedimiento completo pueda reproducirse sin ambigüedad.
 
+	Los fragmentos de código mostrados a lo largo del informe (código de infraestructura en Pulumi, scripts de Kafka, productor, consumidor y el proyecto de Flink) son extractos ilustrativos; el código fuente completo y actualizado está disponible en el repositorio del proyecto: \href{https://github.com/Noodle96/Big_Data/tree/main/kafka-flink-streaming-lab}{github.com/Noodle96/Big\_Data/tree/main/kafka-flink-streaming-lab}.
+
 
 % ------------------------------------------------------------------------------
 \section{Infraestructura del clúster Kafka}
@@ -229,3 +231,8 @@ python3 create_topics.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.2
 			\item \texttt{Replicas} lista los brokers que tienen una copia de esa partición, e \texttt{Isr} (\textit{In-Sync Replicas}) el subconjunto de esas réplicas que está completamente al día con el líder. Que \texttt{Isr} sea idéntico a \texttt{Replicas} en las tres particiones indica que la replicación está sana, sin retraso.
 			\item \texttt{Elr} y \texttt{LastKnownElr} (\textit{Eligible Leader Replicas}) son campos más recientes de Kafka relacionados con la elección segura de líder cuando el ISR se reduce por debajo de lo mínimo; aparecen vacíos porque no ha ocurrido ningún escenario de falla, lo cual es el estado esperado y saludable.
 		\end{itemize}
+
+		La Figura \ref{img:broker-partition-leader} resume visualmente esta misma información: qué broker es líder de cada partición y cuáles la replican como followers.
+
+		\setindexcaption{Distribución de réplicas y liderazgo por partición del topic ecommerce-events.}
+		\insertimage[\label{img:broker-partition-leader}]{kafka/broker-partition-leader.png}{width=14cm}{Cada broker guarda una réplica de las 3 particiones (factor de replicación 3), pero el liderazgo (en ámbar) queda repartido: Broker 1 lidera la Partición 2, Broker 2 lidera la Partición 0 y Broker 3 lidera la Partición 1.}
