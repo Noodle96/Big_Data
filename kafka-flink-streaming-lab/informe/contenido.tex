@@ -184,3 +184,48 @@ kafka-metadata-quorum.sh \
 		\end{itemize}
 
 		Con este resultado se da por completada y verificada la configuración del clúster distribuido de Kafka.
+
+
+% ------------------------------------------------------------------------------
+\section{Uso del clúster: tópicos, productor y consumidor}
+% ------------------------------------------------------------------------------
+
+	Con el clúster ya configurado, esta sección demuestra los conceptos pedidos por el docente: \textit{topic}, \textit{partition}, \textit{producer}, \textit{consumer}, \textit{offset} y \textit{consumer group}. Todo se ejecuta desde \texttt{kafka-client}, la instancia dedicada a correr el productor y el consumidor (no los brokers).
+
+	\subsection{Conexión al cliente y copia de los archivos}
+
+		Primero hay que conectarse por SSH a \texttt{kafka-client} (IP pública entregada por \texttt{pulumi up} como \texttt{sshClient}):
+
+		\begin{sourcecode}[\label{codigo-ssh-client}]{bash}{Conexión SSH al cliente.}
+ssh -i keys/kafka-lab-key.pem ubuntu@54.90.122.174
+		\end{sourcecode}
+
+		El cliente no tiene el repositorio completo, así que los archivos necesarios se copian por \texttt{scp} antes de usarlos (este comando se ejecuta desde la máquina local, no dentro del cliente):
+
+		\begin{sourcecode}[\label{codigo-scp-topics}]{bash}{Copia de topics.yaml y create\_topics.py al cliente.}
+scp -i keys/kafka-lab-key.pem topics.yaml ubuntu@54.90.122.174:~/
+scp -i keys/kafka-lab-key.pem scripts/kafka/create_topics.py ubuntu@54.90.122.174:~/
+		\end{sourcecode}
+
+	\subsection{Creación del topic (Topic y Partition)}
+
+		El topic \texttt{ecommerce-events} se crea (y se describe automáticamente) con el script \texttt{create\_topics.py}, que lee la definición declarativa de \texttt{topics.yaml} en vez de recibir los parámetros sueltos por consola:
+
+		\begin{sourcecode}[\label{codigo-create-topics}]{bash}{Creación del topic desde el cliente.}
+python3 create_topics.py --bootstrap-server 10.20.1.11:9092,10.20.1.12:9092,10.20.1.13:9092
+		\end{sourcecode}
+
+		\setindexcaption{Creación y descripción del topic ecommerce-events.}
+		\insertimage[\label{img:topic-create}]{kafka/topic-create-describe.png}{width=13cm}{Salida de \texttt{kafka-topics.sh --create} y \texttt{--describe} para el topic ecommerce-events: 3 particiones, factor de replicación 3.}
+
+		La Figura \ref{img:topic-create} contiene toda la evidencia de los conceptos \textbf{Topic} y \textbf{Partition}. Interpretando cada campo de la salida:
+
+		\begin{itemize}
+			\item \texttt{TopicId} (\texttt{wz45FgRuSPawap\_w0lCtMA}): identificador interno único que Kafka asigna al topic; distingue al topic incluso si en el futuro se borrara y se recreara con el mismo nombre.
+			\item \texttt{PartitionCount: 3}: el topic quedó dividido en 3 particiones, tal como se definió en \texttt{topics.yaml}. Cada partición es un log independiente y ordenado; dividir el topic en particiones es lo que permite paralelizar la escritura y la lectura entre varios brokers (y, más adelante, entre varios consumidores de un mismo grupo).
+			\item \texttt{ReplicationFactor: 3}: cada partición tiene 3 copias (réplicas) distribuidas en los 3 brokers del clúster. Con exactamente 3 brokers y factor de replicación 3, cada broker termina teniendo una copia de \textbf{todas} las particiones (el máximo posible en este clúster), lo que da tolerancia a fallas: el clúster sigue funcionando aunque se caiga un broker.
+			\item \texttt{Configs}: muestra la configuración efectiva del topic, incluyendo los overrides declarados en \texttt{topics.yaml} (\texttt{retention.ms=3600000}, es decir, los mensajes se retienen 1 hora; \texttt{cleanup.policy=delete}, se borran al vencer la retención) y valores por defecto del clúster (\texttt{min.insync.replicas=2}).
+			\item Por cada partición (0, 1 y 2) se muestra su \texttt{Leader}: el broker que en este momento atiende las lecturas y escrituras de esa partición en particular. Nótese que el liderazgo quedó repartido entre los tres brokers (2, 3 y 1 respectivamente) en vez de concentrarse en uno solo, lo cual es deseable para balancear la carga.
+			\item \texttt{Replicas} lista los brokers que tienen una copia de esa partición, e \texttt{Isr} (\textit{In-Sync Replicas}) el subconjunto de esas réplicas que está completamente al día con el líder. Que \texttt{Isr} sea idéntico a \texttt{Replicas} en las tres particiones indica que la replicación está sana, sin retraso.
+			\item \texttt{Elr} y \texttt{LastKnownElr} (\textit{Eligible Leader Replicas}) son campos más recientes de Kafka relacionados con la elección segura de líder cuando el ISR se reduce por debajo de lo mínimo; aparecen vacíos porque no ha ocurrido ningún escenario de falla, lo cual es el estado esperado y saludable.
+		\end{itemize}
