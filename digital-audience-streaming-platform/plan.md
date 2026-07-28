@@ -51,13 +51,14 @@ Este diagrama (versión más elaborada, con VPC/EC2 por componente) es el primer
 
 ## 2. Fases de implementación
 
-### Fase 1 — Infraestructura base (Pulumi / AWS Academy)
+### Fase 1 — Infraestructura base (Pulumi / AWS Academy) 🚧 (código escrito 2026-07-24, sin desplegar todavía)
 
-- VPC, subnet, security groups (reutilizar patrón del lab de Kafka).
-- EC2: 3 brokers Kafka (KRaft, con el fix de KAFKA-18281 ya conocido), 1 JobManager Flink, N TaskManagers Flink, 1 instancia para PostgreSQL/TimescaleDB, 1 instancia para Grafana (o co-ubicar Grafana+DB en la misma instancia si el Learner Lab tiene límite de instancias).
-- Bootstrap 100% en `user_data` (nada de SSH manual, mismo principio que el lab de Kafka).
+- Scaffold creado manualmente por Russell con `pulumi new aws-python` en `infra/` (stack `academy2`, región `us-east-1`), `__main__.py` reemplazado con el cluster completo.
+- Topología final (8 EC2, todas `t3.small`): 3 brokers Kafka KRaft (patrón validado, reutilizado tal cual), 1 JobManager + **3 TaskManagers de Flink de una** (decisión explícita de Russell: no arrancar con 1 y escalar después), 1 instancia con PostgreSQL 16 + TimescaleDB + Grafana co-ubicados (aceptado: Grafana es liviano, Postgres no se expone a Internet).
+- Bootstrap 100% en `user_data` (nada de SSH manual). El de Kafka está probado; el de Flink (usa `config.yaml`, el formato YAML anidado nuevo de Flink 2.x, no el viejo `flink-conf.yaml`) y el de Postgres/TimescaleDB/Grafana son nuevos, sin validar contra un cluster real todavía — esperar debug en el primer `pulumi up`.
+- Detalle completo en `infra/README.md`.
 - Actualizar credenciales de AWS Academy antes de cada sesión de trabajo (gotcha ya conocido).
-- **Va al informe:** diagrama de red, tabla de instancias (rol / tipo / IP privada), comandos `pulumi up`/`preview` con su evidencia.
+- **Va al informe:** diagrama de red, tabla de instancias (rol / tipo / IP privada), comandos `pulumi up`/`preview` con su evidencia — TODOS los comandos ejecutados, sin excepción (regla reforzada 2026-07-24).
 
 ### Fase 2 — Simulador de agentes + Productores Kafka ✅ (avance inicial integrado 2026-07-24)
 
