@@ -1,0 +1,18 @@
+% ------------------------------------------------------------------------------
+% CONVENCIÓN DEFINITIVA: Comando + Evidencia
+% ------------------------------------------------------------------------------
+% Elegida el 2026-07-24 tras comparar variantes (ver memoria del proyecto). El
+% comando NO lleva caption/numeración propia (no aparece en el Índice de
+% Códigos); la imagen sí lleva caption y queda numerada, y su descripción
+% incluye qué comando se ejecutó. El comando se muestra inline, con fondo
+% celeste (color "cmdbg", definido en main.tex, sin tocar template.tex), SIN
+% símbolo "$" ni ningún prefijo delante. Solo sirve para comandos de una sola
+% línea (usa \inlinesourcecodeboxed, basado en \lstinline) -- si algún comando
+% real es muy largo/multilínea, avisar para usar una variante en bloque.
+%
+% Plantilla a copiar para cada nueva evidencia:
+%
+% \inlinesourcecodeboxed[cmdbg]{bash}{<comando>}
+%
+% \insertimage[\label{img:<id-unico>}]{<ruta-de-la-captura>}{scale=0.12}{<descripción del resultado, mencionando el comando ejecutado>}
+% ------------------------------------------------------------------------------

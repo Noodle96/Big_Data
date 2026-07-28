@@ -1,0 +1,70 @@
+<svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" role="img" font-family="Helvetica, Arial, sans-serif">
+  <title>Pipeline de la plataforma de audiencias digitales</title>
+  <desc>Flujo de datos desde los agentes simulados hasta el dashboard: Agentes, Productores Kafka, Apache Kafka, Apache Flink, PostgreSQL/TimescaleDB y Grafana.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2E75B6"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="460" fill="#FFFFFF"/>
+
+  <!-- ROW 1 -->
+  <g>
+    <rect x="65" y="40" width="230" height="100" rx="10" fill="#EAF2FB" stroke="#2E75B6"/>
+    <text x="180" y="78" text-anchor="middle" fill="#111827" font-size="15" font-weight="700">Agentes autonomos</text>
+    <text x="180" y="100" text-anchor="middle" fill="#374151" font-size="12">8 perfiles, generan eventos</text>
+  </g>
+
+  <line x1="295" y1="90" x2="330" y2="90" stroke="#2E75B6" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="312" y="76" text-anchor="middle" fill="#6B7280" font-size="10">accion</text>
+
+  <g>
+    <rect x="335" y="40" width="230" height="100" rx="10" fill="#EAF2FB" stroke="#2E75B6"/>
+    <text x="450" y="78" text-anchor="middle" fill="#111827" font-size="15" font-weight="700">Productores Kafka</text>
+    <text x="450" y="100" text-anchor="middle" fill="#374151" font-size="12">Publican JSON por topic</text>
+  </g>
+
+  <line x1="565" y1="90" x2="600" y2="90" stroke="#2E75B6" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="582" y="76" text-anchor="middle" fill="#6B7280" font-size="10">TCP</text>
+
+  <g>
+    <rect x="605" y="40" width="230" height="100" rx="10" fill="#EAF2FB" stroke="#2E75B6"/>
+    <text x="720" y="78" text-anchor="middle" fill="#111827" font-size="15" font-weight="700">Apache Kafka</text>
+    <text x="720" y="100" text-anchor="middle" fill="#374151" font-size="12">3 brokers, topics particionados</text>
+  </g>
+
+  <!-- connector down: Kafka -> Flink -->
+  <line x1="720" y1="140" x2="720" y2="260" stroke="#2E75B6" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="742" y="205" text-anchor="start" fill="#6B7280" font-size="10">consumer group</text>
+
+  <!-- ROW 2 -->
+  <g>
+    <rect x="605" y="260" width="230" height="100" rx="10" fill="#EAF2FB" stroke="#2E75B6"/>
+    <text x="720" y="298" text-anchor="middle" fill="#111827" font-size="15" font-weight="700">Apache Flink</text>
+    <text x="720" y="320" text-anchor="middle" fill="#374151" font-size="12">Filtra, enriquece, agrega, clasifica</text>
+  </g>
+
+  <line x1="600" y1="310" x2="565" y2="310" stroke="#2E75B6" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="582" y="296" text-anchor="middle" fill="#6B7280" font-size="10">JDBC sink</text>
+
+  <g>
+    <rect x="335" y="260" width="230" height="100" rx="10" fill="#EAF2FB" stroke="#2E75B6"/>
+    <text x="450" y="298" text-anchor="middle" fill="#111827" font-size="15" font-weight="700">PostgreSQL / Timescale</text>
+    <text x="450" y="320" text-anchor="middle" fill="#374151" font-size="12">Guarda metricas y audiencias</text>
+  </g>
+
+  <line x1="330" y1="310" x2="295" y2="310" stroke="#2E75B6" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="312" y="296" text-anchor="middle" fill="#6B7280" font-size="10">query</text>
+
+  <g>
+    <rect x="65" y="260" width="230" height="100" rx="10" fill="#DCEAFB" stroke="#1F5C96"/>
+    <text x="180" y="298" text-anchor="middle" fill="#111827" font-size="15" font-weight="700">Grafana</text>
+    <text x="180" y="320" text-anchor="middle" fill="#374151" font-size="12">Paneles y alertas en vivo</text>
+  </g>
+
+  <!-- Footer note -->
+  <text x="450" y="410" text-anchor="middle" fill="#6B7280" font-size="12">Agentes, Kafka y Flink corren en EC2 dentro de una misma VPC (IPs privadas estaticas)</text>
+  <text x="450" y="430" text-anchor="middle" fill="#6B7280" font-size="12">Grafana es el unico componente expuesto al navegador</text>
+</svg>
