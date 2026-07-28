@@ -59,8 +59,9 @@ Este diagrama (versión más elaborada, con VPC/EC2 por componente) es el primer
 - Actualizar credenciales de AWS Academy antes de cada sesión de trabajo (gotcha ya conocido).
 - **Va al informe:** diagrama de red, tabla de instancias (rol / tipo / IP privada), comandos `pulumi up`/`preview` con su evidencia.
 
-### Fase 2 — Simulador de agentes + Productores Kafka
+### Fase 2 — Simulador de agentes + Productores Kafka ✅ (avance inicial integrado 2026-07-24)
 
+- Base de código aportada por un compañero de equipo, integrada en `agentes-simulador/src/` con type hints completos, `key=user_id` en el producer, override `FORCED_SEASON` y los 6 escenarios del enunciado. Detalle en `agentes-simulador/README.md` y en la memoria `project-companero-simulador`. Pendiente: apuntar `BOOTSTRAP_SERVERS` a nuestros brokers reales (Fase 1) y correrlo contra un cluster real.
 - Implementar los 8 perfiles obligatorios como clases Python con type hints completos:
 
   | Agente | Comportamiento clave a modelar |
@@ -78,18 +79,18 @@ Este diagrama (versión más elaborada, con VPC/EC2 por componente) es el primer
 - Productores Kafka: serializan a JSON, publican según el tipo de evento al topic correspondiente.
 - **Va al informe:** tabla de perfiles (arriba), diagrama de flujo del simulador, fragmentos de código relevantes (no el código completo — eso va a Anexos si aplica), evidencia de eventos llegando a Kafka.
 
-### Fase 3 — Kafka: topics y particiones
+### Fase 3 — Kafka: topics y particiones ✅ (decidido 2026-07-24)
 
-- Diseñar el esquema de topics (a definir con detalle en esta fase; borrador inicial):
+- Esquema final: **2 topics por semántica de negocio** (no por canal ni uno solo), decidido tras integrar el simulador:
 
-  | Topic | Contenido | Particiones (borrador) | Clave de partición |
+  | Topic | Contenido | Particiones | Clave de partición |
   |---|---|---|---|
-  | `user-events` | login, búsqueda, vista de producto, carrito | 3 | `user_id` |
-  | `purchase-events` | compra realizada, pago rechazado | 3 | `user_id` |
-  | `iot-events` | ubicación GPS, sensores (si se incluyen) | 2 | `agent_id` |
-  | `system-events` | eventos de sistema/monitoreo (opcional) | 1 | — |
+  | `user-events` | SEARCH, VIEW_PRODUCT (navegación) | 3 | `user_id` |
+  | `purchase-events` | ADD_CART, PURCHASE, PAYMENT_REJECTED (conversión) | 3 | `user_id` |
 
-- **Va al informe:** tabla final de topics/particiones/claves, comandos `kafka-topics.sh --create`/`--describe` con evidencia.
+  `iot-events`/`system-events` quedan descartados por ahora: los canales IoT/Vehicle del simulador son canales de *compra*, no telemetría real de sensores — crear un topic vacío no aporta al informe. Se agregaría solo si más adelante se generan eventos de sensores de verdad.
+
+- **Va al informe:** tabla final de topics/particiones/claves (arriba), comandos `kafka-topics.sh --create`/`--describe` con evidencia, y una breve justificación de por qué 2 topics y no 1 ni 4 (buen contenido de análisis).
 
 ### Fase 4 — Apache Flink: cluster y jobs
 
