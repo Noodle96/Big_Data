@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Java / Maven
+target/
+*.class
+*.jar
+!flink-jobs/**/lib/*.jar
+
+# Pulumi
+infra/venv/
+infra/__pycache__/
+Pulumi.*.yaml.bak
+*.pyc
+
+# LaTeX build artifacts (el PDF final sí se versiona, lo intermedio no)
+informe/build/*.aux
+informe/build/*.log
+informe/build/*.out
+informe/build/*.toc
+informe/build/*.lof
+informe/build/*.lol
+informe/build/*.fls
+informe/build/*.fdb_latexmk
+informe/build/*.synctex.gz
+informe/build/*.bbl
+informe/build/*.blg
+informe/build/*.xdv
+
+trabajo_compañero/
+
+# Credenciales / secretos
+*.pem
+keys/
+.env
+.aws/
+
+# Sistema
+.DS_Store
