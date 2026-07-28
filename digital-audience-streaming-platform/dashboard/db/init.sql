@@ -1,0 +1,4 @@
+-- Esquema inicial de PostgreSQL/TimescaleDB para el dashboard.
+-- Por definir en la Fase 6 del plan.md: una tabla o vista por bloque de
+-- métrica (usuarios activos, eventos por tipo, audiencias, productos,
+-- compras por región, tendencias, conversión, alertas).
