@@ -16,3 +16,159 @@
 %
 % \insertimage[\label{img:<id-unico>}]{<ruta-de-la-captura>}{scale=0.12}{<descripción del resultado, mencionando el comando ejecutado>}
 % ------------------------------------------------------------------------------
+
+% ==============================================================================
+% NOTA PENDIENTE: los diagramas informe/img/diagramas/pipeline-general.svg e
+% informe/img/diagramas/infra-red.svg todavía están en SVG, sin convertir a
+% PDF/PNG (pdflatex no incluye SVG directamente). Falta exportarlos -- por
+% ejemplo abriéndolos en Inkscape y "Exportar como PDF" en la misma carpeta,
+% o con cualquier conversor online -- antes de poder insertarlos con
+% \insertimage. Los \insertimage de ambos quedan comentados más abajo con
+% instrucciones exactas hasta que eso se resuelva.
+% ==============================================================================
+
+\clearpage
+\section{Infraestructura (Pulumi / AWS Academy)}
+
+Toda la infraestructura del proyecto (Kafka, Flink, PostgreSQL/TimescaleDB y Grafana) se define como código con Pulumi (Python) y se despliega sobre AWS Academy. El script completo vive en \texttt{infra/\_\_main\_\_.py}; esta sección documenta el despliegue paso a paso, con la evidencia real de cada comando ejecutado.
+
+\subsection{Topología de la infraestructura}
+
+Se desplegaron 8 instancias EC2 (\texttt{t3.small}), todas dentro de la misma VPC y Security Group, con IPs privadas estáticas asignadas por Pulumi (Tabla \ref{tab:instancias-ec2}).
+
+\begin{table}[H]
+\centering
+\caption{Instancias EC2 desplegadas.}
+\begin{tabular}{llll}
+\hline
+\textbf{Rol} & \textbf{Hostname} & \textbf{IP privada} & \textbf{Puertos relevantes} \bigstrut\\
+\hline
+Broker Kafka & kafka-broker-1 & 10.30.1.11 & 9092, 9093 (interno) \\
+Broker Kafka & kafka-broker-2 & 10.30.1.12 & 9092, 9093 (interno) \\
+Broker Kafka & kafka-broker-3 & 10.30.1.13 & 9092, 9093 (interno) \\
+Flink JobManager & flink-jobmanager & 10.30.1.21 & 6123 (interno), 8081 (público) \\
+Flink TaskManager & flink-taskmanager-1 & 10.30.1.22 & 6123 (interno) \\
+Flink TaskManager & flink-taskmanager-2 & 10.30.1.23 & 6123 (interno) \\
+Flink TaskManager & flink-taskmanager-3 & 10.30.1.24 & 6123 (interno) \\
+Postgres+TimescaleDB+Grafana & dashboard & 10.30.1.30 & 5432 (interno), 3000 (público) \\
+\hline
+\end{tabular}
+\label{tab:instancias-ec2}
+\end{table}
+
+Las IPs públicas no se incluyen en la tabla porque cambian en cada \texttt{pulumi up}/\texttt{destroy} (no se usó Elastic IP); se obtienen con \texttt{pulumi stack output} después de cada despliegue. Los comandos de esta sección usan las IPs públicas vigentes al momento de esta corrida.
+
+% \insertimage[\label{img:infra-red}]{diagramas/infra-red.pdf}{width=15cm}{Topología de red: VPC, subred pública, Security Group compartido y agrupación de instancias por rol.}
+% (pendiente de conversión SVG->PDF, ver nota al inicio del archivo)
+
+\subsection{Despliegue con Pulumi}
+
+Con el stack ya configurado, el despliegue completo se ejecuta con un solo comando:
+
+\inlinesourcecodeboxed[cmdbg]{bash}{pulumi up --yes}
+
+La Figura \ref{img:pulumi-up-1} muestra la creación de las 8 instancias EC2.
+
+\insertimage[\label{img:pulumi-up-1}]{evidencia/pulumi-up-1.png}{width=14cm}{Resultado de \texttt{pulumi up --yes}: 8 recursos \texttt{aws:ec2:Instance} creados.}
+
+La Figura \ref{img:pulumi-up-2} muestra los outputs exportados por el stack: bootstrap servers de Kafka, URLs de Flink y Grafana, e IPs de cada instancia.
+
+\insertimage[\label{img:pulumi-up-2}]{evidencia/pulumi-up-2.png}{width=14cm}{Outputs de \texttt{pulumi up --yes}: endpoints y comandos SSH de cada instancia.}
+
+Es importante notar que \texttt{pulumi up} terminando no significa que Kafka/Flink/Postgres/Grafana ya estén instalados y corriendo -- eso lo hace el script de \texttt{user\_data} (cloud-init) en segundo plano dentro de cada instancia, y toma varios minutos adicionales. Las siguientes subsecciones verifican, servicio por servicio, que ese proceso terminó correctamente.
+
+\subsection{Verificación: Apache Kafka (KRaft)}
+
+Los 3 brokers corren Kafka 3.9.0 en modo KRaft (sin Zookeeper), reutilizando el patrón validado en el laboratorio anterior del curso (incluyendo el fix del bug KAFKA-18281). Se verifica que el servicio systemd \texttt{kafka} esté activo en cada broker con \texttt{systemctl status}, forzando un pseudo-terminal (\texttt{-t}) para que la salida se trunque al ancho de la consola en vez de imprimir la línea completa del proceso Java:
+
+\textbf{Broker 1 (10.30.1.11, IP pública 54.234.134.254):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@54.234.134.254 "sudo systemctl status kafka --no-pager"}
+
+\insertimage[\label{img:status-kafka-1}]{evidencia/status-kafka-broker-1.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-1 (nodeId=1).}
+
+\textbf{Broker 2 (10.30.1.12, IP pública 54.87.246.253):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@54.87.246.253 "sudo systemctl status kafka --no-pager"}
+
+\insertimage[\label{img:status-kafka-2}]{evidencia/status-kafka-broker-2.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-2 (nodeId=2).}
+
+\textbf{Broker 3 (10.30.1.13, IP pública 50.19.46.129):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@50.19.46.129 "sudo systemctl status kafka --no-pager"}
+
+\insertimage[\label{img:status-kafka-3}]{evidencia/status-kafka-broker-3.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-3 (nodeId=3).}
+
+Los 3 brokers reportan \texttt{active (running)} y forman correctamente el quorum KRaft (\texttt{controller.quorum.voters} apuntando a los 3 nodos).
+
+\subsection{Verificación: Apache Flink (cluster real)}
+
+A diferencia del laboratorio anterior del curso (donde Flink corría embebido en un solo proceso Java), acá se desplegó un cluster real: 1 JobManager coordinando 3 TaskManagers.
+
+\textbf{JobManager (10.30.1.21, IP pública 54.82.79.189):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@54.82.79.189 "sudo systemctl status flink-jobmanager --no-pager"}
+
+\insertimage[\label{img:status-jm}]{evidencia/status-flink-jobmanager.png}{width=14cm}{Servicio \texttt{flink-jobmanager} activo; el log confirma el registro de los 3 TaskManagers en el \texttt{SlotManager}.}
+
+\textbf{TaskManager 1 (10.30.1.22, IP pública 44.223.75.1):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@44.223.75.1 "sudo systemctl status flink-taskmanager --no-pager"}
+
+\insertimage[\label{img:status-tm1}]{evidencia/status-flink-taskmanager-1.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-1.}
+
+\textbf{TaskManager 2 (10.30.1.23, IP pública 52.200.129.54):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@52.200.129.54 "sudo systemctl status flink-taskmanager --no-pager"}
+
+\insertimage[\label{img:status-tm2}]{evidencia/status-flink-taskmanager-2.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-2. El log muestra un reintento inicial de conexión al JobManager (\texttt{Connection refused}) porque esta instancia terminó su arranque antes que el JobManager -- se resolvió solo mediante el mecanismo de reintento de Flink, sin intervención manual.}
+
+\textbf{TaskManager 3 (10.30.1.24, IP pública 52.90.140.55):}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@52.90.140.55 "sudo systemctl status flink-taskmanager --no-pager"}
+
+\insertimage[\label{img:status-tm3}]{evidencia/status-flink-taskmanager-3.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-3, mismo comportamiento de reintento que TaskManager 2.}
+
+\subsection{Verificación: PostgreSQL + TimescaleDB}
+
+La instancia \texttt{dashboard} corre PostgreSQL 16 con la extensión TimescaleDB, que será el destino de los datos agregados que escriba Flink (Fase 4 del plan de trabajo). IP pública de esta instancia: 98.81.129.129.
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "sudo systemctl status postgresql --no-pager"}
+
+\insertimage[\label{img:status-pg}]{evidencia/status-postgresql.png}{width=14cm}{Servicio \texttt{postgresql} (envoltorio de Debian/Ubuntu) activo.}
+
+Ese servicio es solo un orquestador -- por diseño de los paquetes de Debian/Ubuntu queda en estado \texttt{active (exited)} en vez de \texttt{running}. Para confirmar que la instancia real de Postgres (\texttt{16/main}) está en línea:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "sudo pg_lsclusters"
+\end{lstlisting}
+
+\insertimage[\label{img:pg-lsclusters}]{evidencia/postgres-lsclusters.png}{width=14cm}{Cluster \texttt{16/main} en estado \texttt{online}, puerto 5432.}
+
+Y que la extensión TimescaleDB quedó correctamente instalada en la base \texttt{audiencias}:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "PGPASSWORD='AudienciasLab2026!' psql -h localhost -U flink -d audiencias -c '\dx'"
+\end{lstlisting}
+
+\insertimage[\label{img:pg-timescale}]{evidencia/postgres-timescaledb-extension.png}{width=14cm}{Extensión \texttt{timescaledb} (v2.29.0) instalada en la base \texttt{audiencias}.}
+
+Estos dos últimos comandos se muestran en bloque (no inline) porque contienen caracteres (\texttt{\_}, \texttt{\textbackslash}) que rompen el mecanismo de comando en línea usado en el resto del informe.
+
+\subsection{Verificación: Grafana}
+
+\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "sudo systemctl status grafana-server --no-pager"}
+
+\insertimage[\label{img:status-grafana}]{evidencia/status-grafana-server.png}{width=14cm}{Servicio \texttt{grafana-server} activo en la instancia dashboard.}
+
+\subsection{Verificación visual: interfaces web}
+
+Además de los servicios systemd, se verificó el acceso real desde el navegador a las dos interfaces expuestas por el Security Group.
+
+\insertimage[\label{img:flink-ui}]{evidencia/flink-webui-taskmanagers.png}{width=15cm}{Web UI de Apache Flink (\texttt{http://54.82.79.189:8081}), mostrando los 3 TaskManagers registrados.}
+
+\insertimage[\label{img:grafana-login}]{evidencia/grafana-login.png}{width=15cm}{Pantalla de login de Grafana (\texttt{http://98.81.129.129:3000}).}
+
+\subsection{Conclusión de la Fase 1}
+
+Con los 8 servicios verificados activos, el quorum KRaft de Kafka formado, el cluster de Flink con sus 3 TaskManagers registrados, y TimescaleDB instalado sobre Postgres, la infraestructura base del proyecto queda operativa. El siguiente paso (Fase 2) es apuntar el simulador de agentes a los brokers reales y validar la publicación de eventos de punta a punta.
