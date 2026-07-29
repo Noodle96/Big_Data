@@ -22,6 +22,12 @@ Ejemplos:
     # Corrida real forzando un escenario puntual
     python3 main.py --escenario cyber_monday
 
+    # Forzar que TODOS los perfiles estén activos sin importar la hora real
+    # del servidor (por defecto, solo comprador_compulsivo lo está siempre;
+    # el resto depende de AgentProfile.hours) -- útil para capturar evidencia
+    # con variedad de perfiles para el informe
+    python3 main.py --escenario navidad --ignore-horario
+
     # Ver todos los escenarios disponibles
     python3 main.py --help
 
@@ -92,6 +98,17 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="No conecta a Kafka: solo imprime en consola los eventos que se enviarían.",
     )
+    parser.add_argument(
+        "--ignore-horario",
+        action="store_true",
+        help=(
+            "Ignora AgentProfile.hours: todos los perfiles quedan activos sin "
+            "importar la hora real del servidor. Solo comprador_compulsivo "
+            "está activo 24/7 por defecto -- este flag es útil para generar "
+            "evidencia con variedad de perfiles sin depender de a qué hora "
+            "se corre el simulador."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -139,8 +156,8 @@ def main() -> None:
         season: Season = get_season(now.date(), forced=forced_season)
         for user in USERS:
             profile: AgentProfile = AGENTS[user["agent"]]
-            if now.hour not in profile.hours:  # respeta horario del agente
-                continue
+            if not args.ignore_horario and now.hour not in profile.hours:
+                continue  # respeta horario del agente, salvo --ignore-horario
             if random.random() > 0.3 * profile.intensity * season.intensity:
                 continue  # frecuencia según intensidad
             ev: Event = build_event(user, now, season)
