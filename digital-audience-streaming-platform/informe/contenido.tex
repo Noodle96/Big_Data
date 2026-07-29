@@ -95,6 +95,24 @@ El desarrollo del proyecto se organizó en 8 fases secuenciales, pensadas para a
 \disabletablerowcolor
 
 \clearpage
+\section{Arquitectura de la solución}
+\label{sec:arquitectura}
+
+La plataforma sigue una Arquitectura Orientada a Eventos de punta a punta: cada acción de un usuario simulado se convierte en un evento que viaja por el sistema sin que ningún componente conozca directamente a los demás -- solo se comunican a través de Kafka. La Figura \ref{img:pipeline-general} resume el flujo completo.
+
+\insertimage[\label{img:pipeline-general}]{diagramas/pipeline-general.png}{width=15cm}{Pipeline general: Agentes → Productores Kafka → Apache Kafka → Apache Flink → PostgreSQL/TimescaleDB → Grafana.}
+
+Los agentes autónomos (Sección \ref{sec:fase2}) simulan usuarios reales con 8 perfiles de comportamiento distintos. Cada acción que decide tomar un agente se serializa como un evento JSON y se publica a Kafka a través de uno de 5 canales (web, mobile, IoT, vehicle, POS). Kafka (Sección \ref{sec:infraestructura}) recibe, replica y almacena esos eventos en los 2 topics diseñados por semántica de negocio (Sección \ref{sec:kafka-topics}), sin procesarlos -- solo los deja disponibles para quien los consuma. Apache Flink, corriendo como cluster real (JobManager + 3 TaskManagers), consume esos eventos de forma continua y aplicará sobre ellos el filtrado, enriquecimiento y las reglas de negocio que construyen las audiencias digitales (Fase 4/5, pendientes). Los resultados agregados se escriben a PostgreSQL/TimescaleDB, que Grafana consulta periódicamente para redibujar el dashboard en tiempo real (Fase 6, pendiente).
+
+Tres decisiones de arquitectura se tomaron explícitamente antes de empezar a construir, y se mantienen a lo largo de todo el proyecto:
+
+\textbf{Flink como cluster real, no embebido.} A diferencia del laboratorio anterior del curso (un solo proceso Java consumiendo Kafka), acá se optó por un cluster real con JobManager y TaskManagers separados, más fiel a un entorno productivo y que permite observar paralelismo, checkpoints y una Web UI real.
+
+\textbf{Grafana + PostgreSQL/TimescaleDB para el dashboard}, en vez de un dashboard propio (Streamlit) o una arquitectura 100\% push vía WebSockets. Se evaluaron las tres opciones: WebSockets es la más fiel al espíritu de "arquitectura orientada a eventos de punta a punta" (el propio dashboard sería un consumidor más), pero implica mucho más código propio; Grafana ofrece paneles y alertas por umbral ya integrados, a costa de una actualización por consulta periódica en vez de empuje instantáneo -- una diferencia aceptable para los fines de este proyecto.
+
+\textbf{Infraestructura como código con Pulumi sobre AWS Academy}, reutilizando el patrón ya validado en el laboratorio de Kafka del curso (VPC, IPs privadas estáticas, todo el bootstrap dentro de \texttt{user\_data}, cero configuración manual por SSH), extendido con los componentes nuevos de este proyecto.
+
+\clearpage
 \section{Infraestructura (Pulumi / AWS Academy)}
 \label{sec:infraestructura}
 
@@ -495,7 +513,7 @@ cd ~/digital-audience-streaming-platform/agentes-simulador/src
 /home/ubuntu/venv/bin/python3 main.py --escenario navidad
 \end{lstlisting}
 
-La Figura \ref{img:simulador-corriendo} muestra el simulador publicando eventos reales al cluster: cada línea indica el canal (\texttt{web}, \texttt{mobile}, \texttt{iot}, \texttt{vehicle}, \texttt{pos}), el tipo de evento, el producto, el perfil del agente y el escenario activo. Solo aparecen los perfiles \texttt{comprador\_compulsivo} y \texttt{nocturno} porque son los únicos cuyo horario activo (\texttt{AgentProfile.hours}) incluye la hora real del servidor en el momento de la corrida -- comportamiento esperado, no un error (ver \texttt{agentes-simulador/src/agentes/agents.py}).
+La Figura \ref{img:simulador-corriendo} muestra el simulador publicando eventos reales al cluster: cada línea indica el canal (\texttt{web}, \texttt{mobile}, \texttt{iot}, \texttt{vehicle}, \texttt{pos}), el tipo de evento, el producto, el perfil del agente y el escenario activo. Solo aparecen los perfiles \texttt{comprador\_compulsivo} y \texttt{nocturno} porque son los únicos cuyo horario activo (\texttt{AgentProfile.hours}) incluye la hora real del servidor en el momento de la corrida -- comportamiento esperado, no un error (ver \texttt{agentes-simulador/src/agentes/agents.py}). \texttt{comprador\_compulsivo} es el único perfil activo las 24 horas; los otros 7 tienen ventanas horarias específicas, así que qué perfiles aparecen en una corrida depende de a qué hora del día se ejecute. Para forzar que los 8 perfiles estén activos sin depender de la hora (por ejemplo, para generar evidencia con variedad), se agregó el flag \texttt{--ignore-horario}.
 
 \insertimage[\label{img:simulador-corriendo}]{evidencia/simulador-corriendo.png}{width=14cm}{Simulador de agentes publicando eventos reales al cluster Kafka, escenario forzado "Navidad".}
 
@@ -529,7 +547,7 @@ Con los topics creados y verificados (Tablas \ref{tab:topics-config} y \ref{tab:
 
 El diagrama de referencia del enunciado ("PROPUESTA: ARQUITECTURA ORIENTADA A EVENTOS") propone 4 topics dentro de Kafka: \texttt{user-events}, \texttt{purchase-events}, \texttt{iot-events} y \texttt{system-events}. En este proyecto se implementaron solo los dos primeros (ya usados en la Fase 2, Sección \ref{sec:fase2}), decisión que se justifica a continuación.
 
-\texttt{user-events} y \texttt{purchase-events} separan el tráfico por semántica de negocio, no por canal de origen: el primero concentra la navegación (\texttt{SEARCH}, \texttt{VIEW\_PRODUCT}), el segundo la conversión (\texttt{ADD\_CART}, \texttt{PURCHASE}, \texttt{PAYMENT\_REJECTED}). Esto le da a Apache Flink (Fase 4) una separación natural entre "análisis de navegación" y "análisis de conversión" sin tener que filtrar un único topic mezclado.
+\texttt{user-events} y \texttt{purchase-events} separan el tráfico por semántica de negocio, no por canal de origen: el primero concentra la navegación (\texttt{SEARCH}, \texttt{VIEW\_PRODUCT}), el segundo la conversión (\texttt{ADD\_CART}, \texttt{PURCHASE}, \texttt{PAYMENT\_REJECTED}). Esto le da a Apache Flink (Fase 4) una separación natural entre análisis de navegación y análisis de conversión sin tener que filtrar un único topic mezclado.
 
 \texttt{iot-events} no se implementó porque, en el diseño actual del simulador, los canales "IoT" y "Vehicle" (Sección \ref{sec:infraestructura}, \texttt{agentes-simulador/src/productores/producers.py}) representan medios de \textit{compra} (un agente comprando desde un dispositivo IoT o desde el auto), no telemetría real de sensores -- los eventos que publican son los mismos \texttt{SEARCH}/\texttt{ADD\_CART}/\texttt{PURCHASE} que cualquier otro canal. Crear un topic \texttt{iot-events} sin tráfico genuino habría sido solo para completar visualmente el diagrama de referencia, sin aportar contenido real que analizar.
 
