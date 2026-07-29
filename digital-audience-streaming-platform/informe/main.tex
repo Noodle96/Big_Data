@@ -16,9 +16,9 @@
 ]{article}
 
 % INFORMACIÓN DEL DOCUMENTO
-\def\documenttitle {document title}
-\def\documentsubtitle {}
-\def\documentsubject {document subject}
+\def\documenttitle {Plataforma Inteligente para Simulación y Análisis de Audiencias Digitales en Tiempo Real}
+\def\documentsubtitle {Utilizando Arquitecturas Orientadas a Eventos}
+\def\documentsubject {Big Data -- Arquitecturas Orientadas a Eventos}
 
 \def\documentauthor {Jorge Tito Ccahuaya}
 \def\coursename {Big Data}
@@ -36,7 +36,9 @@
 	\begin{tabular}{ll}
 		Integrante:
 		& \begin{tabular}[t]{l}
-			Jorge Alfredo Tito Ccahuaya
+			Jorge Alfredo Tito Ccahuaya \\
+            Jorge Alfredo Tito Ccahuaya \\
+            Jorge Alfredo Tito Ccahuaya
 		\end{tabular} \\
 		Profesor:
 		& \begin{tabular}[t]{l}
@@ -75,6 +77,20 @@
 	framexrightmargin=6pt,
 	title={\faCopy\ \textcolor{cmdaccent}{\footnotesize\textbf{Comando (copiar)}}},
 }
+
+% El template define un marcador "↪" (postbreak) para cuando una línea de
+% código se corta automáticamente por ancho -- no lo queremos ver nunca en
+% este informe. Esto SOLO sobreescribe la opción de \lstset a nivel de
+% nuestro documento (main.tex), no modifica template.tex.
+\lstset{postbreak={}}
+
+% Colores de las tablas (filas intercaladas), en el mismo tono azul que los
+% bloques de comando -- redefine las variables que template_config.tex deja
+% en gris por defecto ("gray!10"). Esto es una redefinición desde nuestro
+% archivo, NO una edición de template_config.tex: se usa igual que siempre
+% con \enabletablerowcolor/\disabletablerowcolor.
+\def\tablerowfirstcolor {white}
+\def\tablerowsecondcolor {cmdbg}
 
 % INICIO DE PÁGINAS
 \begin{document}

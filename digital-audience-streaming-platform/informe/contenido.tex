@@ -6,15 +6,48 @@
 % Códigos); la imagen sí lleva caption y queda numerada, y su descripción
 % incluye qué comando se ejecutó. El comando se muestra inline, con fondo
 % celeste (color "cmdbg", definido en main.tex, sin tocar template.tex), SIN
-% símbolo "$" ni ningún prefijo delante. Solo sirve para comandos de una sola
-% línea (usa \inlinesourcecodeboxed, basado en \lstinline) -- si algún comando
-% real es muy largo/multilínea, avisar para usar una variante en bloque.
+% símbolo "$" ni ningún prefijo delante.
 %
-% Plantilla a copiar para cada nueva evidencia:
+% IMPORTANTE (agregado 2026-07-28): ninguna imagen ni tabla va "pelada". Cada
+% una se introduce con una frase antes (qué se va a verificar) y se cierra
+% con una frase después que la referencia por número (\ref) y dice qué quedó
+% demostrado -- el caption no alcanza solo, tiene que estar narrado en el
+% cuerpo del texto. Ver el patrón aplicado en la sección de Infraestructura.
+%
+% Plantilla a copiar para un comando CORTO (una sola línea, cabe cómodo):
 %
 % \inlinesourcecodeboxed[cmdbg]{bash}{<comando>}
 %
-% \insertimage[\label{img:<id-unico>}]{<ruta-de-la-captura>}{scale=0.12}{<descripción del resultado, mencionando el comando ejecutado>}
+% Plantilla a copiar para un comando LARGO (SSH con flags/IP/comando remoto
+% entre comillas, o que contenga caracteres especiales de LaTeX como
+% guión_bajo o backslash, o más de ~50-60 caracteres): usar el bloque
+% "cmdbox" partiendo el comando en varias líneas con "\" (continuación de
+% línea válida en bash, copiable tal cual):
+%
+% \begin{lstlisting}[style=cmdbox]
+% comando --con-flags \
+%   resto-del-comando
+% \end{lstlisting}
+%
+% \insertimage[\label{img:<id-unico>}]{<ruta-de-la-captura>}{width=14cm}{<descripción del resultado, mencionando el comando ejecutado>}
+%
+% Plantilla de tabla "amigable" (encabezado azul + filas intercaladas):
+%
+% \enabletablerowcolor[2]
+% \begin{table}[H]
+% \centering
+% \caption{...}
+% \begin{tabular}{T{...}...}
+% \hline
+% \rowcolor{cmdaccent}
+% \textcolor{white}{\textbf{Col1}} & ... \bigstrut\\
+% \hline
+% dato & ... \\
+% \hline
+% \end{tabular}
+% \label{tab:...}
+% \end{table}
+% \disabletablerowcolor
 % ------------------------------------------------------------------------------
 
 % ==============================================================================
@@ -30,18 +63,20 @@
 \clearpage
 \section{Infraestructura (Pulumi / AWS Academy)}
 
-Toda la infraestructura del proyecto (Kafka, Flink, PostgreSQL/TimescaleDB y Grafana) se define como código con Pulumi (Python) y se despliega sobre AWS Academy. El script completo vive en \texttt{infra/\_\_main\_\_.py}; esta sección documenta el despliegue paso a paso, con la evidencia real de cada comando ejecutado.
+Toda la infraestructura del proyecto (Kafka, Flink, PostgreSQL/TimescaleDB y Grafana) se define como código con Pulumi (Python) y se despliega sobre AWS Academy. El script completo vive en \texttt{infra/\_\_main\_\_.py}; esta sección documenta el despliegue paso a paso, con la evidencia real de cada comando ejecutado y su verificación.
 
 \subsection{Topología de la infraestructura}
 
-Se desplegaron 8 instancias EC2 (\texttt{t3.small}), todas dentro de la misma VPC y Security Group, con IPs privadas estáticas asignadas por Pulumi (Tabla \ref{tab:instancias-ec2}).
+Se desplegaron 8 instancias EC2 (\texttt{t3.small}), todas dentro de la misma VPC y Security Group, con IPs privadas estáticas asignadas por Pulumi. La Tabla \ref{tab:instancias-ec2} resume el rol, hostname, IP privada y puertos relevantes de cada una -- esta es la referencia que se usa durante el resto de la sección para identificar a qué instancia corresponde cada verificación.
 
+\enabletablerowcolor[2]
 \begin{table}[H]
 \centering
 \caption{Instancias EC2 desplegadas.}
-\begin{tabular}{llll}
+\begin{tabular}{T{3.3cm}T{3.3cm}T{2.2cm}T{5.5cm}}
 \hline
-\textbf{Rol} & \textbf{Hostname} & \textbf{IP privada} & \textbf{Puertos relevantes} \bigstrut\\
+\rowcolor{cmdaccent}
+\textcolor{white}{\textbf{Rol}} & \textcolor{white}{\textbf{Hostname}} & \textcolor{white}{\textbf{IP privada}} & \textcolor{white}{\textbf{Puertos relevantes}} \bigstrut\\
 \hline
 Broker Kafka & kafka-broker-1 & 10.30.1.11 & 9092, 9093 (interno) \\
 Broker Kafka & kafka-broker-2 & 10.30.1.12 & 9092, 9093 (interno) \\
@@ -55,109 +90,171 @@ Postgres+TimescaleDB+Grafana & dashboard & 10.30.1.30 & 5432 (interno), 3000 (p�
 \end{tabular}
 \label{tab:instancias-ec2}
 \end{table}
+\disabletablerowcolor
 
-Las IPs públicas no se incluyen en la tabla porque cambian en cada \texttt{pulumi up}/\texttt{destroy} (no se usó Elastic IP); se obtienen con \texttt{pulumi stack output} después de cada despliegue. Los comandos de esta sección usan las IPs públicas vigentes al momento de esta corrida.
+Las IPs públicas no se incluyen en la Tabla \ref{tab:instancias-ec2} porque cambian en cada \texttt{pulumi up}/\texttt{destroy} (no se usó Elastic IP); se obtienen con \texttt{pulumi stack output} después de cada despliegue y son las que se usan en los comandos \texttt{ssh} de esta sección.
 
 % \insertimage[\label{img:infra-red}]{diagramas/infra-red.pdf}{width=15cm}{Topología de red: VPC, subred pública, Security Group compartido y agrupación de instancias por rol.}
 % (pendiente de conversión SVG->PDF, ver nota al inicio del archivo)
 
 \subsection{Despliegue con Pulumi}
 
-Con el stack ya configurado, el despliegue completo se ejecuta con un solo comando:
+Con el stack ya configurado, el despliegue completo de las 8 instancias y su red se ejecuta con un solo comando:
 
 \inlinesourcecodeboxed[cmdbg]{bash}{pulumi up --yes}
 
-La Figura \ref{img:pulumi-up-1} muestra la creación de las 8 instancias EC2.
+La Figura \ref{img:pulumi-up-1} muestra el resultado de ese comando: Pulumi identifica y crea los 8 recursos \texttt{aws:ec2:Instance} correspondientes a las filas de la Tabla \ref{tab:instancias-ec2}.
 
 \insertimage[\label{img:pulumi-up-1}]{evidencia/pulumi-up-1.png}{width=14cm}{Resultado de \texttt{pulumi up --yes}: 8 recursos \texttt{aws:ec2:Instance} creados.}
 
-La Figura \ref{img:pulumi-up-2} muestra los outputs exportados por el stack: bootstrap servers de Kafka, URLs de Flink y Grafana, e IPs de cada instancia.
+Al terminar, Pulumi imprime los outputs exportados por el stack (Figura \ref{img:pulumi-up-2}): el string de \texttt{bootstrapServers} para Kafka, las URLs de Flink y Grafana, y las IPs privadas/públicas de cada instancia -- estos son los valores que se usan en el resto de esta sección para armar los comandos \texttt{ssh}.
 
 \insertimage[\label{img:pulumi-up-2}]{evidencia/pulumi-up-2.png}{width=14cm}{Outputs de \texttt{pulumi up --yes}: endpoints y comandos SSH de cada instancia.}
 
-Es importante notar que \texttt{pulumi up} terminando no significa que Kafka/Flink/Postgres/Grafana ya estén instalados y corriendo -- eso lo hace el script de \texttt{user\_data} (cloud-init) en segundo plano dentro de cada instancia, y toma varios minutos adicionales. Las siguientes subsecciones verifican, servicio por servicio, que ese proceso terminó correctamente.
+Un detalle importante que se comprobó en esta corrida: que \texttt{pulumi up} termine no significa que Kafka/Flink/Postgres/Grafana ya estén instalados y corriendo -- eso lo hace el script de \texttt{user\_data} (cloud-init) en segundo plano dentro de cada instancia, y toma varios minutos adicionales. Las siguientes subsecciones verifican, servicio por servicio, que ese proceso terminó correctamente.
 
 \subsection{Verificación: Apache Kafka (KRaft)}
 
-Los 3 brokers corren Kafka 3.9.0 en modo KRaft (sin Zookeeper), reutilizando el patrón validado en el laboratorio anterior del curso (incluyendo el fix del bug KAFKA-18281). Se verifica que el servicio systemd \texttt{kafka} esté activo en cada broker con \texttt{systemctl status}, forzando un pseudo-terminal (\texttt{-t}) para que la salida se trunque al ancho de la consola en vez de imprimir la línea completa del proceso Java:
+Los 3 brokers corren Kafka 3.9.0 en modo KRaft (sin Zookeeper), reutilizando el patrón validado en el laboratorio anterior del curso (incluyendo el fix del bug KAFKA-18281). En cada broker se verifica que el servicio systemd \texttt{kafka} esté activo con \texttt{systemctl status}, forzando un pseudo-terminal (\texttt{-t}) para que la salida se trunque al ancho de la consola en vez de imprimir la línea completa del proceso Java.
 
-\textbf{Broker 1 (10.30.1.11, IP pública 54.234.134.254):}
+En kafka-broker-1 (10.30.1.11, IP pública 54.234.134.254):
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@54.234.134.254 "sudo systemctl status kafka --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@54.234.134.254 \
+  "sudo systemctl status kafka --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-kafka-1} confirma que el servicio quedó \texttt{active (running)} en kafka-broker-1, arrancado como \texttt{nodeId=1} del quorum KRaft.
 
 \insertimage[\label{img:status-kafka-1}]{evidencia/status-kafka-broker-1.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-1 (nodeId=1).}
 
-\textbf{Broker 2 (10.30.1.12, IP pública 54.87.246.253):}
+Se repite el mismo comando, cambiando solo la IP, en kafka-broker-2 (10.30.1.12, IP pública 54.87.246.253):
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@54.87.246.253 "sudo systemctl status kafka --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@54.87.246.253 \
+  "sudo systemctl status kafka --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-kafka-2} confirma el mismo resultado en kafka-broker-2 (\texttt{nodeId=2}).
 
 \insertimage[\label{img:status-kafka-2}]{evidencia/status-kafka-broker-2.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-2 (nodeId=2).}
 
-\textbf{Broker 3 (10.30.1.13, IP pública 50.19.46.129):}
+Y en kafka-broker-3 (10.30.1.13, IP pública 50.19.46.129):
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@50.19.46.129 "sudo systemctl status kafka --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@50.19.46.129 \
+  "sudo systemctl status kafka --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-kafka-3} cierra la verificación de Kafka: los 3 brokers reportan \texttt{active (running)} y, según sus logs individuales, forman correctamente el quorum KRaft (\texttt{controller.quorum.voters} apuntando a los 3 nodos).
 
 \insertimage[\label{img:status-kafka-3}]{evidencia/status-kafka-broker-3.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-3 (nodeId=3).}
 
-Los 3 brokers reportan \texttt{active (running)} y forman correctamente el quorum KRaft (\texttt{controller.quorum.voters} apuntando a los 3 nodos).
-
 \subsection{Verificación: Apache Flink (cluster real)}
 
-A diferencia del laboratorio anterior del curso (donde Flink corría embebido en un solo proceso Java), acá se desplegó un cluster real: 1 JobManager coordinando 3 TaskManagers.
+A diferencia del laboratorio anterior del curso (donde Flink corría embebido en un solo proceso Java), acá se desplegó un cluster real: 1 JobManager coordinando 3 TaskManagers. Se verifica primero el JobManager y luego cada TaskManager.
 
-\textbf{JobManager (10.30.1.21, IP pública 54.82.79.189):}
+En flink-jobmanager (10.30.1.21, IP pública 54.82.79.189):
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@54.82.79.189 "sudo systemctl status flink-jobmanager --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@54.82.79.189 \
+  "sudo systemctl status flink-jobmanager --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-jm} muestra el servicio \texttt{active (running)}; en el log incluido en la misma captura se puede ver además el registro de los 3 TaskManagers en el \texttt{SlotManager} del JobManager, es decir, el cluster ya está formado antes de revisar cada TaskManager por separado.
 
 \insertimage[\label{img:status-jm}]{evidencia/status-flink-jobmanager.png}{width=14cm}{Servicio \texttt{flink-jobmanager} activo; el log confirma el registro de los 3 TaskManagers en el \texttt{SlotManager}.}
 
-\textbf{TaskManager 1 (10.30.1.22, IP pública 44.223.75.1):}
+En flink-taskmanager-1 (10.30.1.22, IP pública 44.223.75.1):
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@44.223.75.1 "sudo systemctl status flink-taskmanager --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@44.223.75.1 \
+  "sudo systemctl status flink-taskmanager --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-tm1} confirma el servicio activo en flink-taskmanager-1.
 
 \insertimage[\label{img:status-tm1}]{evidencia/status-flink-taskmanager-1.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-1.}
 
-\textbf{TaskManager 2 (10.30.1.23, IP pública 52.200.129.54):}
+En flink-taskmanager-2 (10.30.1.23, IP pública 52.200.129.54):
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@52.200.129.54 "sudo systemctl status flink-taskmanager --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@52.200.129.54 \
+  "sudo systemctl status flink-taskmanager --no-pager"
+\end{lstlisting}
 
-\insertimage[\label{img:status-tm2}]{evidencia/status-flink-taskmanager-2.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-2. El log muestra un reintento inicial de conexión al JobManager (\texttt{Connection refused}) porque esta instancia terminó su arranque antes que el JobManager -- se resolvió solo mediante el mecanismo de reintento de Flink, sin intervención manual.}
+La Figura \ref{img:status-tm2} confirma el servicio activo en flink-taskmanager-2. Vale la pena señalar lo que se observa en su log: un reintento inicial de conexión al JobManager (\texttt{Connection refused}) porque esta instancia terminó su arranque antes que el JobManager -- se resolvió solo mediante el mecanismo de reintento de Flink, sin intervención manual, y terminó registrándose correctamente.
 
-\textbf{TaskManager 3 (10.30.1.24, IP pública 52.90.140.55):}
+\insertimage[\label{img:status-tm2}]{evidencia/status-flink-taskmanager-2.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-2, con reintento de conexión inicial resuelto automáticamente.}
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@52.90.140.55 "sudo systemctl status flink-taskmanager --no-pager"}
+Y en flink-taskmanager-3 (10.30.1.24, IP pública 52.90.140.55):
 
-\insertimage[\label{img:status-tm3}]{evidencia/status-flink-taskmanager-3.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-3, mismo comportamiento de reintento que TaskManager 2.}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@52.90.140.55 \
+  "sudo systemctl status flink-taskmanager --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-tm3} confirma el servicio activo en flink-taskmanager-3, con el mismo comportamiento de reintento que TaskManager 2 -- con esto quedan verificados los 3 TaskManagers y, junto con la Figura \ref{img:status-jm}, el cluster de Flink completo.
+
+\insertimage[\label{img:status-tm3}]{evidencia/status-flink-taskmanager-3.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-3.}
 
 \subsection{Verificación: PostgreSQL + TimescaleDB}
 
-La instancia \texttt{dashboard} corre PostgreSQL 16 con la extensión TimescaleDB, que será el destino de los datos agregados que escriba Flink (Fase 4 del plan de trabajo). IP pública de esta instancia: 98.81.129.129.
+La instancia dashboard (10.30.1.30, IP pública 98.81.129.129) corre PostgreSQL 16 con la extensión TimescaleDB, que será el destino de los datos agregados que escriba Flink (Fase 4 del plan de trabajo). Se verifica en tres pasos: el servicio, el cluster de Postgres, y la extensión.
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "sudo systemctl status postgresql --no-pager"}
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.81.129.129 \
+  "sudo systemctl status postgresql --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-pg} muestra el servicio \texttt{postgresql} activo -- aunque en estado \texttt{active (exited)} en vez de \texttt{running}, que es el comportamiento esperado: ese servicio es solo un orquestador, por diseño de los paquetes de Debian/Ubuntu.
 
 \insertimage[\label{img:status-pg}]{evidencia/status-postgresql.png}{width=14cm}{Servicio \texttt{postgresql} (envoltorio de Debian/Ubuntu) activo.}
 
-Ese servicio es solo un orquestador -- por diseño de los paquetes de Debian/Ubuntu queda en estado \texttt{active (exited)} en vez de \texttt{running}. Para confirmar que la instancia real de Postgres (\texttt{16/main}) está en línea:
+Para confirmar que la instancia real de Postgres (\texttt{16/main}) está en línea de verdad:
 
 \begin{lstlisting}[style=cmdbox]
-ssh -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "sudo pg_lsclusters"
+ssh -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.81.129.129 \
+  "sudo pg_lsclusters"
 \end{lstlisting}
+
+La Figura \ref{img:pg-lsclusters} confirma el cluster \texttt{16/main} en estado \texttt{online}, escuchando en el puerto 5432.
 
 \insertimage[\label{img:pg-lsclusters}]{evidencia/postgres-lsclusters.png}{width=14cm}{Cluster \texttt{16/main} en estado \texttt{online}, puerto 5432.}
 
-Y que la extensión TimescaleDB quedó correctamente instalada en la base \texttt{audiencias}:
+Y por último, que la extensión TimescaleDB quedó correctamente instalada en la base \texttt{audiencias}:
 
 \begin{lstlisting}[style=cmdbox]
-ssh -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "PGPASSWORD='AudienciasLab2026!' psql -h localhost -U flink -d audiencias -c '\dx'"
+ssh -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.81.129.129 \
+  "PGPASSWORD='AudienciasLab2026!' psql -h localhost \
+   -U flink -d audiencias -c '\dx'"
 \end{lstlisting}
+
+La Figura \ref{img:pg-timescale} confirma la extensión \texttt{timescaledb} (versión 2.29.0) instalada en la base \texttt{audiencias}, cerrando la verificación de esta instancia.
 
 \insertimage[\label{img:pg-timescale}]{evidencia/postgres-timescaledb-extension.png}{width=14cm}{Extensión \texttt{timescaledb} (v2.29.0) instalada en la base \texttt{audiencias}.}
 
-Estos dos últimos comandos se muestran en bloque (no inline) porque contienen caracteres (\texttt{\_}, \texttt{\textbackslash}) que rompen el mecanismo de comando en línea usado en el resto del informe.
-
 \subsection{Verificación: Grafana}
 
-\inlinesourcecodeboxed[cmdbg]{bash}{ssh -t -i ../keys/audiencias-lab-key.pem ubuntu@98.81.129.129 "sudo systemctl status grafana-server --no-pager"}
+En la misma instancia dashboard, se verifica el servicio de Grafana:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.81.129.129 \
+  "sudo systemctl status grafana-server --no-pager"
+\end{lstlisting}
+
+La Figura \ref{img:status-grafana} confirma el servicio \texttt{grafana-server} activo, sin errores en su log.
 
 \insertimage[\label{img:status-grafana}]{evidencia/status-grafana-server.png}{width=14cm}{Servicio \texttt{grafana-server} activo en la instancia dashboard.}
 
@@ -165,10 +262,14 @@ Estos dos últimos comandos se muestran en bloque (no inline) porque contienen c
 
 Además de los servicios systemd, se verificó el acceso real desde el navegador a las dos interfaces expuestas por el Security Group.
 
+La Figura \ref{img:flink-ui} muestra la Web UI de Apache Flink, accesible en \texttt{http://54.82.79.189:8081} -- confirma visualmente, desde la perspectiva del cluster, lo mismo que ya se había verificado por SSH: los 3 TaskManagers registrados y disponibles.
+
 \insertimage[\label{img:flink-ui}]{evidencia/flink-webui-taskmanagers.png}{width=15cm}{Web UI de Apache Flink (\texttt{http://54.82.79.189:8081}), mostrando los 3 TaskManagers registrados.}
+
+La Figura \ref{img:grafana-login} muestra la pantalla de login de Grafana, accesible en \texttt{http://98.81.129.129:3000} -- confirma que el servicio no solo está activo a nivel de sistema, sino que efectivamente responde peticiones HTTP desde fuera de la VPC.
 
 \insertimage[\label{img:grafana-login}]{evidencia/grafana-login.png}{width=15cm}{Pantalla de login de Grafana (\texttt{http://98.81.129.129:3000}).}
 
 \subsection{Conclusión de la Fase 1}
 
-Con los 8 servicios verificados activos, el quorum KRaft de Kafka formado, el cluster de Flink con sus 3 TaskManagers registrados, y TimescaleDB instalado sobre Postgres, la infraestructura base del proyecto queda operativa. El siguiente paso (Fase 2) es apuntar el simulador de agentes a los brokers reales y validar la publicación de eventos de punta a punta.
+Con los 8 servicios verificados activos (Figuras \ref{img:status-kafka-1}--\ref{img:status-grafana}), el quorum KRaft de Kafka formado, el cluster de Flink con sus 3 TaskManagers registrados (Figuras \ref{img:status-jm}--\ref{img:status-tm3} y \ref{img:flink-ui}), y TimescaleDB instalado sobre Postgres (Figura \ref{img:pg-timescale}), la infraestructura base del proyecto (Tabla \ref{tab:instancias-ec2}) queda operativa. El siguiente paso (Fase 2) es apuntar el simulador de agentes a los brokers reales y validar la publicación de eventos de punta a punta.
