@@ -1,0 +1,36 @@
+# Definición declarativa de topics de Kafka para el proyecto.
+#
+# Reemplaza la creación de topics "a mano" por consola: nombre, particiones,
+# factor de replicación y configuración quedan versionados acá, y
+# scripts/kafka/create_topics.py los lee para crearlos. Mismo patrón que se
+# usó en kafka-flink-streaming-lab (evita no saber qué se configuró si
+# después alguien pregunta).
+
+topics:
+  - name: user-events
+    partitions: 3
+    replication_factor: 3
+    description: >
+      Eventos de navegación generados por el simulador de agentes
+      (agentes-simulador/): SEARCH, VIEW_PRODUCT. Esquema del mensaje (JSON):
+      {timestamp, user_id, event, product, category, city, price,
+      agent_type, source}. Ver agentes-simulador/src/schema.py::Event.
+      Key del mensaje: user_id.
+    config:
+      retention.ms: 86400000       # 24 horas -- suficiente para una sesión
+                                    # de pruebas/escenarios sin llenar el
+                                    # disco de las instancias t3.small.
+      cleanup.policy: delete
+
+  - name: purchase-events
+    partitions: 3
+    replication_factor: 3
+    description: >
+      Eventos de conversión generados por el simulador de agentes:
+      ADD_CART, PURCHASE, PAYMENT_REJECTED. Mismo esquema que user-events.
+      Separado de user-events por semántica de negocio, no por canal (ver
+      plan.md Fase 3 y agentes-simulador/src/productores/producers.py::topic_for_event).
+      Key del mensaje: user_id.
+    config:
+      retention.ms: 86400000
+      cleanup.policy: delete
