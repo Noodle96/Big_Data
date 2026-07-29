@@ -9,7 +9,8 @@ from typing import Optional
 # TODO(Fase 1): reemplazar por las IPs privadas de nuestros brokers una vez
 # que la infraestructura (Pulumi) esté desplegada. Estas son del cluster de
 # prueba del compañero.
-BOOTSTRAP_SERVERS: str = "172.31.26.203:9092,172.31.23.20:9092,172.31.26.204:9092"
+# BOOTSTRAP_SERVERS: str = "172.31.26.203:9092,172.31.23.20:9092,172.31.26.204:9092"
+BOOTSTRAP_SERVERS: str = "10.30.1.11:9092,10.30.1.12:9092,10.30.1.13:9092"
 
 # Topics separados por SEMÁNTICA DE NEGOCIO (no por canal de origen), tal
 # como sugiere el diagrama de referencia del enunciado. "user-events"
