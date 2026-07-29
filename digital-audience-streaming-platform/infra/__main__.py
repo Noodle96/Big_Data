@@ -39,6 +39,16 @@ TASKMANAGER_PRIVATE_IPS: Final[list[str]] = [
 # Postgres/TimescaleDB + Grafana, co-ubicados en la misma instancia
 DASHBOARD_PRIVATE_IP: Final[str] = "10.30.1.30"
 
+# Cliente: corre el simulador de agentes (Fase 2) y scripts/kafka/create_topics.py.
+# Rol único (productor + verificación de consumo), no separado en dos
+# instancias como en kafka-flink-streaming-lab, para no sumar más EC2.
+CLIENT_PRIVATE_IP: Final[str] = "10.30.1.40"
+
+# Repositorio del proyecto -- se clona en la instancia cliente durante el
+# bootstrap para tener el simulador y los scripts listos sin copiarlos a mano.
+PROJECT_REPO_URL: Final[str] = "https://github.com/Noodle96/Big_Data.git"
+PROJECT_REPO_SUBDIR: Final[str] = "digital-audience-streaming-platform"
+
 COMMON_TAGS: Final[dict[str, str]] = {
     "Project": PROJECT_NAME,
     "Environment": "academy-lab",
@@ -275,6 +285,7 @@ ALL_HOSTS_ENTRIES: Final[str] = f"""
 {TASKMANAGER_2_PRIVATE_IP} flink-taskmanager-2
 {TASKMANAGER_3_PRIVATE_IP} flink-taskmanager-3
 {DASHBOARD_PRIVATE_IP} dashboard
+{CLIENT_PRIVATE_IP} kafka-client
 """
 
 COMMON_BOOTSTRAP: Final[str] = """#!/bin/bash
@@ -640,6 +651,47 @@ def build_dashboard_user_data(hostname: str, private_ip: str) -> str:
 
 
 # ============================================================
+# BOOTSTRAP DEL CLIENTE (simulador de agentes + scripts/kafka)
+# ============================================================
+# Instancia única para correr agentes-simulador (Fase 2) y
+# scripts/kafka/create_topics.py -- no separada en productor/consumidor
+# como en kafka-flink-streaming-lab, para no sumar más EC2 al Learner Lab.
+
+CLIENT_BOOTSTRAP: Final[str] = """
+apt-get install -y python3 python3-pip python3-venv git
+
+sudo -u ubuntu git clone "__PROJECT_REPO_URL__" /home/ubuntu/repo
+
+cd /home/ubuntu/repo/__PROJECT_REPO_SUBDIR__
+
+sudo -u ubuntu python3 -m venv /home/ubuntu/venv
+sudo -u ubuntu /home/ubuntu/venv/bin/pip install --upgrade pip
+sudo -u ubuntu /home/ubuntu/venv/bin/pip install \\
+    -r agentes-simulador/requirements.txt \\
+    -r scripts/kafka/requirements.txt
+
+cat > /etc/profile.d/audiencias-venv.sh <<'EOF'
+export PATH="/home/ubuntu/venv/bin:$PATH"
+EOF
+
+chown -R ubuntu:ubuntu /home/ubuntu/repo /home/ubuntu/venv
+"""
+
+
+def build_client_user_data(hostname: str, private_ip: str) -> str:
+    client_block = (
+        CLIENT_BOOTSTRAP
+        .replace("__PROJECT_REPO_URL__", PROJECT_REPO_URL)
+        .replace("__PROJECT_REPO_SUBDIR__", PROJECT_REPO_SUBDIR)
+    )
+    return (
+        _render_common(hostname, private_ip, role="kafka-client")
+        + client_block
+        + COMPLETION_MARKER
+    )
+
+
+# ============================================================
 # FUNCIÓN PARA CREAR INSTANCIAS (idéntica al patrón validado)
 # ============================================================
 
@@ -739,6 +791,16 @@ dashboard = create_ec2_instance(
 
 
 # ============================================================
+# CLIENTE (simulador de agentes + scripts/kafka)
+# ============================================================
+
+kafka_client = create_ec2_instance(
+    "kafka-client-instance", "kafka-client", CLIENT_PRIVATE_IP,
+    "kafka-client", build_client_user_data("kafka-client", CLIENT_PRIVATE_IP),
+)
+
+
+# ============================================================
 # EXPORTS DE PULUMI
 # ============================================================
 
@@ -765,6 +827,7 @@ for _name, _instance in [
     ("JobManager", jobmanager),
     ("TaskManager1", taskmanager_1), ("TaskManager2", taskmanager_2), ("TaskManager3", taskmanager_3),
     ("Dashboard", dashboard),
+    ("Client", kafka_client),
 ]:
     pulumi.export(f"{_name.lower()}PrivateIp", _instance.private_ip)
     pulumi.export(f"{_name.lower()}PublicIp", _instance.public_ip)
