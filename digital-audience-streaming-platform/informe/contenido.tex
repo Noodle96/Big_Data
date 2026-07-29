@@ -61,9 +61,54 @@
 % ==============================================================================
 
 \clearpage
-\section{Infraestructura (Pulumi / AWS Academy)}
+\section{Plan de trabajo}
 
-Toda la infraestructura del proyecto (Kafka, Flink, PostgreSQL/TimescaleDB y Grafana) se define como código con Pulumi (Python) y se despliega sobre AWS Academy. El script completo vive en \texttt{infra/\_\_main\_\_.py}; esta sección documenta el despliegue paso a paso, con la evidencia real de cada comando ejecutado y su verificación.
+El desarrollo del proyecto se organizó en 8 fases secuenciales, pensadas para avanzar de manera incremental y verificable: primero la infraestructura base, luego cada componente del pipeline por separado, y por último la ejecución de escenarios comerciales y el análisis de resultados. La Tabla \ref{tab:fases-plan} resume el objetivo y el estado de cada fase al momento de escribir este informe; las secciones siguientes hacen referencia a estas fases por su número (por ejemplo, la Sección \ref{sec:infraestructura} corresponde a la Fase 1).
+
+\enabletablerowcolor[2]
+\begin{table}[H]
+\centering
+\caption{Fases del plan de trabajo.}
+\begin{tabular}{T{1.3cm}T{9cm}T{4.5cm}}
+\hline
+\rowcolor{cmdaccent}
+\textcolor{white}{\textbf{Fase}} & \textcolor{white}{\textbf{Objetivo}} & \textcolor{white}{\textbf{Estado}} \bigstrut\\
+\hline
+1 & Infraestructura base: VPC, Kafka (KRaft), cluster de Flink, PostgreSQL/TimescaleDB, Grafana, todo desplegado con Pulumi & Completada \\
+2 & Simulador de agentes autónomos (8 perfiles) + productores Kafka & Código integrado, pendiente probar contra el cluster real \\
+3 & Diseño de topics y particiones de Kafka & Decidida (2 topics por semántica de negocio) \\
+4 & Jobs de Apache Flink: consumo, filtrado, enriquecimiento, agregación por ventanas & Pendiente \\
+5 & Reglas de negocio para clasificar audiencias digitales & Pendiente \\
+6 & Dashboard en tiempo real (Grafana + PostgreSQL/TimescaleDB) & Pendiente \\
+7 & Ejecución de escenarios comerciales (Navidad, Cyber Monday, etc.) y análisis comparativo & Pendiente \\
+8 & Cierre del informe: introducción, conclusiones, revisión final & En curso (este documento) \\
+\hline
+\end{tabular}
+\label{tab:fases-plan}
+\end{table}
+\disabletablerowcolor
+
+\clearpage
+\section{Infraestructura (Pulumi / AWS Academy)}
+\label{sec:infraestructura}
+
+Toda la infraestructura del proyecto (Kafka, Flink, PostgreSQL/TimescaleDB y Grafana) se define como código con Pulumi (Python) y se despliega sobre AWS Academy. El script completo vive en \texttt{infra/\_\_main\_\_.py} del \href{https://github.com/Noodle96/Big_Data/tree/main/digital-audience-streaming-platform}{repositorio del proyecto en GitHub}; esta sección documenta el despliegue paso a paso, con la evidencia real de cada comando ejecutado y su verificación.
+
+\subsection{Componentes utilizados y su propósito}
+
+Antes de entrar en el despliegue concreto, esta subsección describe qué es cada pieza de la infraestructura y qué rol cumple dentro del pipeline completo (Agentes → Kafka → Flink → PostgreSQL/TimescaleDB → Grafana).
+
+\textbf{Pulumi.} Herramienta de infraestructura como código (IaC): define y despliega todos los recursos de AWS mediante un programa Python, en vez de crearlos manualmente desde la consola. Permite reproducir el cluster completo con un solo comando (\texttt{pulumi up}) y destruirlo igual de fácil (\texttt{pulumi destroy}), algo clave para no consumir horas del Learner Lab de AWS Academy sin necesidad.
+
+\textbf{Apache Kafka (modo KRaft).} La capa de mensajería del proyecto: recibe los eventos publicados por el simulador de agentes y los distribuye a quien los necesite consumir (en este caso, Flink). Corre en modo KRaft (sin Zookeeper), con 3 brokers que además actúan como controllers del quorum, replicando los datos entre sí para tolerar la caída de uno.
+
+\textbf{Apache Flink (cluster real: JobManager + TaskManagers).} El motor de procesamiento de streaming: consume continuamente los eventos desde Kafka, aplica las reglas de negocio (filtrado, enriquecimiento, ventanas de tiempo, clasificación de audiencias) y escribe los resultados agregados a la base de datos. El JobManager coordina la ejecución y el estado del cluster; los TaskManagers son los que realmente ejecutan las tareas en paralelo.
+
+\textbf{PostgreSQL + TimescaleDB.} La base de datos donde Flink escribe sus resultados. PostgreSQL es la base relacional; TimescaleDB es una extensión sobre PostgreSQL (no una base aparte) que agrega manejo eficiente de series de tiempo, útil porque casi todas las métricas del proyecto (usuarios activos, eventos por segundo, tendencias, etc.) son datos que cambian en el tiempo.
+
+\textbf{Grafana.} El motor de visualización del dashboard. No almacena nada: se conecta a PostgreSQL/TimescaleDB como cliente de solo lectura y consulta cada pocos segundos para redibujar los paneles en tiempo real.
+
+\textbf{VPC y Security Group compartido.} Todas las instancias viven en la misma red privada (\texttt{10.30.0.0/16}) y comparten un único Security Group, que permite todo el tráfico interno entre ellas (necesario para que Kafka, Flink y Postgres se comuniquen) pero solo expone a Internet los puertos estrictamente necesarios para operar desde afuera: SSH (22), la Web UI de Flink (8081) y Grafana (3000).
 
 \subsection{Topología de la infraestructura}
 
