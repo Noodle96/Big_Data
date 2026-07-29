@@ -2,7 +2,7 @@
 
 Infraestructura como código (Pulumi, Python) — Fase 1 del `plan.md`. Scaffold creado manualmente con `pulumi new aws-python` (stack `academy2`, región `us-east-1`), `__main__.py` reemplazado con el cluster real.
 
-## Topología (8 instancias EC2, todas `t3.small`, misma VPC/Security Group)
+## Topología (9 instancias EC2, todas `t3.small`, misma VPC/Security Group)
 
 | Instancia | Rol | IP privada |
 |---|---|---|
@@ -10,8 +10,9 @@ Infraestructura como código (Pulumi, Python) — Fase 1 del `plan.md`. Scaffold
 | flink-jobmanager | Flink JobManager | 10.30.1.21 |
 | flink-taskmanager-1/2/3 | Flink TaskManager | 10.30.1.22-24 |
 | dashboard | PostgreSQL 16 + TimescaleDB + Grafana (co-ubicados) | 10.30.1.30 |
+| kafka-client | Simulador de agentes + `scripts/kafka/create_topics.py` (Python, repo clonado en el bootstrap) | 10.30.1.40 |
 
-Decisiones (ver conversación 2026-07-24): sin réplica de "empezar con 1 TaskManager y escalar después" — se despliegan los 3 TaskManagers de una. Postgres/TimescaleDB y Grafana comparten instancia (Grafana es liviano, Postgres no se expone a Internet, solo Grafana en el puerto 3000 y Flink UI en el 8081).
+Decisiones (ver conversación 2026-07-24/2026-07-29): sin réplica de "empezar con 1 TaskManager y escalar después" — se despliegan los 3 TaskManagers de una. Postgres/TimescaleDB y Grafana comparten instancia (Grafana es liviano, Postgres no se expone a Internet, solo Grafana en el puerto 3000 y Flink UI en el 8081). El cliente (productor + verificación de consumo) es una sola instancia, no dos separadas como en `kafka-flink-streaming-lab`, para no sumar más EC2.
 
 ## Prerrequisitos
 
