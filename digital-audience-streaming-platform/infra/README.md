@@ -10,7 +10,7 @@ Infraestructura como código (Pulumi, Python) — Fase 1 del `plan.md`. Scaffold
 | flink-jobmanager | Flink JobManager | 10.30.1.21 |
 | flink-taskmanager-1/2/3 | Flink TaskManager | 10.30.1.22-24 |
 | dashboard | PostgreSQL 16 + TimescaleDB + Grafana (co-ubicados) | 10.30.1.30 |
-| kafka-client | Simulador de agentes + `scripts/kafka/create_topics.py` (Python, repo clonado en el bootstrap) | 10.30.1.40 |
+| kafka-client | Simulador de agentes + `scripts/kafka/create_topics.py` (Python; código subido por rsync, no clonado) | 10.30.1.40 |
 
 Decisiones (ver conversación 2026-07-24/2026-07-29): sin réplica de "empezar con 1 TaskManager y escalar después" — se despliegan los 3 TaskManagers de una. Postgres/TimescaleDB y Grafana comparten instancia (Grafana es liviano, Postgres no se expone a Internet, solo Grafana en el puerto 3000 y Flink UI en el 8081). El cliente (productor + verificación de consumo) es una sola instancia, no dos separadas como en `kafka-flink-streaming-lab`, para no sumar más EC2.
 
@@ -46,6 +46,27 @@ Para destruir todo al terminar una sesión de trabajo (evitar consumir horas del
 
 ```bash
 pulumi destroy
+```
+
+## Subir el código a kafka-client (rsync, no git)
+
+El bootstrap de `kafka-client` solo deja Python/pip/venv listos -- no clona el repositorio (se probó, y obliga a hacer commit+push en cada cambio solo para poder probarlo, muy tedioso durante desarrollo activo). En su lugar, el código se sincroniza con `rsync`, que solo transfiere lo que cambió cada vez (reutiliza el propio `.gitignore` del proyecto para no subir `venv/`, `.git/`, `informe/build/`, `keys/`, etc.):
+
+```bash
+cd ..   # a la raíz digital-audience-streaming-platform/
+rsync -avz --progress \
+  -e "ssh -i keys/audiencias-lab-key.pem" \
+  --filter=":- .gitignore" \
+  --exclude='.git/' \
+  ./ ubuntu@<ip-publica-kafka-client>:/home/ubuntu/digital-audience-streaming-platform/
+```
+
+Después de cada `rsync` (la primera vez, y cada vez que cambie el código):
+
+```bash
+ssh -i keys/audiencias-lab-key.pem ubuntu@<ip-publica-kafka-client> \
+  "cd digital-audience-streaming-platform && \
+   /home/ubuntu/venv/bin/pip install -r agentes-simulador/requirements.txt -r scripts/kafka/requirements.txt"
 ```
 
 ## Estado del bootstrap
