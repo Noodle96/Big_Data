@@ -51,13 +51,19 @@
 % ------------------------------------------------------------------------------
 
 % ==============================================================================
-% NOTA PENDIENTE: los diagramas informe/img/diagramas/pipeline-general.svg e
-% informe/img/diagramas/infra-red.svg todavía están en SVG, sin convertir a
-% PDF/PNG (pdflatex no incluye SVG directamente). Falta exportarlos -- por
-% ejemplo abriéndolos en Inkscape y "Exportar como PDF" en la misma carpeta,
-% o con cualquier conversor online -- antes de poder insertarlos con
-% \insertimage. Los \insertimage de ambos quedan comentados más abajo con
-% instrucciones exactas hasta que eso se resuelva.
+% NOTA PENDIENTE: 3 diagramas siguen en SVG, sin convertir a PNG (pdflatex no
+% incluye SVG directamente):
+%   - informe/img/diagramas/pipeline-general.svg
+%   - informe/img/diagramas/infra-red.svg
+%   - informe/img/diagramas/topics-particiones-replicas.svg
+% Exportar cada uno como PNG (Inkscape: "Archivo > Exportar PNG", misma
+% carpeta, mismo nombre) y descomentar el \insertimage correspondiente:
+%   - infra-red y topics-particiones-replicas ya tienen su \insertimage
+%     comentado en el lugar exacto donde van (secciones de Infraestructura y
+%     de Diseño de topics).
+%   - pipeline-general.svg todavía no tiene un \insertimage en ningún lado --
+%     va en la futura sección "Arquitectura de la solución" (portada del
+%     pipeline completo), que todavía no se ha escrito.
 % ==============================================================================
 
 \clearpage
@@ -110,9 +116,11 @@ Antes de entrar en el despliegue concreto, esta subsección describe qué es cad
 
 \textbf{VPC y Security Group compartido.} Todas las instancias viven en la misma red privada (\texttt{10.30.0.0/16}) y comparten un único Security Group, que permite todo el tráfico interno entre ellas (necesario para que Kafka, Flink y Postgres se comuniquen) pero solo expone a Internet los puertos estrictamente necesarios para operar desde afuera: SSH (22), la Web UI de Flink (8081) y Grafana (3000).
 
+\textbf{Cliente (kafka-client).} La instancia desde donde se corre el simulador de agentes (Fase 2) y el script de creación de topics (\texttt{scripts/kafka/create\_topics.py}). No corre ningún servicio permanente -- durante el arranque solo deja Python y un entorno virtual (venv) listos; el código del proyecto se sube por separado con \texttt{rsync} (Sección \ref{subsec:ampliacion-cliente}), no se clona por git. Es una sola instancia para productor y verificación de consumo (no dos separadas, como en el laboratorio anterior), para no sumar más EC2 al Learner Lab.
+
 \subsection{Topología de la infraestructura}
 
-Se desplegaron 8 instancias EC2 (\texttt{t3.small}), todas dentro de la misma VPC y Security Group, con IPs privadas estáticas asignadas por Pulumi. La Tabla \ref{tab:instancias-ec2} resume el rol, hostname, IP privada y puertos relevantes de cada una -- esta es la referencia que se usa durante el resto de la sección para identificar a qué instancia corresponde cada verificación.
+Se desplegaron 9 instancias EC2 (\texttt{t3.small}), todas dentro de la misma VPC y Security Group, con IPs privadas estáticas asignadas por Pulumi (las primeras 8 se desplegaron juntas; la novena, \texttt{kafka-client}, se agregó después -- ver Sección \ref{subsec:ampliacion-cliente}). La Tabla \ref{tab:instancias-ec2} resume el rol, hostname, IP privada y puertos relevantes de cada una -- esta es la referencia que se usa durante el resto de la sección para identificar a qué instancia corresponde cada verificación.
 
 \enabletablerowcolor[2]
 \begin{table}[H]
@@ -131,6 +139,7 @@ Flink TaskManager & flink-taskmanager-1 & 10.30.1.22 & 6123 (interno) \\
 Flink TaskManager & flink-taskmanager-2 & 10.30.1.23 & 6123 (interno) \\
 Flink TaskManager & flink-taskmanager-3 & 10.30.1.24 & 6123 (interno) \\
 Postgres+TimescaleDB+Grafana & dashboard & 10.30.1.30 & 5432 (interno), 3000 (público) \\
+Cliente (simulador + scripts) & kafka-client & 10.30.1.40 & -- (solo saliente) \\
 \hline
 \end{tabular}
 \label{tab:instancias-ec2}
@@ -139,7 +148,9 @@ Postgres+TimescaleDB+Grafana & dashboard & 10.30.1.30 & 5432 (interno), 3000 (p�
 
 Las IPs públicas no se incluyen en la Tabla \ref{tab:instancias-ec2} porque cambian en cada \texttt{pulumi up}/\texttt{destroy} (no se usó Elastic IP); se obtienen con \texttt{pulumi stack output} después de cada despliegue y son las que se usan en los comandos \texttt{ssh} de esta sección.
 
-% \insertimage[\label{img:infra-red}]{diagramas/infra-red.pdf}{width=15cm}{Topología de red: VPC, subred pública, Security Group compartido y agrupación de instancias por rol.}
+La Figura \ref{img:infra-red} ilustra esta misma topología de forma visual: la VPC y su subred pública, el Security Group compartido, y las instancias agrupadas por rol (Kafka, Flink, dashboard), junto con qué puertos quedan expuestos a Internet y cuáles solo son accesibles dentro de la red privada.
+
+\insertimage[\label{img:infra-red}]{diagramas/infra-red.png}{width=15cm}{Topología de red: VPC, subred pública, Security Group compartido y agrupación de instancias por rol.}
 % (pendiente de conversión SVG->PDF, ver nota al inicio del archivo)
 
 \subsection{Despliegue con Pulumi}
@@ -162,11 +173,11 @@ Un detalle importante que se comprobó en esta corrida: que \texttt{pulumi up} t
 
 Los 3 brokers corren Kafka 3.9.0 en modo KRaft (sin Zookeeper), reutilizando el patrón validado en el laboratorio anterior del curso (incluyendo el fix del bug KAFKA-18281). En cada broker se verifica que el servicio systemd \texttt{kafka} esté activo con \texttt{systemctl status}, forzando un pseudo-terminal (\texttt{-t}) para que la salida se trunque al ancho de la consola en vez de imprimir la línea completa del proceso Java.
 
-En kafka-broker-1 (10.30.1.11, IP pública 54.234.134.254):
+En kafka-broker-1 (10.30.1.11, IP pública 13.221.254.62):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@54.234.134.254 \
+  ubuntu@13.221.254.62 \
   "sudo systemctl status kafka --no-pager"
 \end{lstlisting}
 
@@ -174,11 +185,11 @@ La Figura \ref{img:status-kafka-1} confirma que el servicio quedó \texttt{activ
 
 \insertimage[\label{img:status-kafka-1}]{evidencia/status-kafka-broker-1.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-1 (nodeId=1).}
 
-Se repite el mismo comando, cambiando solo la IP, en kafka-broker-2 (10.30.1.12, IP pública 54.87.246.253):
+Se repite el mismo comando, cambiando solo la IP, en kafka-broker-2 (10.30.1.12, IP pública 100.59.195.102):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@54.87.246.253 \
+  ubuntu@100.59.195.102 \
   "sudo systemctl status kafka --no-pager"
 \end{lstlisting}
 
@@ -186,11 +197,11 @@ La Figura \ref{img:status-kafka-2} confirma el mismo resultado en kafka-broker-2
 
 \insertimage[\label{img:status-kafka-2}]{evidencia/status-kafka-broker-2.png}{width=14cm}{Servicio \texttt{kafka} activo en kafka-broker-2 (nodeId=2).}
 
-Y en kafka-broker-3 (10.30.1.13, IP pública 50.19.46.129):
+Y en kafka-broker-3 (10.30.1.13, IP pública 3.95.231.216):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@50.19.46.129 \
+  ubuntu@3.95.231.216 \
   "sudo systemctl status kafka --no-pager"
 \end{lstlisting}
 
@@ -202,11 +213,11 @@ La Figura \ref{img:status-kafka-3} cierra la verificación de Kafka: los 3 broke
 
 A diferencia del laboratorio anterior del curso (donde Flink corría embebido en un solo proceso Java), acá se desplegó un cluster real: 1 JobManager coordinando 3 TaskManagers. Se verifica primero el JobManager y luego cada TaskManager.
 
-En flink-jobmanager (10.30.1.21, IP pública 54.82.79.189):
+En flink-jobmanager (10.30.1.21, IP pública 34.224.8.125):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@54.82.79.189 \
+  ubuntu@34.224.8.125 \
   "sudo systemctl status flink-jobmanager --no-pager"
 \end{lstlisting}
 
@@ -214,11 +225,11 @@ La Figura \ref{img:status-jm} muestra el servicio \texttt{active (running)}; en 
 
 \insertimage[\label{img:status-jm}]{evidencia/status-flink-jobmanager.png}{width=14cm}{Servicio \texttt{flink-jobmanager} activo; el log confirma el registro de los 3 TaskManagers en el \texttt{SlotManager}.}
 
-En flink-taskmanager-1 (10.30.1.22, IP pública 44.223.75.1):
+En flink-taskmanager-1 (10.30.1.22, IP pública 54.227.106.184):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@44.223.75.1 \
+  ubuntu@54.227.106.184 \
   "sudo systemctl status flink-taskmanager --no-pager"
 \end{lstlisting}
 
@@ -226,11 +237,11 @@ La Figura \ref{img:status-tm1} confirma el servicio activo en flink-taskmanager-
 
 \insertimage[\label{img:status-tm1}]{evidencia/status-flink-taskmanager-1.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-1.}
 
-En flink-taskmanager-2 (10.30.1.23, IP pública 52.200.129.54):
+En flink-taskmanager-2 (10.30.1.23, IP pública 3.80.228.191):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@52.200.129.54 \
+  ubuntu@3.80.228.191 \
   "sudo systemctl status flink-taskmanager --no-pager"
 \end{lstlisting}
 
@@ -238,11 +249,11 @@ La Figura \ref{img:status-tm2} confirma el servicio activo en flink-taskmanager-
 
 \insertimage[\label{img:status-tm2}]{evidencia/status-flink-taskmanager-2.png}{width=14cm}{Servicio \texttt{flink-taskmanager} activo en flink-taskmanager-2, con reintento de conexión inicial resuelto automáticamente.}
 
-Y en flink-taskmanager-3 (10.30.1.24, IP pública 52.90.140.55):
+Y en flink-taskmanager-3 (10.30.1.24, IP pública 98.93.69.252):
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@52.90.140.55 \
+  ubuntu@98.93.69.252 \
   "sudo systemctl status flink-taskmanager --no-pager"
 \end{lstlisting}
 
@@ -252,11 +263,11 @@ La Figura \ref{img:status-tm3} confirma el servicio activo en flink-taskmanager-
 
 \subsection{Verificación: PostgreSQL + TimescaleDB}
 
-La instancia dashboard (10.30.1.30, IP pública 98.81.129.129) corre PostgreSQL 16 con la extensión TimescaleDB, que será el destino de los datos agregados que escriba Flink (Fase 4 del plan de trabajo). Se verifica en tres pasos: el servicio, el cluster de Postgres, y la extensión.
+La instancia dashboard (10.30.1.30, IP pública 34.201.148.176) corre PostgreSQL 16 con la extensión TimescaleDB, que será el destino de los datos agregados que escriba Flink (Fase 4 del plan de trabajo). Se verifica en tres pasos: el servicio, el cluster de Postgres, y la extensión.
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@98.81.129.129 \
+  ubuntu@34.201.148.176 \
   "sudo systemctl status postgresql --no-pager"
 \end{lstlisting}
 
@@ -268,7 +279,7 @@ Para confirmar que la instancia real de Postgres (\texttt{16/main}) está en lí
 
 \begin{lstlisting}[style=cmdbox]
 ssh -i ../keys/audiencias-lab-key.pem \
-  ubuntu@98.81.129.129 \
+  ubuntu@34.201.148.176 \
   "sudo pg_lsclusters"
 \end{lstlisting}
 
@@ -280,7 +291,7 @@ Y por último, que la extensión TimescaleDB quedó correctamente instalada en l
 
 \begin{lstlisting}[style=cmdbox]
 ssh -i ../keys/audiencias-lab-key.pem \
-  ubuntu@98.81.129.129 \
+  ubuntu@34.201.148.176 \
   "PGPASSWORD='AudienciasLab2026!' psql -h localhost \
    -U flink -d audiencias -c '\dx'"
 \end{lstlisting}
@@ -295,7 +306,7 @@ En la misma instancia dashboard, se verifica el servicio de Grafana:
 
 \begin{lstlisting}[style=cmdbox]
 ssh -t -i ../keys/audiencias-lab-key.pem \
-  ubuntu@98.81.129.129 \
+  ubuntu@34.201.148.176 \
   "sudo systemctl status grafana-server --no-pager"
 \end{lstlisting}
 
@@ -307,14 +318,221 @@ La Figura \ref{img:status-grafana} confirma el servicio \texttt{grafana-server} 
 
 Además de los servicios systemd, se verificó el acceso real desde el navegador a las dos interfaces expuestas por el Security Group.
 
-La Figura \ref{img:flink-ui} muestra la Web UI de Apache Flink, accesible en \texttt{http://54.82.79.189:8081} -- confirma visualmente, desde la perspectiva del cluster, lo mismo que ya se había verificado por SSH: los 3 TaskManagers registrados y disponibles.
+La Figura \ref{img:flink-ui} muestra la Web UI de Apache Flink, accesible en \texttt{http://34.224.8.125:8081} -- confirma visualmente, desde la perspectiva del cluster, lo mismo que ya se había verificado por SSH: los 3 TaskManagers registrados y disponibles.
 
-\insertimage[\label{img:flink-ui}]{evidencia/flink-webui-taskmanagers.png}{width=15cm}{Web UI de Apache Flink (\texttt{http://54.82.79.189:8081}), mostrando los 3 TaskManagers registrados.}
+\insertimage[\label{img:flink-ui}]{evidencia/flink-webui-taskmanagers.png}{width=15cm}{Web UI de Apache Flink (\texttt{http://34.224.8.125:8081}), mostrando los 3 TaskManagers registrados.}
 
-La Figura \ref{img:grafana-login} muestra la pantalla de login de Grafana, accesible en \texttt{http://98.81.129.129:3000} -- confirma que el servicio no solo está activo a nivel de sistema, sino que efectivamente responde peticiones HTTP desde fuera de la VPC.
+La Figura \ref{img:grafana-login} muestra la pantalla de login de Grafana, accesible en \texttt{http://34.201.148.176:3000} -- confirma que el servicio no solo está activo a nivel de sistema, sino que efectivamente responde peticiones HTTP desde fuera de la VPC.
 
-\insertimage[\label{img:grafana-login}]{evidencia/grafana-login.png}{width=15cm}{Pantalla de login de Grafana (\texttt{http://98.81.129.129:3000}).}
+\insertimage[\label{img:grafana-login}]{evidencia/grafana-login.png}{width=15cm}{Pantalla de login de Grafana (\texttt{http://34.201.148.176:3000}).}
+
+\subsection{Ampliación: instancia cliente}
+\label{subsec:ampliacion-cliente}
+
+Después de la verificación inicial de las 8 instancias, se agregó una novena (\texttt{kafka-client}, 10.30.1.40) para correr el simulador de agentes (Fase 2) y \texttt{scripts/kafka/create\_topics.py}. A diferencia de las otras instancias, su bootstrap no clona ningún repositorio -- solo deja Python, \texttt{pip} y un entorno virtual (venv) listos. El código del proyecto se sube por separado con \texttt{rsync} (se probó primero con \texttt{git clone} dentro del bootstrap, pero obligaba a hacer commit+push antes de poder probar cualquier cambio, algo tedioso durante desarrollo activo; \texttt{rsync} solo transfiere lo que cambió cada vez).
+
+Un efecto secundario observado al aplicar este cambio: como el \texttt{user\_data} de las 8 instancias ya existentes comparte un mismo bloque de \texttt{/etc/hosts} con la lista de todos los nodos (ahora incluyendo al cliente), Pulumi las marcó como "a actualizar" también -- sin recrearlas ni tocar sus discos, pero sí reasignándoles una IP pública nueva a cada una (las IPs privadas, que son las que usa el cluster para comunicarse internamente, no cambiaron). Es un comportamiento esperado: ya estaba documentado en el propio código reutilizado del laboratorio de Kafka (opción \texttt{user\_data\_replace\_on\_change=False}: \textit{"Pulumi podría detenerla e iniciarla para aplicar ciertos cambios"}). Los comandos de las secciones anteriores ya reflejan las IPs públicas vigentes después de este cambio; las capturas de pantalla en sí corresponden al momento de la verificación original, previo a esta ampliación.
+
+Primero se confirma que el cloud-init de kafka-client terminó bien:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.80.119.54 \
+  "cloud-init status --wait"
+\end{lstlisting}
+
+La Figura \ref{img:cloudinit-client} confirma que, tras el rediseño del bootstrap (sin \texttt{git clone}), el cloud-init de kafka-client termina limpio.
+
+\insertimage[\label{img:cloudinit-client}]{evidencia/cloudinit-kafka-client.png}{width=14cm}{cloud-init completo (\texttt{status: done}) en kafka-client, tras remover el paso de \texttt{git clone} del bootstrap.}
+
+Luego se sube el código del proyecto con \texttt{rsync} (reutiliza el propio \texttt{.gitignore} del repositorio para no subir \texttt{venv/}, \texttt{.git/}, \texttt{keys/}, etc.), ejecutado desde la raíz del proyecto en la máquina local:
+
+\begin{lstlisting}[style=cmdbox]
+rsync -avz --progress \
+  -e "ssh -i keys/audiencias-lab-key.pem" \
+  --filter=":- .gitignore" --exclude='.git/' \
+  ./ ubuntu@98.80.119.54:/home/ubuntu/digital-audience-streaming-platform/
+\end{lstlisting}
+
+\insertimage[\label{img:rsync-client}]{evidencia/rsync-kafka-client.png}{width=14cm}{Salida de rsync subiendo el proyecto a kafka-client.}
+
+Y se instalan las dependencias de Python dentro del venv ya preparado por el bootstrap:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.80.119.54 \
+  "cd digital-audience-streaming-platform && \
+   /home/ubuntu/venv/bin/pip install \
+   -r agentes-simulador/requirements.txt \
+   -r scripts/kafka/requirements.txt"
+\end{lstlisting}
+
+\insertimage[\label{img:pipinstall-client}]{evidencia/pip-install-kafka-client.png}{width=14cm}{Instalación de kafka-python y PyYAML en el venv de kafka-client.}
+
+Por último se confirma que las dependencias quedaron instaladas:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -t -i ../keys/audiencias-lab-key.pem \
+  ubuntu@98.80.119.54 \
+  "/home/ubuntu/venv/bin/pip list"
+\end{lstlisting}
+
+La Figura \ref{img:venv-client} confirma que \texttt{kafka-python} y \texttt{PyYAML} quedaron instalados en el entorno virtual de kafka-client -- la instancia queda lista para correr el simulador de agentes y \texttt{scripts/kafka/create\_topics.py}.
+
+\insertimage[\label{img:venv-client}]{evidencia/status-kafka-client-venv.png}{width=14cm}{kafka-python y PyYAML instalados en el venv de kafka-client, confirmando que el entorno quedó listo.}
 
 \subsection{Conclusión de la Fase 1}
 
-Con los 8 servicios verificados activos (Figuras \ref{img:status-kafka-1}--\ref{img:status-grafana}), el quorum KRaft de Kafka formado, el cluster de Flink con sus 3 TaskManagers registrados (Figuras \ref{img:status-jm}--\ref{img:status-tm3} y \ref{img:flink-ui}), y TimescaleDB instalado sobre Postgres (Figura \ref{img:pg-timescale}), la infraestructura base del proyecto (Tabla \ref{tab:instancias-ec2}) queda operativa. El siguiente paso (Fase 2) es apuntar el simulador de agentes a los brokers reales y validar la publicación de eventos de punta a punta.
+Con los 8 servicios de procesamiento verificados activos (Figuras \ref{img:status-kafka-1}--\ref{img:status-grafana}), el quorum KRaft de Kafka formado, el cluster de Flink con sus 3 TaskManagers registrados (Figuras \ref{img:status-jm}--\ref{img:status-tm3} y \ref{img:flink-ui}), TimescaleDB instalado sobre Postgres (Figura \ref{img:pg-timescale}), y la instancia cliente agregada (Sección \ref{subsec:ampliacion-cliente}), la infraestructura completa del proyecto (Tabla \ref{tab:instancias-ec2}, 9 instancias) queda operativa. El siguiente paso (Fase 2) es apuntar el simulador de agentes a los brokers reales y validar la publicación de eventos de punta a punta.
+
+\clearpage
+\section{Simulador de agentes y publicación en Kafka (Fase 2)}
+\label{sec:fase2}
+
+Con la infraestructura operativa (Sección \ref{sec:infraestructura}), esta sección documenta la creación de los topics reales, la ejecución del simulador de agentes contra el cluster, y la verificación de que los eventos efectivamente llegan a Kafka. El trabajo se hace desde dos sesiones SSH abiertas en paralelo: una a \texttt{kafka-client} (10.30.1.40) para crear los topics y correr el simulador, y otra a kafka-broker-1 (10.30.1.11) para verificar los topics y consumir los eventos publicados.
+
+\subsection{Configuración: apuntar al cluster real}
+
+Antes de esta fase, \texttt{agentes-simulador/src/config.py} apuntaba a un cluster de prueba (ver Sección \ref{subsec:ampliacion-cliente}). Se actualizó para apuntar a los 3 brokers reales, usando sus IPs privadas (el simulador corre dentro de la misma VPC, en kafka-client):
+
+\begin{lstlisting}[style=cmdbox]
+BOOTSTRAP_SERVERS: str = "10.30.1.11:9092,10.30.1.12:9092,10.30.1.13:9092"
+\end{lstlisting}
+
+Este cambio, junto con el resto del código del proyecto, se sube a kafka-client con \texttt{rsync} (ver Sección \ref{subsec:ampliacion-cliente}) cada vez que se modifica.
+
+\subsection{Sesión A (kafka-client): creación de topics}
+
+Se abre una sesión SSH interactiva a kafka-client:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -i keys/audiencias-lab-key.pem ubuntu@98.80.119.54
+\end{lstlisting}
+
+La Figura \ref{img:ssh-client} muestra la conexión exitosa.
+
+\insertimage[\label{img:ssh-client}]{evidencia/ssh-kafka-client.png}{width=14cm}{Conexión SSH a kafka-client.}
+
+Ya dentro de la sesión, se crean los 2 topics declarados en \texttt{scripts/kafka/topics.yaml} (Sección \ref{sec:infraestructura} -- ver también la justificación de por qué 2 topics y no los 4 del diagrama de referencia del enunciado, Sección \ref{sec:kafka-topics}):
+
+\begin{lstlisting}[style=cmdbox]
+cd digital-audience-streaming-platform/scripts/kafka
+/home/ubuntu/venv/bin/python3 create_topics.py \
+  --bootstrap-servers 10.30.1.11:9092,10.30.1.12:9092,10.30.1.13:9092
+\end{lstlisting}
+
+La Figura \ref{img:topics-created} confirma la creación de \texttt{user-events} y \texttt{purchase-events}.
+
+\insertimage[\label{img:topics-created}]{evidencia/topics-created.png}{width=14cm}{Salida de create\_topics.py creando los 2 topics.}
+
+\subsection{Sesión B (kafka-broker-1): verificación de topics}
+
+En una segunda terminal, se abre una sesión SSH a kafka-broker-1:
+
+\begin{lstlisting}[style=cmdbox]
+ssh -i keys/audiencias-lab-key.pem ubuntu@13.221.254.62
+\end{lstlisting}
+
+\insertimage[\label{img:ssh-broker1}]{evidencia/ssh-kafka-broker-1.png}{width=14cm}{Conexión SSH a kafka-broker-1.}
+
+Y se describe el estado de los topics ya creados:
+
+\inlinesourcecodeboxed[cmdbg]{bash}{/opt/kafka/current/bin/kafka-topics.sh --bootstrap-server 10.30.1.11:9092 --describe}
+
+La Tabla \ref{tab:topics-config} resume la configuración de cada topic, obtenida directamente de esa salida.
+
+\enabletablerowcolor[2]
+\begin{table}[H]
+\centering
+\caption{Configuración de los topics creados.}
+\begin{tabular}{T{3cm}T{2cm}T{2.7cm}T{3cm}T{3cm}}
+\hline
+\rowcolor{cmdaccent}
+\textcolor{white}{\textbf{Topic}} & \textcolor{white}{\textbf{Particiones}} & \textcolor{white}{\textbf{Replicación}} & \textcolor{white}{\textbf{Retención}} & \textcolor{white}{\textbf{Política}} \bigstrut\\
+\hline
+user-events & 3 & 3 & 24h (86400000 ms) & delete \\
+purchase-events & 3 & 3 & 24h (86400000 ms) & delete \\
+\hline
+\end{tabular}
+\label{tab:topics-config}
+\end{table}
+\disabletablerowcolor
+
+La Tabla \ref{tab:topics-particiones} detalla cada partición individualmente: quién es su líder y qué brokers tienen la réplica, confirmando que el factor de replicación 3 se cumple en las 6 particiones (2 topics × 3 particiones) sin ninguna sub-replicada (ISR completo en todas).
+
+\enabletablerowcolor[2]
+\begin{table}[H]
+\centering
+\caption{Detalle de particiones por topic.}
+\begin{tabular}{T{3cm}T{2cm}T{1.8cm}T{3cm}T{3cm}}
+\hline
+\rowcolor{cmdaccent}
+\textcolor{white}{\textbf{Topic}} & \textcolor{white}{\textbf{Partición}} & \textcolor{white}{\textbf{Líder}} & \textcolor{white}{\textbf{Réplicas}} & \textcolor{white}{\textbf{ISR}} \bigstrut\\
+\hline
+user-events & 0 & 3 & 3, 1, 2 & 3, 1, 2 \\
+user-events & 1 & 1 & 1, 2, 3 & 1, 2, 3 \\
+user-events & 2 & 2 & 2, 3, 1 & 2, 3, 1 \\
+purchase-events & 0 & 3 & 3, 1, 2 & 3, 1, 2 \\
+purchase-events & 1 & 1 & 1, 2, 3 & 1, 2, 3 \\
+purchase-events & 2 & 2 & 2, 3, 1 & 2, 3, 1 \\
+\hline
+\end{tabular}
+\label{tab:topics-particiones}
+\end{table}
+\disabletablerowcolor
+
+La Figura \ref{img:topics-diagrama} ilustra la misma información de forma visual: cada broker termina siendo líder de exactamente 2 particiones (una por topic) y réplica de las otras 4 -- una distribución balanceada entre los 3 nodos.
+
+\insertimage[\label{img:topics-diagrama}]{diagramas/topics-particiones-replicas.png}{width=15cm}{Distribución de particiones y réplicas entre los 3 brokers: cada broker es líder de 2 particiones y réplica de las otras 4.}
+% (pendiente de conversión SVG->PDF, ver nota al inicio del archivo -- diagrama ya generado en informe/img/diagramas/topics-particiones-replicas.svg)
+
+\subsection{Sesión A (kafka-client): simulador de agentes generando eventos}
+
+De vuelta en la sesión de kafka-client, se corre el simulador forzando el escenario "Navidad":
+
+\begin{lstlisting}[style=cmdbox]
+cd ~/digital-audience-streaming-platform/agentes-simulador/src
+/home/ubuntu/venv/bin/python3 main.py --escenario navidad
+\end{lstlisting}
+
+La Figura \ref{img:simulador-corriendo} muestra el simulador publicando eventos reales al cluster: cada línea indica el canal (\texttt{web}, \texttt{mobile}, \texttt{iot}, \texttt{vehicle}, \texttt{pos}), el tipo de evento, el producto, el perfil del agente y el escenario activo. Solo aparecen los perfiles \texttt{comprador\_compulsivo} y \texttt{nocturno} porque son los únicos cuyo horario activo (\texttt{AgentProfile.hours}) incluye la hora real del servidor en el momento de la corrida -- comportamiento esperado, no un error (ver \texttt{agentes-simulador/src/agentes/agents.py}).
+
+\insertimage[\label{img:simulador-corriendo}]{evidencia/simulador-corriendo.png}{width=14cm}{Simulador de agentes publicando eventos reales al cluster Kafka, escenario forzado "Navidad".}
+
+\subsection{Sesión B (kafka-broker-1): confirmación de recepción}
+
+Por último, de vuelta en la sesión del broker, se consumen algunos mensajes de cada topic para confirmar que los eventos publicados por el simulador realmente llegaron:
+
+\begin{lstlisting}[style=cmdbox]
+/opt/kafka/current/bin/kafka-console-consumer.sh \
+  --bootstrap-server 10.30.1.11:9092 --topic user-events \
+  --from-beginning --max-messages 5
+\end{lstlisting}
+
+\insertimage[\label{img:consumer-user}]{evidencia/consumer-user-events.png}{width=14cm}{5 mensajes reales consumidos del topic user-events.}
+
+\begin{lstlisting}[style=cmdbox]
+/opt/kafka/current/bin/kafka-console-consumer.sh \
+  --bootstrap-server 10.30.1.11:9092 --topic purchase-events \
+  --from-beginning --max-messages 5
+\end{lstlisting}
+
+\insertimage[\label{img:consumer-purchase}]{evidencia/consumer-purchase-events.png}{width=14cm}{5 mensajes reales consumidos del topic purchase-events.}
+
+\subsection{Conclusión de la Fase 2}
+
+Con los topics creados y verificados (Tablas \ref{tab:topics-config} y \ref{tab:topics-particiones}, Figura \ref{img:topics-diagrama}), el simulador publicando eventos reales al cluster (Figura \ref{img:simulador-corriendo}), y esos mismos eventos confirmados por consumo directo desde un broker (Figuras \ref{img:consumer-user} y \ref{img:consumer-purchase}), el pipeline Agentes → Kafka queda validado de punta a punta. El siguiente paso (Fase 3/4) es procesar estos eventos con Apache Flink.
+
+\clearpage
+\section{Diseño de topics de Kafka (Fase 3)}
+\label{sec:kafka-topics}
+
+El diagrama de referencia del enunciado ("PROPUESTA: ARQUITECTURA ORIENTADA A EVENTOS") propone 4 topics dentro de Kafka: \texttt{user-events}, \texttt{purchase-events}, \texttt{iot-events} y \texttt{system-events}. En este proyecto se implementaron solo los dos primeros (ya usados en la Fase 2, Sección \ref{sec:fase2}), decisión que se justifica a continuación.
+
+\texttt{user-events} y \texttt{purchase-events} separan el tráfico por semántica de negocio, no por canal de origen: el primero concentra la navegación (\texttt{SEARCH}, \texttt{VIEW\_PRODUCT}), el segundo la conversión (\texttt{ADD\_CART}, \texttt{PURCHASE}, \texttt{PAYMENT\_REJECTED}). Esto le da a Apache Flink (Fase 4) una separación natural entre "análisis de navegación" y "análisis de conversión" sin tener que filtrar un único topic mezclado.
+
+\texttt{iot-events} no se implementó porque, en el diseño actual del simulador, los canales "IoT" y "Vehicle" (Sección \ref{sec:infraestructura}, \texttt{agentes-simulador/src/productores/producers.py}) representan medios de \textit{compra} (un agente comprando desde un dispositivo IoT o desde el auto), no telemetría real de sensores -- los eventos que publican son los mismos \texttt{SEARCH}/\texttt{ADD\_CART}/\texttt{PURCHASE} que cualquier otro canal. Crear un topic \texttt{iot-events} sin tráfico genuino habría sido solo para completar visualmente el diagrama de referencia, sin aportar contenido real que analizar.
+
+\texttt{system-events} tampoco se implementó todavía: se reservó conceptualmente como el canal de salida de las \textbf{alertas} que generará Apache Flink (Fase 6, requisito del dashboard), no como un topic alimentado por el simulador. Tiene sentido activarlo recién cuando exista lógica de alertas real que publicar ahí.
+
+En síntesis: se prefirió una arquitectura con topics que reflejan tráfico real y verificable sobre una réplica exacta del diagrama de referencia con topics vacíos.
