@@ -663,6 +663,10 @@ Todo el procesamiento vive en un único job de Flink, \texttt{AudienciasDigitale
 \item \textbf{Join vista/compra}: cruza eventos \texttt{VIEW\_PRODUCT} y \texttt{PURCHASE} del mismo producto dentro de la misma ventana, como dato exploratorio adicional.
 \end{enumerate}
 
+La Figura \ref{img:flink-job-interno} ilustra este mismo flujo de forma visual, desde los 8 perfiles de agente hasta el dashboard: los eventos salen de los productores hacia los 2 topics de Kafka (3 particiones cada uno, replicadas en los 3 brokers), el cluster de Flink los consume y los reparte entre las 4 ramas de procesamiento, y cada rama escribe su resultado a PostgreSQL/TimescaleDB en vez de a un topic de salida.
+
+\insertimage[\label{img:flink-job-interno}]{diagramas/flink-job-interno.png}{width=13cm}{Flujo interno del job: agentes, productores, Kafka (2 topics x 3 particiones), las 4 ramas dentro del cluster Flink, y las 8 tablas de destino en PostgreSQL/TimescaleDB.}
+
 La Tabla \ref{tab:flink-ramas} resume cómo cada rama termina en una tabla de PostgreSQL/TimescaleDB (esquema completo en \href{https://github.com/Noodle96/Big_Data/blob/main/digital-audience-streaming-platform/dashboard/db/init.sql}{\texttt{dashboard/db/init.sql}}), y qué métrica del enunciado cubre cada una.
 
 \enabletablerowcolor[2]

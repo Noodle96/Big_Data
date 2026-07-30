@@ -36,9 +36,9 @@
 	\begin{tabular}{ll}
 		Integrante:
 		& \begin{tabular}[t]{l}
-			Jorge Alfredo Tito Ccahuaya \\
-            Jorge Alfredo Tito Ccahuaya \\
-            Jorge Alfredo Tito Ccahuaya
+			Cáceres Cuba, Jayan Michael \\
+            Apaza Andaluz, Diego Francisco \\
+            Tito Ccahuaya, Jorge Alfredo
 		\end{tabular} \\
 		Profesor:
 		& \begin{tabular}[t]{l}
@@ -103,7 +103,9 @@
 
 % RESUMEN O ABSTRACT
 \begin{abstractd}
-	% todo
+	Este informe documenta la construcción de una plataforma que simula el comportamiento de usuarios en una tienda en línea y procesa esa actividad en tiempo real, usando una arquitectura orientada a eventos: agentes autónomos generan tráfico (búsquedas, vistas de producto, carritos, compras), Apache Kafka lo distribuye, Apache Flink lo procesa y clasifica, y los resultados terminan en un dashboard de Grafana que se actualiza solo. Toda la infraestructura (3 brokers de Kafka en modo KRaft, un cluster de Flink con JobManager y 3 TaskManagers, y una instancia con PostgreSQL/TimescaleDB y Grafana) corre sobre AWS Academy y se despliega íntegramente con Pulumi, sin pasos manuales.
+
+	El trabajo se dividió por partes entre los tres integrantes del equipo: la infraestructura, el simulador de agentes y el diseño de los topics de Kafka fueron un desarrollo conjunto; el job de procesamiento en Flink -- que agrega métricas por ventanas de tiempo, clasifica a cada usuario en categorías de audiencia y detecta alertas -- estuvo a cargo de otro integrante y se adaptó para escribir sus resultados directamente a PostgreSQL, de forma que se integrara con el dashboard; y el dashboard de Grafana, con los 10 paneles pedidos por el enunciado. Una corrida sostenida de poco más de 15 minutos permitió verificar el sistema completo funcionando de punta a punta, con datos reales y coherentes en las ocho tablas del modelo y en los diez paneles del dashboard.
 \end{abstractd}
 
 % TABLA DE CONTENIDOS - ÍNDICE
