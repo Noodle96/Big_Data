@@ -33,18 +33,9 @@ import java.time.Duration;
  * Envío al cluster real (no "java -jar", ver reference-kafka-flink-validated-stack):
  *   flink run -c com.bigdata.audiencias.jobs.EventCountJob target/flink-jobs-1.0.0.jar
  *
- * NOTA (corregido 2026-07-29 tras el primer intento de compilación real):
- * en la versión 4.1.0-2.2 JdbcSink se movió de org.apache.flink.connector.jdbc
- * a org.apache.flink.connector.jdbc.core.datastream.sink -- usa la Sink API v2
- * (builder + .sinkTo(), no .addSink()). JdbcConnectionOptions y
- * JdbcExecutionOptions siguen en el paquete histórico org.apache.flink.connector.jdbc.
- * Confirmado leyendo el código fuente real del conector (tag v4.1.0 en GitHub),
- * no adivinado.
- *
- * NOTA 2 (corregido 2026-07-29 tras la primera corrida real): la primera
- * versión escribía LocalDateTime.now() como window_start (hora de inserción
- * en Postgres, no el límite real de la ventana de Flink). Corregido usando
- * un ProcessWindowFunction, que sí tiene acceso a context.window().getStart().
+ * El conteo usa un ProcessWindowFunction (en vez de un simple .sum()) porque
+ * necesitamos el límite real de cada ventana (context.window().getStart())
+ * para poblar window_start con precisión, no solo el conteo agregado.
  */
 public class EventCountJob {
 
