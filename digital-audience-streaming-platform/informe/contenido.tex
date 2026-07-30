@@ -69,25 +69,25 @@
 \clearpage
 \section{Plan de trabajo}
 
-El desarrollo del proyecto se organizó en 8 fases secuenciales, pensadas para avanzar de manera incremental y verificable: primero la infraestructura base, luego cada componente del pipeline por separado, y por último la ejecución de escenarios comerciales y el análisis de resultados. La Tabla \ref{tab:fases-plan} resume el objetivo y el estado de cada fase al momento de escribir este informe; las secciones siguientes hacen referencia a estas fases por su número (por ejemplo, la Sección \ref{sec:infraestructura} corresponde a la Fase 1).
+El desarrollo del proyecto se organizó en 8 fases secuenciales, pensadas para avanzar de manera incremental y verificable: primero la infraestructura base, luego cada componente del pipeline por separado, y por último la ejecución de escenarios comerciales y el análisis de resultados. La Tabla \ref{tab:fases-plan} resume el objetivo de cada fase; las secciones siguientes hacen referencia a estas fases por su número (por ejemplo, la Sección \ref{sec:infraestructura} corresponde a la Fase 1).
 
 \enabletablerowcolor[2]
 \begin{table}[H]
 \centering
 \caption{Fases del plan de trabajo.}
-\begin{tabular}{T{1.3cm}T{9cm}T{4.5cm}}
+\begin{tabular}{T{1.3cm}T{13.5cm}}
 \hline
 \rowcolor{cmdaccent}
-\textcolor{white}{\textbf{Fase}} & \textcolor{white}{\textbf{Objetivo}} & \textcolor{white}{\textbf{Estado}} \bigstrut\\
+\textcolor{white}{\textbf{Fase}} & \textcolor{white}{\textbf{Objetivo}} \bigstrut\\
 \hline
-1 & Infraestructura base: VPC, Kafka (KRaft), cluster de Flink, PostgreSQL/TimescaleDB, Grafana, todo desplegado con Pulumi & Completada \\
-2 & Simulador de agentes autónomos (8 perfiles) + productores Kafka & Código integrado, pendiente probar contra el cluster real \\
-3 & Diseño de topics y particiones de Kafka & Decidida (2 topics por semántica de negocio) \\
-4 & Jobs de Apache Flink: consumo, filtrado, enriquecimiento, agregación por ventanas & Pendiente \\
-5 & Reglas de negocio para clasificar audiencias digitales & Pendiente \\
-6 & Dashboard en tiempo real (Grafana + PostgreSQL/TimescaleDB) & Pendiente \\
-7 & Ejecución de escenarios comerciales (Navidad, Cyber Monday, etc.) y análisis comparativo & Pendiente \\
-8 & Cierre del informe: introducción, conclusiones, revisión final & En curso (este documento) \\
+1 & Infraestructura base: VPC, Kafka (KRaft), cluster de Flink, PostgreSQL/TimescaleDB, Grafana, todo desplegado con Pulumi \\
+2 & Simulador de agentes autónomos (8 perfiles) + productores Kafka \\
+3 & Diseño de topics y particiones de Kafka \\
+4 & Job de Apache Flink: consumo, filtrado, agregación por ventanas, clasificación de audiencias \\
+5 & Reglas de negocio para clasificar audiencias digitales \\
+6 & Dashboard en tiempo real (Grafana + PostgreSQL/TimescaleDB) \\
+7 & Ejecución de escenarios comerciales (Navidad, Cyber Monday, etc.) y análisis comparativo \\
+8 & Cierre del informe: introducción, conclusiones, revisión final \\
 \hline
 \end{tabular}
 \label{tab:fases-plan}
@@ -409,6 +409,97 @@ Con los 8 servicios de procesamiento verificados activos (Figuras \ref{img:statu
 
 Con la infraestructura operativa (Sección \ref{sec:infraestructura}), esta sección documenta la creación de los topics reales, la ejecución del simulador de agentes contra el cluster, y la verificación de que los eventos efectivamente llegan a Kafka. El trabajo se hace desde dos sesiones SSH abiertas en paralelo: una a \texttt{kafka-client} (10.30.1.40) para crear los topics y correr el simulador, y otra a kafka-broker-1 (10.30.1.11) para verificar los topics y consumir los eventos publicados.
 
+\subsection{Diseño del simulador de agentes}
+
+El simulador (\href{https://github.com/Noodle96/Big_Data/tree/main/digital-audience-streaming-platform/agentes-simulador}{\texttt{agentes-simulador/src/} del repositorio}) fue diseñado por el integrante del equipo a cargo de esa parte, en 5 archivos con responsabilidades separadas. Esta subsección explica el rol de cada uno, en el mismo orden en que se diseñaron; el código mostrado es el que efectivamente corre contra el cluster real -- algunos valores concretos (las IPs de Kafka, los topics, banderas de línea de comandos) se adaptaron durante la integración a la infraestructura del proyecto, pero la lógica de fondo es la que se describe a continuación.
+
+\textbf{\texttt{config.py}: esquema de eventos y catálogo.} Define lo que comparten todos los demás módulos: a qué cluster de Kafka conectarse, el catálogo de 8 productos (nombre, categoría, precio) y las 5 ciudades que puede usar cualquier usuario simulado.
+
+\begin{sourcecode}[\label{code:config}]{python}{Catálogo de productos y ciudades (\texttt{config.py}).}
+CITIES: list[str] = ["Arequipa", "Lima", "Cusco", "Trujillo", "Piura"]
+
+PRODUCTS: list[Product] = [
+    Product("Laptop Lenovo", "Electronics", 3200),
+    Product("Laptop Dell", "Electronics", 4100),
+    Product("iPhone 15", "Electronics", 5200),
+    Product("Mouse Logitech", "Accesorios", 90),
+    Product("Teclado HyperX", "Accesorios", 250),
+    Product("Monitor LG", "Electronics", 1200),
+    Product("Audifonos Sony", "Audio", 700),
+    Product("Smartwatch Garmin", "Wearables", 1500),
+]
+\end{sourcecode}
+
+\textbf{\texttt{agentes/agents.py}: comportamiento de los 8 agentes.} Cada perfil se modela con pesos probabilísticos sobre los 4 tipos de evento (a mayor peso, más probable que el agente genere ese evento), un rango de horas en el que está activo, una preferencia de precio (\texttt{any}/\texttt{high}/\texttt{low}) y una intensidad que multiplica su frecuencia de generar eventos. La Figura \ref{code:agents} muestra 3 de los 8: un comprador impulsivo (mucho \texttt{PURCHASE}, poca comparación), uno que investiga antes de comprar (mucho \texttt{SEARCH}/\texttt{VIEW\_PRODUCT}), y uno activo de madrugada.
+
+\begin{sourcecode}[\label{code:agents}]{python}{3 de los 8 perfiles de agente (\texttt{agentes/agents.py}).}
+"comprador_compulsivo": AgentProfile(
+    weights={"SEARCH": 1, "VIEW_PRODUCT": 2, "ADD_CART": 3, "PURCHASE": 5},
+    hours=list(range(0, 24)), price="any", intensity=1.5,
+),
+"comparador": AgentProfile(
+    weights={"SEARCH": 5, "VIEW_PRODUCT": 5, "ADD_CART": 2, "PURCHASE": 1},
+    hours=list(range(8, 23)), price="any", intensity=1.0,
+),
+"nocturno": AgentProfile(
+    weights={"SEARCH": 3, "VIEW_PRODUCT": 4, "ADD_CART": 2, "PURCHASE": 2},
+    hours=list(range(22, 24)) + list(range(0, 5)), price="any", intensity=1.0,
+),
+\end{sourcecode}
+
+\textbf{\texttt{escenarios/seasons.py}: temporada comercial activa.} Detecta en qué temporada está la simulación (por fecha real, o forzada explícitamente) y devuelve un \texttt{purchase\_boost} e \texttt{intensity} que modifican el comportamiento de todos los agentes -- así, en Navidad o Cyber Monday, la probabilidad de compra sube sin tener que tocar los perfiles de agente.
+
+\begin{sourcecode}[\label{code:seasons}]{python}{Detección de temporada por fecha real (\texttt{escenarios/seasons.py}).}
+def _season_by_calendar_date(d: date) -> Season:
+    if d.month == 11 and 28 <= d.day <= 30:
+        return SEASONS["cyber_monday"]
+    if d.month == 12 and 1 <= d.day <= 25:
+        return SEASONS["navidad"]
+    if d.month == 7 and 25 <= d.day <= 29:
+        return SEASONS["fiestas_patrias"]
+    # ... dia_del_padre, campaña_escolar, black_friday
+    return SEASONS["normal"]
+\end{sourcecode}
+
+\textbf{\texttt{productores/producers.py}: publicación en Kafka.} Una clase base (\texttt{BaseProducer}) concentra la conexión al cluster y el envío; 5 clases heredan de ella para modelar los 5 canales del enunciado (\texttt{WebProducer}, \texttt{MobileProducer}, \texttt{IoTProducer}, \texttt{VehicleProducer}, \texttt{POSProducer}), cada una restringida a los tipos de evento que tiene sentido que genere ese canal (por ejemplo, \texttt{POSProducer} -- tienda física -- solo genera \texttt{PURCHASE}).
+
+\begin{sourcecode}[\label{code:producers}]{python}{Envío de eventos, ruteado por tipo (\texttt{productores/producers.py}).}
+def send(self, event: Event) -> None:
+    event["source"] = self.source
+    topic: str = topic_for_event(event["event"])
+    self.kafka.send(topic, key=event["user_id"], value=event)
+
+class IoTProducer(BaseProducer):
+    source = "iot"
+    allowed_events = ["ADD_CART", "PURCHASE"]  # reposición automática
+
+class POSProducer(BaseProducer):
+    source = "pos"
+    allowed_events = ["PURCHASE"]  # tienda física
+\end{sourcecode}
+
+\textbf{\texttt{main.py}: bucle principal.} Coordina todo lo anterior: crea los 5 productores y los 50 usuarios sintéticos, y en cada segundo recorre a cada usuario, decide si le toca generar un evento según su horario e intensidad (ajustada por la temporada activa), arma el evento y lo envía por el productor correspondiente.
+
+\begin{sourcecode}[\label{code:mainloop}]{python}{Bucle principal del simulador (\texttt{main.py}).}
+while True:
+    now: datetime = datetime.now()
+    season: Season = get_season(now.date(), forced=forced_season)
+    for user in USERS:
+        profile: AgentProfile = AGENTS[user["agent"]]
+        if not args.ignore_horario and now.hour not in profile.hours:
+            continue  # respeta horario del agente, salvo --ignore-horario
+        if random.random() > 0.3 * profile.intensity * season.intensity:
+            continue  # frecuencia según intensidad
+        ev: Event = build_event(user, now, season)
+        valid: list[BaseProducer] = [
+            pr for pr in producers
+            if pr.allowed_events is None or ev["event"] in pr.allowed_events
+        ]
+        pr: BaseProducer = random.choice(valid)
+        pr.send(ev)
+    time.sleep(1)
+\end{sourcecode}
+
 \subsection{Configuración: apuntar al cluster real}
 
 Antes de esta fase, \texttt{agentes-simulador/src/config.py} apuntaba a un cluster de prueba (ver Sección \ref{subsec:ampliacion-cliente}). Se actualizó para apuntar a los 3 brokers reales, usando sus IPs privadas (el simulador corre dentro de la misma VPC, en kafka-client):
@@ -551,6 +642,390 @@ El diagrama de referencia del enunciado ("PROPUESTA: ARQUITECTURA ORIENTADA A EV
 
 \texttt{iot-events} no se implementó porque, en el diseño actual del simulador, los canales "IoT" y "Vehicle" (Sección \ref{sec:infraestructura}, \texttt{agentes-simulador/src/productores/producers.py}) representan medios de \textit{compra} (un agente comprando desde un dispositivo IoT o desde el auto), no telemetría real de sensores -- los eventos que publican son los mismos \texttt{SEARCH}/\texttt{ADD\_CART}/\texttt{PURCHASE} que cualquier otro canal. Crear un topic \texttt{iot-events} sin tráfico genuino habría sido solo para completar visualmente el diagrama de referencia, sin aportar contenido real que analizar.
 
-\texttt{system-events} tampoco se implementó todavía: se reservó conceptualmente como el canal de salida de las \textbf{alertas} que generará Apache Flink (Fase 6, requisito del dashboard), no como un topic alimentado por el simulador. Tiene sentido activarlo recién cuando exista lógica de alertas real que publicar ahí.
+\texttt{system-events} tampoco se implementó: las alertas que genera Apache Flink (Sección \ref{sec:flink}) no se publican de vuelta a Kafka, sino que se escriben directo a una tabla de PostgreSQL/TimescaleDB (\texttt{alertas}), que es lo que Grafana consulta para el panel de alertas del dashboard (Sección \ref{sec:dashboard}). Un topic \texttt{system-events} habría sido un salto intermedio innecesario entre Flink y su propio destino final.
 
 En síntesis: se prefirió una arquitectura con topics que reflejan tráfico real y verificable sobre una réplica exacta del diagrama de referencia con topics vacíos.
+
+\clearpage
+\section{Apache Flink: cluster y job de audiencias digitales (Fase 4)}
+\label{sec:flink}
+
+El cluster de Flink (1 JobManager + 3 TaskManagers) ya se desplegó y verificó en la Fase 1 (Sección \ref{sec:infraestructura}). Esta sección documenta el job que corre sobre ese cluster: consume los 2 topics de Kafka (Sección \ref{sec:kafka-topics}), procesa los eventos, y escribe los resultados a PostgreSQL/TimescaleDB para alimentar el dashboard (Sección \ref{sec:dashboard}).
+
+\subsection{Diseño del job}
+
+Todo el procesamiento vive en un único job de Flink, \texttt{AudienciasDigitalesJob} (paquete \texttt{com.bigdata.audiencias}, código completo en \href{https://github.com/Noodle96/Big_Data/tree/main/digital-audience-streaming-platform/flink-jobs}{\texttt{flink-jobs/} del repositorio}). Consume \texttt{user-events} y \texttt{purchase-events} como un solo stream unificado, filtra los eventos inválidos, y se ramifica en 4 líneas de procesamiento que comparten ese mismo stream de entrada:
+
+\begin{enumerate}
+\item \textbf{Agregación por ventana} (\texttt{windowAll}, ventanas tumbling de 10 segundos): cuenta eventos, usuarios distintos, vistas/compras por producto y compras por ciudad dentro de cada ventana.
+\item \textbf{Clasificación de audiencias por usuario} (\texttt{keyBy(user\_id)} + estado acumulado de Flink): evalúa, en cada evento, en cuál de 6 categorías de negocio cae el usuario según su comportamiento acumulado.
+\item \textbf{Alertas}: una anomalía de ventana (muchos \texttt{ADD\_CART} sin ningún \texttt{PURCHASE}) y una alerta cuando un usuario cambia a un estado de audiencia de riesgo o de alto interés.
+\item \textbf{Join vista/compra}: cruza eventos \texttt{VIEW\_PRODUCT} y \texttt{PURCHASE} del mismo producto dentro de la misma ventana, como dato exploratorio adicional.
+\end{enumerate}
+
+La Tabla \ref{tab:flink-ramas} resume cómo cada rama termina en una tabla de PostgreSQL/TimescaleDB (esquema completo en \href{https://github.com/Noodle96/Big_Data/blob/main/digital-audience-streaming-platform/dashboard/db/init.sql}{\texttt{dashboard/db/init.sql}}), y qué métrica del enunciado cubre cada una.
+
+\enabletablerowcolor[2]
+\begin{table}[H]
+\centering
+\caption{Ramas del job, tabla destino y métrica del enunciado que cubren.}
+\begin{tabular}{T{4.5cm}T{4cm}T{6cm}}
+\hline
+\rowcolor{cmdaccent}
+\textcolor{white}{\textbf{Rama}} & \textcolor{white}{\textbf{Tabla en Postgres}} & \textcolor{white}{\textbf{Métrica del enunciado}} \bigstrut\\
+\hline
+Agregación por ventana & \texttt{resumen\_ventana} & Usuarios activos, eventos/segundo, conversión \\
+Agregación por ventana & \texttt{eventos\_por\_tipo} & Eventos por tipo, tendencias temporales \\
+Agregación por ventana & \texttt{productos\_vistos} & Productos más visitados \\
+Agregación por ventana & \texttt{productos\_comprados} & Productos más comprados \\
+Agregación por ventana & \texttt{compras\_por\_region} & Compras por región \\
+Clasificación de audiencias & \texttt{audiencias} & Audiencias detectadas \\
+Alertas (ventana + audiencia) & \texttt{alertas} & Alertas \\
+Join vista/compra & \texttt{productos\_relacionados} & Extra, no pedido por el enunciado \\
+\hline
+\end{tabular}
+\label{tab:flink-ramas}
+\end{table}
+\disabletablerowcolor
+
+El sink hacia cada tabla usa el conector JDBC de Flink (\texttt{flink-connector-jdbc-postgres}), con reintentos y escritura por lotes -- el mismo mecanismo que usa el proyecto para conectar Flink con PostgreSQL/TimescaleDB en las 8 tablas.
+
+\subsection{Estructura del código y componentes internos}
+
+El diseño del job fue trabajo del integrante del equipo a cargo de la Fase 4; esta subsección recorre archivo por archivo, en el mismo orden en que se diseñó, el código real que corre hoy contra el cluster -- durante la integración se renombró el paquete (de \texttt{pe.unsa} a \texttt{com.bigdata.audiencias}, para que coincida con el resto del proyecto) y se cambió el destino final de cada rama, de tópicos de Kafka a tablas de PostgreSQL (ya explicado en la subsección anterior), pero la lógica de procesamiento en sí no cambió.
+
+\textbf{Modelo de datos (\texttt{model/Event.java}, \texttt{model/WindowSummary.java}).} \texttt{Event} representa un evento individual tal como lo publica el simulador; la anotación \texttt{@JsonIgnoreProperties(ignoreUnknown = true)} le dice a Jackson que ignore cualquier campo del JSON que no reconozca en vez de fallar, y cada campo necesita su getter/setter porque Jackson los usa para llenar el objeto automáticamente. \texttt{WindowSummary} es el resultado agregado de una ventana completa: cuántos eventos hubo, cuántos usuarios distintos, y varios conteos agrupados (por tipo de evento, por ciudad, por producto).
+
+\begin{sourcecode}[\label{code:event}]{java}{Campos del modelo \texttt{Event} (\texttt{model/Event.java}).}
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Event implements Serializable {
+    private String timestamp;
+    private String user_id;
+    private String event;
+    private String product;
+    private String category;
+    private String city;
+    private double price;
+    private String agent_type;
+    private String source;
+    // ... constructor vacio, getters y setters
+}
+\end{sourcecode}
+
+\textbf{Deserialización (\texttt{model/EventDeserializer.java}).} Convierte los bytes crudos que llegan de Kafka en un objeto \texttt{Event} usando Jackson. El \texttt{ObjectMapper} se crea recién en \texttt{open()} y no en el constructor, porque Jackson no es serializable y Flink puede mover esta clase entre TaskManagers -- si se creara en el constructor, fallaría al intentar serializar la clase completa para distribuirla al cluster.
+
+\begin{sourcecode}[\label{code:deserializer}]{java}{Deserialización JSON $\to$ \texttt{Event} (\texttt{model/EventDeserializer.java}).}
+public class EventDeserializer implements DeserializationSchema<Event> {
+    private transient ObjectMapper objectMapper;
+
+    @Override
+    public void open(InitializationContext context) {
+        this.objectMapper = new ObjectMapper();
+    }
+
+    @Override
+    public Event deserialize(byte[] message) throws IOException {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+        }
+        return objectMapper.readValue(message, Event.class);
+    }
+}
+\end{sourcecode}
+
+\textbf{Agregación por ventana (\texttt{processing/WindowSummaryFunction.java}).} Recorre todos los eventos que cayeron dentro de una ventana de 10 segundos y arma los conteos: por cada evento, suma al total, agrega el usuario al set de usuarios distintos, incrementa el conteo de su tipo, y según sea \texttt{PURCHASE}, \texttt{VIEW\_PRODUCT} o \texttt{ADD\_CART}, también lo suma a los mapas de compras por ciudad/producto o vistas por producto.
+
+\begin{sourcecode}[\label{code:windowsummary-fn}]{java}{Conteo dentro de una ventana (\texttt{processing/WindowSummaryFunction.java}).}
+for (Event e : elements) {
+    total++;
+    users.add(e.getUser_id());
+    eventCounts.merge(e.getEvent(), 1L, Long::sum);
+    switch (e.getEvent()) {
+        case "PURCHASE":
+            purchasesByCity.merge(e.getCity(), 1L, Long::sum);
+            purchasesByProduct.merge(e.getProduct(), 1L, Long::sum);
+            break;
+        case "VIEW_PRODUCT":
+            viewsByProduct.merge(e.getProduct(), 1L, Long::sum);
+            break;
+        // ... ADD_CART
+    }
+}
+\end{sourcecode}
+
+\textbf{Clasificación de audiencias (\texttt{processing/ClassifyAudienceFunction.java}).} Mantiene, por usuario, un estado persistente de Flink (\texttt{ValueState}) con sus conteos acumulados de \texttt{SEARCH}/\texttt{VIEW\_PRODUCT}/\texttt{ADD\_CART}/\texttt{PURCHASE}, y en cada evento nuevo reevalúa en qué categoría cae. Cuando la categoría cambia hacia un estado de riesgo o de alto interés, emite una alerta por un side output aparte, para no mezclar el stream principal de audiencias con el de alertas. La única diferencia real frente al diseño original es la salida: antes se armaba un \texttt{Map} y se serializaba a JSON con Jackson para mandarlo a un tópico; ahora se devuelve un objeto \texttt{AudienceRecord}/\texttt{AlertRecord} tipado, porque el sink JDBC necesita enlazar cada campo directo a una columna SQL, no un blob de texto.
+
+\begin{sourcecode}[\label{code:classify-fn}]{java}{Alerta al cambiar de audiencia (\texttt{processing/ClassifyAudienceFunction.java}).}
+String previous = lastAudienceState.value();
+if (!audiencia.equals(previous) &&
+        (audiencia.equals("riesgo_abandono") || audiencia.equals("alta_intencion_compra"))) {
+    ctx.output(alertTag, new AlertRecord(
+            "audiencia",
+            "Usuario " + value.getUser_id() + " cambio a audiencia: " + audiencia,
+            value.getUser_id()));
+}
+lastAudienceState.update(audiencia);
+\end{sourcecode}
+
+\textbf{Join vista/compra (\texttt{processing/ViewPurchaseJoinFunction.java}).} Cruza, dentro de la misma ventana, un evento \texttt{VIEW\_PRODUCT} y uno \texttt{PURCHASE} del mismo producto -- correlaciona quién vio un producto con quién terminó comprándolo, aunque sean usuarios distintos. Mismo cambio que en la función anterior: el resultado ahora es un objeto tipado (\texttt{RelatedProductRecord}) en vez de JSON.
+
+\begin{sourcecode}[\label{code:join-fn}]{java}{Correlación vista/compra (\texttt{processing/ViewPurchaseJoinFunction.java}).}
+public RelatedProductRecord join(Event viewed, Event purchased) {
+    return new RelatedProductRecord(
+            viewed.getProduct(), viewed.getUser_id(), purchased.getUser_id());
+}
+\end{sourcecode}
+
+\textbf{Orquestación (\texttt{jobs/AudienciasDigitalesJob.java}, la clase \texttt{Main} del diseño original).} Conecta todo lo anterior con la fuente de Kafka. Primero filtra eventos inválidos (usuario o tipo de evento vacío, precio negativo):
+
+\begin{sourcecode}[\label{code:main-validacion}]{java}{Limpieza y validación (\texttt{jobs/AudienciasDigitalesJob.java}).}
+DataStream<Event> events = raw.filter(e ->
+        e != null &&
+        e.getUser_id() != null && !e.getUser_id().isEmpty() &&
+        e.getEvent() != null && !e.getEvent().isEmpty() &&
+        e.getPrice() >= 0
+).name("validacion-eventos");
+\end{sourcecode}
+
+Luego arma la ventana de agregación:
+
+\begin{sourcecode}[\label{code:main-ventanas}]{java}{Ventanas y agregación (\texttt{jobs/AudienciasDigitalesJob.java}).}
+DataStream<WindowSummary> summaries = events
+        .windowAll(TumblingProcessingTimeWindows.of(WINDOW_SIZE))
+        .process(new WindowSummaryFunction())
+        .name("agregaciones-ventana");
+\end{sourcecode}
+
+La rama del join, filtrando primero cada tipo de evento por separado:
+
+\begin{sourcecode}[\label{code:main-join}]{java}{Vistas y compras cruzadas (\texttt{jobs/AudienciasDigitalesJob.java}).}
+DataStream<Event> viewed = events.filter(e -> "VIEW_PRODUCT".equals(e.getEvent()));
+DataStream<Event> purchased = events.filter(e -> "PURCHASE".equals(e.getEvent()));
+
+viewed.join(purchased)
+        .where(Event::getProduct).equalTo(Event::getProduct)
+        .window(TumblingProcessingTimeWindows.of(WINDOW_SIZE))
+        .apply(new ViewPurchaseJoinFunction())
+        .sinkTo(makeRelatedSink(jdbcUrl, jdbcUser, jdbcPassword));
+\end{sourcecode}
+
+Y la rama de audiencias por usuario, con su side output de alertas:
+
+\begin{sourcecode}[\label{code:main-audiencias}]{java}{Audiencias por usuario (\texttt{jobs/AudienciasDigitalesJob.java}).}
+OutputTag<AlertRecord> alertTag = new OutputTag<AlertRecord>("alertas-audiencia") {};
+
+SingleOutputStreamOperator<AudienceRecord> audienceStream = events
+        .keyBy(Event::getUser_id)
+        .process(new ClassifyAudienceFunction(alertTag))
+        .name("clasificacion-audiencias");
+
+audienceStream.sinkTo(makeAudienceSink(jdbcUrl, jdbcUser, jdbcPassword));
+DataStream<AlertRecord> alertasAudiencia = audienceStream.getSideOutput(alertTag);
+\end{sourcecode}
+
+\subsection{Compilación y despliegue}
+
+El proyecto Maven se compila en kafka-client (no en el JobManager, que solo tiene el runtime de Flink instalado, no las herramientas de build). Primero se sube el código con \texttt{rsync}, con el mismo comando ya usado en la Sección \ref{subsec:ampliacion-cliente}:
+
+\begin{lstlisting}[style=cmdbox]
+rsync -avz --progress \
+  -e "ssh -i keys/audiencias-lab-key.pem" \
+  --filter=":- .gitignore" --exclude='.git/' \
+  ./ ubuntu@<IP-kafka-client>:/home/ubuntu/digital-audience-streaming-platform/
+\end{lstlisting}
+
+Y, ya dentro de una sesión SSH a kafka-client, se compila:
+
+\begin{lstlisting}[style=cmdbox]
+cd digital-audience-streaming-platform/flink-jobs
+mvn clean package
+\end{lstlisting}
+
+La Figura \ref{img:mvn-package} confirma \texttt{BUILD SUCCESS}: Maven genera un único jar (\texttt{flink-jobs-1.0.0.jar}) que empaqueta, además del código propio, los conectores de Kafka y JDBC/PostgreSQL (no incluidos en el \texttt{lib/} del cluster) usando el plugin de shade.
+
+\insertimage[\label{img:mvn-package}]{evidencia/mvn-package-audiencias-digitales.png}{width=14cm}{\texttt{BUILD SUCCESS} al compilar \texttt{AudienciasDigitalesJob} en kafka-client.}
+
+El jar resultante se lleva al JobManager en dos saltos (a través de la máquina local, la única con la llave SSH), primero bajándolo de kafka-client:
+
+\begin{lstlisting}[style=cmdbox]
+scp -i keys/audiencias-lab-key.pem \
+  ubuntu@<IP-kafka-client>:digital-audience-streaming-platform/flink-jobs/target/flink-jobs-1.0.0.jar .
+\end{lstlisting}
+
+\insertimage[\label{img:scp-jar-1}]{evidencia/scp-jar-kafka-client-laptop.png}{width=14cm}{Descarga del jar compilado desde kafka-client hacia la máquina local.}
+
+Y subiéndolo al JobManager:
+
+\begin{lstlisting}[style=cmdbox]
+scp -i keys/audiencias-lab-key.pem \
+  flink-jobs-1.0.0.jar ubuntu@<IP-jobmanager>:~/
+\end{lstlisting}
+
+\insertimage[\label{img:scp-jar-2}]{evidencia/scp-jar-laptop-jobmanager.png}{width=14cm}{Subida del jar compilado desde la máquina local hacia flink-jobmanager.}
+
+Finalmente, ya en una sesión SSH al JobManager, se somete el job al cluster:
+
+\inlinesourcecodeboxed[cmdbg]{bash}{flink run -c com.bigdata.audiencias.jobs.AudienciasDigitalesJob flink-jobs-1.0.0.jar}
+
+La Figura \ref{img:flink-run} confirma el envío exitoso, con el \texttt{JobID} asignado por el cluster.
+
+\insertimage[\label{img:flink-run}]{evidencia/flink-run-corrida-final.png}{width=14cm}{Job \texttt{AudienciasDigitalesJob} sometido exitosamente al cluster de Flink.}
+
+\subsection{Verificación: topología en la Web UI}
+
+La Figura \ref{img:flink-graph} muestra el grafo de ejecución real del job en la Web UI de Flink (\texttt{http://<IP-jobmanager>:8081}). Cada una de las 8 tablas de la Tabla \ref{tab:flink-ramas} aparece como su propio nodo terminal (\texttt{Sink: Writer -> Sink: Committer}); las flechas \texttt{HASH} corresponden a los \texttt{keyBy} (clasificación de audiencias, join por producto), y las flechas \texttt{REBALANCE} distribuyen el resultado de la agregación de ventana (que corre en una sola instancia, ya que \texttt{windowAll} no se paraleliza) hacia sus 6 sinks en paralelo.
+
+\insertimage[\label{img:flink-graph}]{evidencia/flink-ui-audiencias-digitales-graph.png}{width=15cm}{Grafo de ejecución de \texttt{AudienciasDigitalesJob} en la Web UI de Flink: las 8 ramas de salida coinciden exactamente con el diseño de la Tabla \ref{tab:flink-ramas}.}
+
+\subsection{Verificación: datos en PostgreSQL}
+
+Para confirmar que el job efectivamente escribe a las 8 tablas, se corrió el simulador de agentes (Sección \ref{sec:fase2}) durante una corrida sostenida de poco más de 15 minutos, y se contaron las filas resultantes en cada tabla:
+
+\begin{lstlisting}[style=cmdbox]
+PGPASSWORD='AudienciasLab2026!' psql -h dashboard -U flink -d audiencias -c "
+SELECT 'eventos_por_tipo' AS tabla, COUNT(*) FROM eventos_por_tipo
+UNION ALL SELECT 'resumen_ventana', COUNT(*) FROM resumen_ventana
+UNION ALL SELECT 'productos_vistos', COUNT(*) FROM productos_vistos
+UNION ALL SELECT 'productos_comprados', COUNT(*) FROM productos_comprados
+UNION ALL SELECT 'compras_por_region', COUNT(*) FROM compras_por_region
+UNION ALL SELECT 'audiencias', COUNT(*) FROM audiencias
+UNION ALL SELECT 'alertas', COUNT(*) FROM alertas
+UNION ALL SELECT 'productos_relacionados', COUNT(*) FROM productos_relacionados;"
+\end{lstlisting}
+
+La Figura \ref{img:postgres-conteo} confirma que las 8 tablas recibieron datos reales. \texttt{resumen\_ventana} tiene 93 filas -- 93 ventanas de 10 segundos equivalen a los poco más de 15 minutos que duró la corrida, coherente con el tiempo real transcurrido.
+
+\insertimage[\label{img:postgres-conteo}]{evidencia/postgres-corrida-final-conteo.png}{width=14cm}{Conteo de filas en las 8 tablas tras una corrida sostenida de ~15.5 minutos del simulador.}
+
+\subsection{Conclusión de la Fase 4}
+
+Con el job compilado, desplegado y corriendo en el cluster real (Figuras \ref{img:mvn-package}--\ref{img:flink-run}), su topología confirmada en la Web UI (Figura \ref{img:flink-graph}) coincidiendo exactamente con el diseño (Tabla \ref{tab:flink-ramas}), y datos reales verificados en las 8 tablas de destino (Figura \ref{img:postgres-conteo}), el pipeline completo Kafka → Flink → PostgreSQL queda validado de punta a punta. El siguiente paso (Fase 6) es el dashboard de Grafana que consulta estas mismas tablas.
+
+\clearpage
+\section{Dashboard en tiempo real (Fase 6)}
+\label{sec:dashboard}
+
+\subsection{Por qué PostgreSQL/TimescaleDB y Grafana}
+
+Esta decisión ya se adelantó en la Sección \ref{sec:arquitectura}, y aquí se retoma con más detalle porque es la que conecta directamente a Flink con el dashboard. Se evaluaron tres formas de alimentar la visualización: una arquitectura 100\% push vía WebSockets (el dashboard como un consumidor más de Kafka), un dashboard propio con Streamlit, o Grafana consultando una base de datos. Se eligió la tercera por dos razones concretas: Flink ya necesitaba escribir sus resultados a algún destino persistente (no solo transmitirlos), y PostgreSQL/TimescaleDB tiene un conector JDBC directo y maduro para Flink (\texttt{flink-connector-jdbc-postgres}, ya usado en la Fase 4) -- no hace falta ningún componente intermedio. TimescaleDB, al ser una extensión sobre PostgreSQL y no una base de datos aparte, agrega justo lo necesario para series de tiempo (particionamiento automático por tiempo vía \textit{hypertables}) sin obligar a aprender un lenguaje de consulta nuevo como InfluxQL/Flux. Grafana, por su parte, trae paneles, tipos de gráfico y alertas por umbral ya integrados -- se obtiene un dashboard con apariencia profesional sin escribir código de visualización propio.
+
+\subsection{Cómo Grafana genera los paneles}
+
+El dashboard completo está \textbf{provisionado como código}: no se creó ningún panel a mano haciendo clic en la interfaz de Grafana, todo vive en archivos versionados dentro de \href{https://github.com/Noodle96/Big_Data/tree/main/digital-audience-streaming-platform/dashboard/grafana}{\texttt{dashboard/grafana/}} del repositorio. Grafana funciona con dos piezas de configuración separadas:
+
+\textbf{El datasource} (\texttt{dashboard/grafana/provisioning/datasources/postgres.yaml}) le dice a Grafana dónde y cómo conectarse a PostgreSQL: host, base de datos, usuario/contraseña, y que la base tiene TimescaleDB habilitado.
+
+\textbf{El dashboard} (\texttt{dashboard/grafana/dashboards/audiencias-eventos.json}) define cada uno de los 10 paneles: su tipo (pie, barras, gauge, tabla, serie de tiempo, stat), su posición en la grilla, y -- lo más importante -- una consulta SQL propia por panel. Cuando el navegador carga el dashboard (o cada 30 segundos, por el auto-refresh configurado), Grafana ejecuta la consulta de cada panel contra PostgreSQL y dibuja el resultado según el tipo de panel. No hay caché ni copia de los datos dentro de Grafana: cada vez que se ve un panel, se está viendo el estado real de la tabla en ese instante.
+
+Al arrancar Grafana, un tercer archivo (\texttt{dashboard/grafana/provisioning/dashboards/dashboards.yaml}) le indica dónde buscar los \texttt{.json} de dashboards -- así, con solo copiar los 3 archivos a las rutas reales de Grafana y reiniciar el servicio, el dashboard completo aparece solo, sin ninguna configuración manual:
+
+\begin{lstlisting}[style=cmdbox]
+sudo cp dashboard/grafana/provisioning/datasources/postgres.yaml \
+  /etc/grafana/provisioning/datasources/
+sudo cp dashboard/grafana/provisioning/dashboards/dashboards.yaml \
+  /etc/grafana/provisioning/dashboards/
+sudo cp dashboard/grafana/dashboards/audiencias-eventos.json \
+  /etc/grafana/provisioning/dashboards/
+sudo systemctl restart grafana-server
+\end{lstlisting}
+
+La Figura \ref{img:grafana-restart} confirma el servicio activo tras el reinicio, con el dashboard de 10 paneles ya cargado.
+
+\insertimage[\label{img:grafana-restart}]{evidencia/grafana-restart-10-paneles.png}{width=14cm}{Servicio \texttt{grafana-server} activo tras cargar el dashboard de 10 paneles provisionado como código.}
+
+\subsection{Los 10 paneles}
+
+Todos los paneles muestran datos de la misma corrida de ~15.5 minutos usada para verificar la Fase 4 (Figura \ref{img:postgres-conteo}). Cada uno se describe con qué mide, de qué tabla sale el dato, y qué explica el resultado concreto que se observa en la captura.
+
+\textbf{Eventos por tipo.} Mide la proporción de cada tipo de evento sobre el total de tráfico generado. Sale de \texttt{eventos\_por\_tipo}, la misma tabla que arma la rama de agregación por ventana del job (Sección \ref{sec:flink}). La Figura \ref{img:panel-eventos-tipo} muestra una distribución razonablemente pareja entre los 4 tipos (VIEW\_PRODUCT 31\%, SEARCH 24\%, ADD\_CART 23\%, PURCHASE 22\%) -- consistente con un embudo de conversión donde cada etapa pierde algo de volumen respecto a la anterior, pero sin una caída abrupta.
+
+\insertimage[\label{img:panel-eventos-tipo}]{evidencia/grafana-panel-eventos-por-tipo.png}{width=13cm}{Panel "Eventos por tipo": distribución de VIEW\_PRODUCT, SEARCH, ADD\_CART y PURCHASE.}
+
+\textbf{Tendencias temporales.} Muestra la evolución de cada tipo de evento a lo largo del tiempo, en vez de un total acumulado -- permite ver si el tráfico es estable o tiene picos. Sale de la misma tabla \texttt{eventos\_por\_tipo}, graficada contra \texttt{window\_start}. La Figura \ref{img:panel-tendencias} muestra las 4 líneas oscilando de forma pareja durante toda la corrida, sin una tendencia creciente ni decreciente marcada -- esperable, porque el simulador no varía su intensidad con el tiempo dentro de un mismo escenario.
+
+\insertimage[\label{img:panel-tendencias}]{evidencia/grafana-panel-tendencias-temporales.png}{width=13cm}{Panel "Tendencias temporales": una línea por tipo de evento a lo largo de la corrida.}
+
+\textbf{Eventos por segundo.} Mide el throughput real del pipeline: cuántos eventos procesa Flink por segundo, en promedio, dentro de cada ventana. Sale de \texttt{resumen\_ventana.eventos\_por\_segundo}, calculado directamente por el job (\texttt{total\_events} de la ventana dividido entre 10 segundos) en vez de aproximarse desde otra tabla. La Figura \ref{img:panel-eventos-segundo} muestra un throughput sostenido entre 15 y 20 eventos/segundo durante toda la corrida -- confirma que el pipeline no tuvo caídas ni cuellos de botella con el volumen generado por el simulador.
+
+\insertimage[\label{img:panel-eventos-segundo}]{evidencia/grafana-panel-eventos-por-segundo.png}{width=13cm}{Panel "Eventos por segundo": throughput sostenido entre 15 y 20 eventos/s.}
+
+\textbf{Conversión de compras.} Mide qué porcentaje de las vistas de producto terminan en una compra (\texttt{PURCHASE} sobre \texttt{VIEW\_PRODUCT}), el indicador de negocio más directo de todo el dashboard. Sale de \texttt{resumen\_ventana.conversion}, promediado sobre el rango de tiempo seleccionado. La Figura \ref{img:panel-conversion} muestra 72.2\% -- una conversión muy alta comparada con un e-commerce real (donde 2-5\% ya se considera bueno), pero coherente con el diseño del simulador: los agentes no navegan de forma puramente exploratoria, la mayoría de perfiles está calibrada para terminar comprando.
+
+\insertimage[\label{img:panel-conversion}]{evidencia/grafana-panel-conversion-compras.png}{width=10cm}{Panel "Conversión de compras": 72.2\% en la corrida completa.}
+
+\textbf{Usuarios activos.} Cuenta usuarios distintos (\texttt{user\_id}) que generaron al menos un evento dentro de la ventana más reciente. Sale de \texttt{resumen\_ventana.usuarios\_activos}. La Figura \ref{img:panel-usuarios} muestra 50 -- coincide exactamente con los 50 usuarios sintéticos que crea el simulador (\texttt{agentes-simulador/src/main.py}), confirmando que, al correr con \texttt{--ignore-horario}, los 50 estuvieron activos en la última ventana de 10 segundos de la corrida.
+
+\insertimage[\label{img:panel-usuarios}]{evidencia/grafana-panel-usuarios-activos.png}{width=10cm}{Panel "Usuarios activos": 50, coincide con el total de usuarios sintéticos del simulador.}
+
+\textbf{Audiencias detectadas.} Clasifica a cada usuario según su comportamiento acumulado (compras, vistas, carritos) en una de seis categorías de negocio, evaluada en tiempo real en cada evento por \texttt{ClassifyAudienceFunction}. Sale de la tabla \texttt{audiencias}, tomando la clasificación más reciente de cada usuario dentro del rango de tiempo. La Figura \ref{img:panel-audiencias} muestra los 50 usuarios clasificados como \texttt{cliente\_frecuente}, sin ninguna otra categoría presente. No es un error: la regla revisa primero si el usuario acumuló 3 o más compras, y como las compras solo se suman (nunca se resetean dentro de una corrida), una vez que un usuario cruza ese umbral queda en \texttt{cliente\_frecuente} de forma permanente. Con 15 minutos de tráfico sostenido y los 8 perfiles activos, los 50 usuarios terminaron cruzando ese umbral antes de que terminara la corrida -- la clasificación por audiencia es sensible al tiempo de observación, algo que sí se aprecia en el panel de Alertas (más abajo), que sí captura la variedad de transiciones que ocurrieron \textit{durante} la corrida.
+
+\insertimage[\label{img:panel-audiencias}]{evidencia/grafana-panel-audiencias-detectadas.png}{width=13cm}{Panel "Audiencias detectadas": los 50 usuarios convergieron a \texttt{cliente\_frecuente} hacia el final de la corrida.}
+
+\textbf{Productos más visitados.} Ranking de los productos con más eventos \texttt{VIEW\_PRODUCT}, agregados por ventana. Sale de \texttt{productos\_vistos}, sumado sobre todas las ventanas del rango. La Figura \ref{img:panel-productos-vistos} muestra los 8 productos del catálogo del simulador con vistas entre 313 y 424 -- una diferencia moderada, no una concentración fuerte en uno o dos productos, porque los agentes eligen producto de forma mayormente aleatoria.
+
+\insertimage[\label{img:panel-productos-vistos}]{evidencia/grafana-panel-productos-vistos.png}{width=13cm}{Panel "Productos más visitados": los 8 productos del catálogo, entre 313 y 424 vistas.}
+
+\textbf{Productos más comprados.} Igual que el anterior, pero contando \texttt{PURCHASE} en vez de \texttt{VIEW\_PRODUCT}. Sale de \texttt{productos\_comprados}. La Figura \ref{img:panel-productos-comprados} muestra un orden distinto al de vistas (Laptop Lenovo lidera compras con 304, pero no era el más visto) -- evidencia de que el paso de "ver" a "comprar" no es uniforme entre productos, algunos convierten mejor que otros.
+
+\insertimage[\label{img:panel-productos-comprados}]{evidencia/grafana-panel-productos-comprados.png}{width=13cm}{Panel "Productos más comprados": orden distinto al de vistas, Laptop Lenovo lidera con 304 compras.}
+
+\textbf{Compras por región.} Suma las compras agrupadas por ciudad del usuario. Sale de \texttt{compras\_por\_region}. La Figura \ref{img:panel-compras-region} muestra las 5 ciudades del simulador (Lima, Cusco, Piura, Arequipa, Trujillo) con totales muy parejos, entre 390 y 425 compras cada una -- consistente con que el simulador reparte los 50 usuarios entre ciudades sin sesgar la probabilidad de compra por ubicación.
+
+\insertimage[\label{img:panel-compras-region}]{evidencia/grafana-panel-compras-region.png}{width=13cm}{Panel "Compras por región": las 5 ciudades del simulador, totales parejos entre 390 y 425.}
+
+\textbf{Alertas recientes.} Lista las últimas alertas generadas por el job, de sus dos fuentes: anomalía de ventana (\texttt{ADD\_CART} sin \texttt{PURCHASE}) y transición de un usuario a un estado de audiencia de riesgo (\texttt{riesgo\_abandono}) o de alto interés (\texttt{alta\_intencion\_compra}). Sale de la tabla \texttt{alertas}. La Figura \ref{img:panel-alertas} muestra únicamente alertas de tipo \texttt{audiencia} -- con el volumen de compra real que hubo en esta corrida (Figura \ref{img:panel-conversion}), hubo pocas ventanas con carritos abandonados sin ninguna compra, por lo que la anomalía de ventana casi no se disparó; en cambio sí se ven varias transiciones de audiencia por usuario, incluyendo casos que oscilan entre \texttt{alta\_intencion\_compra} y \texttt{riesgo\_abandono} en momentos distintos, reflejo del estado que va cambiando a medida que cada usuario acumula más eventos.
+
+\insertimage[\label{img:panel-alertas}]{evidencia/grafana-panel-alertas.png}{width=15cm}{Panel "Alertas recientes": transiciones de audiencia capturadas durante la corrida.}
+
+\subsection{Conclusión de la Fase 6}
+
+Con el dashboard provisionado como código (Figura \ref{img:grafana-restart}) y los 10 paneles pedidos por el enunciado mostrando datos reales y coherentes entre sí (Figuras \ref{img:panel-eventos-tipo}--\ref{img:panel-alertas}), el pipeline completo -- Agentes → Kafka → Flink → PostgreSQL/TimescaleDB → Grafana -- queda funcionando de punta a punta. La siguiente sección junta toda la evidencia de las Fases 4 y 6 en una sola corrida narrada de principio a fin.
+
+\clearpage
+\section{Prueba de extremo a extremo}
+\label{sec:extremo-a-extremo}
+
+Las Secciones \ref{sec:flink} y \ref{sec:dashboard} verificaron cada componente por separado. Esta sección narra la misma corrida como una secuencia única, de principio a fin, para que quede claro cómo encajan todas las piezas sin tener que saltar entre secciones -- y sirve como guía resumida para reproducir el sistema completo en funcionamiento.
+
+\begin{enumerate}
+\item \textbf{Cluster arriba.} Kafka (3 brokers), Flink (JobManager + 3 TaskManagers) y PostgreSQL/TimescaleDB + Grafana ya desplegados y verificados (Sección \ref{sec:infraestructura}).
+\item \textbf{Job de Flink corriendo.} \texttt{AudienciasDigitalesJob} compilado, desplegado y sometido al cluster (Figuras \ref{img:mvn-package}--\ref{img:flink-run}), con su topología de 8 sinks confirmada en la Web UI (Figura \ref{img:flink-graph}).
+\item \textbf{Dashboard cargado.} Los 10 paneles de Grafana ya provisionados como código y consultando las tablas vacías, a la espera de datos (Figura \ref{img:grafana-restart}).
+\item \textbf{Arranca el tráfico.} Desde kafka-client, se lanza el simulador de agentes:
+\begin{lstlisting}[style=cmdbox]
+cd ~/digital-audience-streaming-platform/agentes-simulador/src
+source ~/venv/bin/activate
+python3 main.py --ignore-horario
+\end{lstlisting}
+Sin \texttt{--escenario}, el simulador detecta la temporada por la fecha real del sistema; en el momento de esta corrida cayó fuera de cualquier ventana comercial especial (\texttt{agentes-simulador/src/escenarios/seasons.py}), así que corrió en el escenario \textbf{"Normal"} -- el mismo punto de comparación base que pide la Fase 7 (Tabla \ref{tab:fases-plan}) para contrastar contra escenarios con boost de compras (Navidad, Cyber Monday, etc.).
+\item \textbf{Los eventos fluyen sin intervención manual.} El simulador publica a los 2 topics de Kafka (Sección \ref{sec:fase2}); \texttt{AudienciasDigitalesJob} los consume y procesa en tiempo real; los resultados se escriben a las 8 tablas de PostgreSQL (Sección \ref{sec:flink}); Grafana redibuja los 10 paneles cada 30 segundos con los datos más recientes (Sección \ref{sec:dashboard}) -- ningún paso intermedio requiere acción humana.
+\item \textbf{Corrida sostenida y cierre.} Se dejó correr el simulador durante ~15.5 minutos (\texttt{Ctrl+C} para detenerlo), tiempo suficiente para que las tendencias en Grafana muestren un patrón real en vez de 2-3 puntos sueltos.
+\end{enumerate}
+
+La Tabla \ref{tab:resumen-corrida} resume el resultado final de esta corrida, uniendo los números ya mostrados en las Figuras \ref{img:postgres-conteo} y \ref{img:panel-eventos-tipo}--\ref{img:panel-alertas}.
+
+\enabletablerowcolor[2]
+\begin{table}[H]
+\centering
+\caption{Resumen de la corrida de extremo a extremo (~15.5 minutos).}
+\begin{tabular}{T{6cm}T{8cm}}
+\hline
+\rowcolor{cmdaccent}
+\textcolor{white}{\textbf{Indicador}} & \textcolor{white}{\textbf{Valor observado}} \bigstrut\\
+\hline
+Duración & 93 ventanas de 10s ($\approx$ 15.5 minutos) \\
+Eventos totales procesados & 16 277 (eventos por tipo, suma de la Figura \ref{img:panel-eventos-tipo}) \\
+Usuarios sintéticos activos & 50 de 50 \\
+Throughput sostenido & 15--20 eventos/segundo \\
+Conversión (PURCHASE/VIEW\_PRODUCT) & 72.2\% \\
+Audiencias detectadas (estado final) & 100\% \texttt{cliente\_frecuente} (ver discusión en Sección \ref{sec:dashboard}) \\
+Alertas disparadas & 11, todas de transición de audiencia \\
+Tablas de Postgres pobladas & 8 de 8 \\
+Paneles de Grafana con datos reales & 10 de 10 \\
+\hline
+\end{tabular}
+\label{tab:resumen-corrida}
+\end{table}
+\disabletablerowcolor
+
+El hallazgo más relevante de esta corrida no es un número aislado, sino un patrón: la clasificación de audiencias (Tabla \ref{tab:resumen-corrida}, última fila con datos) es \textbf{sensible al tiempo de observación}. Una corrida corta muestra variedad de categorías (usuarios explorando, con riesgo de abandono, etc.); una corrida sostenida como esta termina concentrando a casi todos los usuarios en \texttt{cliente\_frecuente}, porque la regla de negocio no tiene mecanismo de "olvido" -- una vez que un usuario acumula 3 compras, se queda clasificado así para siempre dentro de esa ejecución del job. Esto no invalida el resultado: confirma que el pipeline reacciona correctamente al comportamiento real de los usuarios, y es justamente el tipo de comparación que la Fase 7 (ejecución de varios escenarios) va a poder explotar -- contrastando esta corrida "Normal" contra corridas más cortas o con escenarios de temporada alta, donde se espera ver mayor variedad de audiencias y alertas de \texttt{riesgo\_abandono} más sostenidas en el tiempo.

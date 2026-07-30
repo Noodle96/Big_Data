@@ -606,6 +606,12 @@ apt-get install -y postgresql-16 postgresql-client-16 timescaledb-2-postgresql-1
 
 timescaledb-tune --quiet --yes
 
+# timescaledb-tune deja max_connections muy bajo (25) para un t3.small --
+# insuficiente para AudienciasDigitalesJob (8 sinks JDBC x parallelism 3 =
+# hasta 24 conexiones simultaneas), mas Grafana y sesiones de psql. Se sube
+# a 100 (RAM de sobra en 2GB para esa cantidad de conexiones).
+sed -i "s/^max_connections = .*/max_connections = 100/" /etc/postgresql/16/main/postgresql.conf
+
 # Acceso solo desde dentro de la VPC (no desde Internet)
 sed -i "s/^#listen_addresses.*/listen_addresses = '*'/" /etc/postgresql/16/main/postgresql.conf
 echo "host    all             all             __VPC_CIDR__            md5" \\
