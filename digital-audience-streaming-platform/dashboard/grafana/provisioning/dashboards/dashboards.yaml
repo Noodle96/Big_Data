@@ -1,0 +1,14 @@
+# Provider de dashboards de Grafana: le dice a Grafana que cargue cualquier
+# .json que encuentre en esta misma carpeta como dashboard, sin clicks manuales.
+apiVersion: 1
+
+providers:
+  - name: Audiencias Digitales
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

@@ -1,0 +1,22 @@
+# Datasource de Grafana provisionado como código (no se crea a mano en la UI).
+# Apunta al Postgres/TimescaleDB local de esta misma instancia (dashboard),
+# ver infra/__main__.py (POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD).
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL-Audiencias
+    uid: postgres-audiencias
+    type: postgres
+    access: proxy
+    url: localhost:5432
+    database: audiencias
+    user: flink
+    isDefault: true
+    editable: false
+    jsonData:
+      database: audiencias
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: true
+    secureJsonData:
+      password: AudienciasLab2026!

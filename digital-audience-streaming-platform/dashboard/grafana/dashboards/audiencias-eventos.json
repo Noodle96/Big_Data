@@ -1,0 +1,111 @@
+{
+  "uid": "audiencias-eventos",
+  "title": "Audiencias Digitales - Eventos (Fase 4)",
+  "description": "Paneles alimentados por eventos_por_tipo (EventCountJob, Fase 4). Los paneles de usuarios activos, audiencias, productos y compras por region se agregan cuando existan los jobs/reglas correspondientes.",
+  "tags": ["audiencias", "kafka", "flink", "proyecto-final"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-15m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Eventos por tipo",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT event_type, SUM(event_count) AS total FROM eventos_por_tipo WHERE $__timeFilter(window_start) GROUP BY event_type ORDER BY total DESC",
+          "rawQuery": true
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] },
+        "pieType": "pie"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Tendencias temporales (eventos por tipo)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "time_series",
+          "rawSql": "SELECT window_start AS \"time\", event_type AS \"metric\", event_count AS \"value\" FROM eventos_por_tipo WHERE $__timeFilter(window_start) ORDER BY window_start",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10 } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } }
+    },
+    {
+      "id": 3,
+      "title": "Eventos por segundo (aprox., ventana 30s)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "time_series",
+          "rawSql": "SELECT window_start AS \"time\", SUM(event_count) / 30.0 AS \"eventos_por_segundo\" FROM eventos_por_tipo WHERE $__timeFilter(window_start) GROUP BY window_start ORDER BY window_start",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 15 } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } }
+    },
+    {
+      "id": 4,
+      "title": "Conversion de compras (PURCHASE / VIEW_PRODUCT)",
+      "type": "gauge",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT 100.0 * SUM(event_count) FILTER (WHERE event_type = 'PURCHASE') / NULLIF(SUM(event_count) FILTER (WHERE event_type = 'VIEW_PRODUCT'), 0) AS conversion_pct FROM eventos_por_tipo WHERE $__timeFilter(window_start)",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 30 },
+              { "color": "green", "value": 60 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      }
+    }
+  ]
+}
