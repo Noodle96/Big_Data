@@ -1,11 +1,11 @@
 {
   "uid": "audiencias-eventos",
-  "title": "Audiencias Digitales - Eventos (Fase 4)",
-  "description": "Paneles alimentados por eventos_por_tipo (EventCountJob, Fase 4). Los paneles de usuarios activos, audiencias, productos y compras por region se agregan cuando existan los jobs/reglas correspondientes.",
+  "title": "Audiencias Digitales - Dashboard (Fase 6)",
+  "description": "Los 10 paneles pedidos por el enunciado, alimentados por AudienciasDigitalesJob (Fase 4).",
   "tags": ["audiencias", "kafka", "flink", "proyecto-final"],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 2,
   "refresh": "30s",
   "time": { "from": "now-15m", "to": "now" },
   "panels": [
@@ -26,7 +26,8 @@
       ],
       "options": {
         "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] },
-        "pieType": "pie"
+        "pieType": "pie",
+        "reduceOptions": { "values": true, "calcs": [], "fields": "" }
       }
     },
     {
@@ -52,7 +53,7 @@
     },
     {
       "id": 3,
-      "title": "Eventos por segundo (aprox., ventana 30s)",
+      "title": "Eventos por segundo",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
       "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
@@ -61,7 +62,7 @@
           "refId": "A",
           "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
           "format": "time_series",
-          "rawSql": "SELECT window_start AS \"time\", SUM(event_count) / 30.0 AS \"eventos_por_segundo\" FROM eventos_por_tipo WHERE $__timeFilter(window_start) GROUP BY window_start ORDER BY window_start",
+          "rawSql": "SELECT window_start AS \"time\", eventos_por_segundo AS \"value\" FROM resumen_ventana WHERE $__timeFilter(window_start) ORDER BY window_start",
           "rawQuery": true
         }
       ],
@@ -73,7 +74,7 @@
     },
     {
       "id": 4,
-      "title": "Conversion de compras (PURCHASE / VIEW_PRODUCT)",
+      "title": "Conversion de compras",
       "type": "gauge",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
       "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
@@ -82,7 +83,7 @@
           "refId": "A",
           "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
           "format": "table",
-          "rawSql": "SELECT 100.0 * SUM(event_count) FILTER (WHERE event_type = 'PURCHASE') / NULLIF(SUM(event_count) FILTER (WHERE event_type = 'VIEW_PRODUCT'), 0) AS conversion_pct FROM eventos_por_tipo WHERE $__timeFilter(window_start)",
+          "rawSql": "SELECT AVG(conversion) * 100 AS conversion_pct FROM resumen_ventana WHERE $__timeFilter(window_start)",
           "rawQuery": true
         }
       ],
@@ -106,6 +107,107 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       }
+    },
+    {
+      "id": 5,
+      "title": "Usuarios activos",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT usuarios_activos FROM resumen_ventana WHERE $__timeFilter(window_start) ORDER BY window_start DESC LIMIT 1",
+          "rawQuery": true
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "options": { "graphMode": "area", "colorMode": "value", "textMode": "auto" }
+    },
+    {
+      "id": 6,
+      "title": "Audiencias detectadas",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT audiencia, COUNT(DISTINCT user_id) AS usuarios FROM (SELECT DISTINCT ON (user_id) user_id, audiencia FROM audiencias WHERE $__timeFilter(event_time) ORDER BY user_id, event_time DESC) t GROUP BY audiencia ORDER BY usuarios DESC",
+          "rawQuery": true
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Productos mas visitados",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT product, SUM(views_count) AS total FROM productos_vistos WHERE $__timeFilter(window_start) GROUP BY product ORDER BY total DESC LIMIT 10",
+          "rawQuery": true
+        }
+      ],
+      "options": { "orientation": "horizontal", "xField": "product" }
+    },
+    {
+      "id": 8,
+      "title": "Productos mas comprados",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT product, SUM(purchases_count) AS total FROM productos_comprados WHERE $__timeFilter(window_start) GROUP BY product ORDER BY total DESC LIMIT 10",
+          "rawQuery": true
+        }
+      ],
+      "options": { "orientation": "horizontal", "xField": "product" }
+    },
+    {
+      "id": 9,
+      "title": "Compras por region",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT city, SUM(purchases_count) AS total FROM compras_por_region WHERE $__timeFilter(window_start) GROUP BY city ORDER BY total DESC",
+          "rawQuery": true
+        }
+      ],
+      "options": { "orientation": "horizontal", "xField": "city" }
+    },
+    {
+      "id": 10,
+      "title": "Alertas recientes",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 32 },
+      "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "postgres-audiencias" },
+          "format": "table",
+          "rawSql": "SELECT created_at AS \"time\", tipo, mensaje, user_id FROM alertas WHERE $__timeFilter(created_at) ORDER BY created_at DESC LIMIT 50",
+          "rawQuery": true
+        }
+      ]
     }
   ]
 }
