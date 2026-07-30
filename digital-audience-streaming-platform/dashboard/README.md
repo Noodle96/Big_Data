@@ -9,21 +9,26 @@ Dashboard en tiempo real — Fase 6 del `plan.md`. Grafana + PostgreSQL/Timescal
 - `grafana/dashboards/*.json` — definiciones de dashboards/paneles, uno por cada métrica pedida en el enunciado.
 - `db/init.sql` — esquema de PostgreSQL/TimescaleDB (tablas que alimentan cada panel).
 
-## Estado de los paneles (Fase 6, iniciado 2026-07-30)
+## Estado de los paneles (actualizado 2026-07-30 -- las 10 métricas del enunciado)
 
-`audiencias-eventos.json` cubre los 4 paneles que ya se pueden alimentar con datos reales de `eventos_por_tipo` (Job 1, `EventCountJob`):
+Con el job adaptado del compañero (ver `flink-jobs/README.md`), **`audiencias-eventos.json` ya tiene los 10 paneles pedidos**, todos alimentados por tablas reales de `dashboard/db/init.sql`:
 
-| Métrica pedida | Estado |
-|---|---|
-| Eventos por tipo | Listo (`audiencias-eventos.json`) |
-| Tendencias temporales | Listo (`audiencias-eventos.json`) |
-| Eventos por segundo | Listo, aproximado (`audiencias-eventos.json`) |
-| Conversión de compras | Listo, aproximado (`audiencias-eventos.json`) |
-| Usuarios activos | Pendiente |
-| Audiencias detectadas | Pendiente (Fase 5) |
-| Productos más visitados/comprados | Pendiente (Job 2, `ProductRankingJob`) |
-| Compras por región | Pendiente (Job 3, `RegionSalesJob`) |
-| Alertas | Pendiente |
+| Métrica pedida | Tabla en Postgres | Tipo de panel |
+|---|---|---|
+| Eventos por tipo | `eventos_por_tipo` | Pie |
+| Tendencias temporales | `eventos_por_tipo`, contra `window_start` | Serie de tiempo |
+| Eventos por segundo | `resumen_ventana` | Serie de tiempo |
+| Conversión de compras | `resumen_ventana` | Gauge |
+| Usuarios activos | `resumen_ventana` | Stat |
+| Audiencias detectadas | `audiencias` | Tabla (usuarios distintos por audiencia) |
+| Productos más visitados | `productos_vistos` | Barras horizontales |
+| Productos más comprados | `productos_comprados` | Barras horizontales |
+| Compras por región | `compras_por_region` | Barras horizontales |
+| Alertas | `alertas` | Tabla (alertas recientes) |
+
+**Nota sobre "Alertas":** el enunciado sugiere un "panel de alertas de Grafana (umbral)" -- es decir, una regla de alerta nativa de Grafana, no solo una tabla mostrando filas de la tabla `alertas`. Lo que hay ahora es una tabla con las alertas más recientes (dato real, sí cumple la métrica), pero configurar además una regla de alerta nativa (ej. umbral sobre `riesgo_abandono` o `PAYMENT_REJECTED`) queda como mejora pendiente si hay tiempo.
+
+**Ya no aproximados:** "Eventos por segundo" y "Conversión de compras" ahora leen directo de `resumen_ventana` (calculados por el job, precisos) en vez de recalcularse desde `eventos_por_tipo` como en la primera versión.
 
 ## Desplegar a la instancia `dashboard`
 

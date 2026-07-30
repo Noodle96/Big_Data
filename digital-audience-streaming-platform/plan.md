@@ -97,14 +97,26 @@ Este diagrama (versión más elaborada, con VPC/EC2 por componente) es el primer
 
 - **Va al informe:** tabla final de topics/particiones/claves (arriba), comandos `kafka-topics.sh --create`/`--describe` con evidencia, y una breve justificación de por qué 2 topics y no 1 ni 4 (buen contenido de análisis).
 
-### Fase 4 — Apache Flink: cluster y jobs
+### Fase 4 — Apache Flink: cluster y jobs ✅ (compilado, desplegado y validado 2026-07-30)
 
-- Deploy del cluster: `start-cluster.sh` o EC2 dedicados a JobManager/TaskManager, verificación por Web UI.
-- Jobs (uno o varios, a definir): consumo de topics → filtrado (purchase/add_cart, etc.) → enriquecimiento (hora, día, mes, fin de semana) → ventanas de tiempo → conteo/agregación → clasificación en audiencias.
-- Sink hacia PostgreSQL/TimescaleDB (vía `flink-connector-jdbc`).
-- **Va al informe:** diagrama JobManager/TaskManager, descripción de cada job, evidencia de envío (`flink run`), capturas de la Web UI, logs relevantes.
+- Cluster: JobManager + 3 TaskManagers, desplegados y verificados en la Fase 1 (Web UI accesible, ver evidencia ya capturada).
+- **Un solo job**, `AudienciasDigitalesJob` (`flink-jobs/`), a cargo de esa parte del proyecto, consume `user-events` + `purchase-events` y se ramifica así:
 
-### Fase 5 — Audiencias digitales (reglas de negocio)
+  | Rama del pipeline | Tabla(s) en Postgres | Métrica del enunciado |
+  |---|---|---|
+  | Agregación por ventana (10s, `windowAll`) | `resumen_ventana` | Usuarios activos, eventos/segundo, conversión |
+  | ↳ mismo resumen, por tipo/producto/ciudad | `eventos_por_tipo`, `productos_vistos`, `productos_comprados`, `compras_por_region` | Eventos por tipo, productos más vistos/comprados, compras por región |
+  | ↳ anomalía de ventana (ADD_CART sin PURCHASE) | `alertas` | Alertas |
+  | Clasificación de audiencia por usuario (`keyBy` + estado) | `audiencias` | Audiencias detectadas |
+  | ↳ alerta al cambiar a estado de riesgo/interés | `alertas` | Alertas |
+  | Join vista/compra por ventana | `productos_relacionados` | Extra, no pedido por el enunciado |
+
+  Tendencias temporales no tiene tabla propia: se resuelve graficando cualquiera de las anteriores contra `window_start`.
+
+- Sink hacia PostgreSQL/TimescaleDB vía `flink-connector-jdbc` (no Kafka), para integrarse directo con el dashboard de Grafana de la Fase 6. Esquema completo en `dashboard/db/init.sql`, detalle del job en `flink-jobs/README.md`.
+- **Va al informe:** diagrama JobManager/TaskManager, descripción del job y sus ramas (tabla de arriba), evidencia de envío (`flink run`), capturas de la Web UI, verificación de datos en Postgres.
+
+### Fase 5 — Audiencias digitales (reglas de negocio) ✅ (integrada dentro del job de Fase 4, `ClassifyAudienceFunction`)
 
 - Reglas a definir con tabla explícita, por ejemplo:
 
@@ -118,7 +130,7 @@ Este diagrama (versión más elaborada, con VPC/EC2 por componente) es el primer
 
 - **Va al informe:** tabla final de reglas, evidencia de clasificación (registros/consultas mostrando usuarios etiquetados).
 
-### Fase 6 — Dashboard en tiempo real (Grafana)
+### Fase 6 — Dashboard en tiempo real (Grafana) ✅ (10 paneles provisionados y validados 2026-07-30)
 
 - Modelo de datos en Postgres/TimescaleDB: una tabla o vista por bloque de métrica pedido.
 - Provisioning de Grafana as code (datasources + dashboards en JSON/YAML, no clicks manuales — mejor para la guía).
