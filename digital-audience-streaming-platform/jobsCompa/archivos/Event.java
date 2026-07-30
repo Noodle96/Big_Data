@@ -1,21 +1,10 @@
-package com.bigdata.audiencias.model;
+package pe.unsa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 
-/**
- * Evento JSON tal como lo publica agentes-simulador (ver
- * agentes-simulador/src/schema.py::Event -- mismos campos, mismos nombres).
- *
- * Adaptado del modelo original de jobsCompa/ (pe.unsa.model.Event) --
- * mismos campos y tipos, solo cambia el paquete para integrarse al resto
- * de flink-jobs/.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event implements Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     private String timestamp;
     private String user_id;
@@ -27,8 +16,7 @@ public class Event implements Serializable {
     private String agent_type;
     private String source;
 
-    public Event() {
-    }
+    public Event() {}
 
     public String getTimestamp() { return timestamp; }
     public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
@@ -59,8 +47,7 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "timestamp='" + timestamp + '\'' +
+        return "Event{" + "timestamp='" + timestamp + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", event='" + event + '\'' +
                 ", product='" + product + '\'' +
